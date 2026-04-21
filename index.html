@@ -10,7 +10,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
-    /* VARIABLES & RESET */
     :root {
       --primary: #2C7A7B;
       --bg: #F7F9FC;
@@ -18,7 +17,6 @@
       --text-main: #1A2C3E;
       --text-muted: #4A627A;
       --border: #E2E8F0;
-      
       --c-urgent: #2B6CB0;
       --c-general: #ED8936;
       --c-doctor: #3182CE;
@@ -27,17 +25,11 @@
       --c-warning: #D69E2E;
     }
     
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     
     html, body {
       width: 100%;
       height: 100%;
-      margin: 0;
-      padding: 0;
       overflow: auto !important;
       -webkit-overflow-scrolling: touch;
     }
@@ -49,10 +41,8 @@
       font-size: 16px;
       line-height: 1.4;
       overflow-y: auto;
-      overflow-x: hidden;
     }
 
-    /* HEADER */
     header { 
       background-color: var(--card-bg); 
       padding: 12px 16px; 
@@ -67,20 +57,9 @@
     h1 { font-size: 1.3rem; font-weight: 600; color: var(--primary); }
     .lang-selector select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; background: var(--bg); }
 
-    /* MAIN LAYOUT - En móvil: mapa pequeño, lista grande */
-    .app-container { 
-      display: flex; 
-      flex-direction: column; 
-      min-height: 100%;
-    }
-    @media (min-width: 768px) { 
-      .app-container { 
-        flex-direction: row; 
-        min-height: calc(100vh - 60px);
-      } 
-    }
+    .app-container { display: flex; flex-direction: column; min-height: 100%; }
+    @media (min-width: 768px) { .app-container { flex-direction: row; } }
 
-    /* SIDEBAR (controles + lista) - OCUPA MÁS ESPACIO */
     .sidebar { 
       width: 100%; 
       display: flex; 
@@ -89,14 +68,8 @@
       border-right: 1px solid var(--border);
       flex: 2;
     }
-    @media (min-width: 768px) { 
-      .sidebar { 
-        width: 45%;
-        max-width: 500px;
-      } 
-    }
+    @media (min-width: 768px) { .sidebar { width: 45%; max-width: 500px; } }
     
-    /* CONTROLES - compactos pero claros */
     .controls { 
       padding: 16px; 
       border-bottom: 1px solid var(--border); 
@@ -134,7 +107,6 @@
       margin-top: 8px;
     }
 
-    /* LISTA DE RESULTADOS - MÁS GRANDE Y CÓMODA */
     .results-list { 
       flex: 1; 
       padding: 12px; 
@@ -142,15 +114,10 @@
       overflow-y: auto;
       min-height: 40vh;
     }
-    @media (min-width: 768px) {
-      .results-list {
-        min-height: 60vh;
-      }
-    }
+    @media (min-width: 768px) { .results-list { min-height: 60vh; } }
     
     .status-msg { text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 20px; }
     
-    /* TARJETAS - COMPACTAS PERO LEGIBLES */
     .card { 
       background: var(--card-bg); 
       border: 1px solid var(--border); 
@@ -158,7 +125,6 @@
       padding: 12px; 
       margin-bottom: 12px; 
       cursor: pointer;
-      transition: 0.1s;
     }
     .card.urgent-card { background-color: #EBF8FF; border-top: 3px solid var(--c-urgent); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
@@ -183,25 +149,16 @@
       cursor: pointer;
     }
 
-    /* MAPA - MÁS PEQUEÑO EN MÓVIL PARA DAR ESPACIO A LISTA */
     .map-area { 
       width: 100%;
-      height: 280px;
+      height: 260px;
       position: relative;
       flex-shrink: 0;
     }
     @media (min-width: 768px) {
-      .map-area {
-        flex: 1;
-        height: auto;
-        min-height: 400px;
-      }
+      .map-area { flex: 1; height: auto; min-height: 400px; }
     }
-    #map { 
-      width: 100%; 
-      height: 100%; 
-      background: #E9E5DE; 
-    }
+    #map { width: 100%; height: 100%; background: #E9E5DE; }
     
     .marker-pin { 
       width: 24px; 
@@ -216,7 +173,6 @@
       font-weight: bold;
     }
     
-    /* BOTÓN DONACIÓN FLOTANTE */
     .btn-donate { 
       position: fixed; 
       bottom: 16px; 
@@ -242,7 +198,7 @@
       border-top: 1px solid var(--border); 
     }
 
-    /* MODAL DONACIÓN - VERSIÓN MEJORADA */
+    /* MODAL DONACIÓN - SIMPLIFICADO */
     .modal-overlay { 
       position: fixed; 
       top: 0; 
@@ -276,25 +232,22 @@
     }
     .modal h2 { font-size: 1.4rem; margin-bottom: 8px; }
     .modal p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-    .grid-btns { 
-      display: grid; 
-      grid-template-columns: repeat(3, 1fr); 
-      gap: 10px; 
-      margin-bottom: 12px; 
-    }
-    .grid-btns button, .btn-other-amount { 
-      padding: 10px; 
-      border: 1px solid var(--border); 
+    .btn-donate-modal { 
+      width: 100%; 
+      padding: 12px; 
+      background: var(--c-general); 
+      color: white; 
+      border: none; 
       border-radius: 40px; 
-      background: var(--bg); 
+      font-weight: 600; 
+      font-size: 16px; 
       cursor: pointer; 
-      font-weight: 600;
-      font-size: 14px;
+      margin-bottom: 10px;
     }
-    .btn-other-amount {
-      width: 100%;
-      margin-bottom: 12px;
-      background: white;
+    .donation-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 12px;
     }
   </style>
 </head>
@@ -351,7 +304,7 @@
       </div>
       
       <footer>
-        <span data-i18n="footerText">Herramienta comunitaria gratuita. Datos de prueba.</span> 
+        <span data-i18n="footerText">Herramienta comunitaria gratuita · Sin publicidad</span>
       </footer>
     </aside>
 
@@ -362,30 +315,25 @@
 
   <button class="btn-donate" data-i18n="donateBtn" onclick="toggleModal(true)">☕ Apóyanos</button>
 
-  <!-- MODAL DE DONACIÓN SIN PAYPAL -->
+  <!-- MODAL SIMPLIFICADO - UN SOLO BOTÓN -->
   <div class="modal-overlay" id="donateModal">
     <div class="modal">
       <button class="modal-close" onclick="toggleModal(false)">&times;</button>
       <h2>🙏 ¡Gracias por estar aquí!</h2>
-      <p>SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Si te ayudó, invitarnos un café nos permite seguir creciendo.</p>
-      <div class="grid-btns">
-        <button onclick="alertDonate(1)">$1 USD</button>
-        <button onclick="alertDonate(5)">$5 USD</button>
-        <button onclick="alertDonate(10)">$10 USD</button>
-      </div>
-      <button class="btn-other-amount" onclick="alertDonate('other')">💬 Other amount (tú decides)</button>
-      <button style="width:100%; border:none; background:none; color:var(--text-muted); cursor:pointer; font-size:13px; margin-top:10px;" onclick="toggleModal(false)">Cerrar</button>
+      <p data-i18n="donateMsg">SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Tu apoyo, desde <strong>$3 USD</strong>, nos ayuda a seguir ayudando a quien más lo necesita.</p>
+      <button class="btn-donate-modal" onclick="abrirDonacion()">☕ Invítanos un café</button>
+      <div class="donation-note" data-i18n="donateNote">Cualquier monto es enorme para nosotros. En la siguiente pantalla podrás elegirlo.</div>
     </div>
   </div>
 
   <script>
-    // DICCIONARIO DE TRADUCCIONES (8 Idiomas) - solo textos visibles
+    // DICCIONARIO DE TRADUCCIONES (8 idiomas - simplificado)
     const i18n = {
-      es: { search: "Buscar", radius: "Radio (km)", mode: "Modo viaje", driving: "🚗 Coche", transit: "🚌 Transporte", walking: "🚶 Caminando", includePharmacies: "💊 Incluir farmacias", loading: "Cargando...", noResults: "No se encontraron resultados", geoError: "Error de geolocalización", geoPrompt: "Permite la ubicación", footerText: "Herramienta gratuita · Datos de prueba", donateBtn: "☕ Apóyanos", routeBtn: "🗺️ Cómo llegar", sponsor: "⭐ Patrocinador", type_1: "Hospital urgencias 24h", type_2: "Hospital general", type_3: "Médico con cédula", type_4: "Clínica", type_5: "Farmacia", sum_1: "Atención 24h", sum_2: "Atención general", sum_3: "Consulta especialista", sum_4: "Servicios básicos", sum_5: "Venta medicamentos" },
-      en: { search: "Search", radius: "Radius (km)", mode: "Travel mode", driving: "🚗 Driving", transit: "🚌 Transit", walking: "🚶 Walking", includePharmacies: "💊 Include pharmacies", loading: "Loading...", noResults: "No results", geoError: "Location error", geoPrompt: "Allow location", footerText: "Free tool · Demo data", donateBtn: "☕ Support us", routeBtn: "🗺️ Directions", sponsor: "⭐ Sponsor", type_1: "24h Emergency", type_2: "General Hospital", type_3: "Licensed Doctor", type_4: "Clinic", type_5: "Pharmacy", sum_1: "24h care", sum_2: "General care", sum_3: "Specialist", sum_4: "Basic services", sum_5: "Medicine sales" }
+      es: { radius: "Radio (km)", mode: "Modo viaje", driving: "🚗 Coche", transit: "🚌 Transporte", walking: "🚶 Caminando", includePharmacies: "💊 Incluir farmacias", search: "Buscar", loading: "Cargando...", noResults: "No se encontraron resultados", geoError: "Error de geolocalización", geoPrompt: "Permite la ubicación", footerText: "Herramienta comunitaria gratuita · Sin publicidad", donateBtn: "☕ Apóyanos", donateMsg: "SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Tu apoyo, desde <strong>$3 USD</strong>, nos ayuda a seguir ayudando a quien más lo necesita.", donateNote: "Cualquier monto es enorme para nosotros. En la siguiente pantalla podrás elegirlo.", routeBtn: "🗺️ Cómo llegar", sponsor: "⭐ Patrocinador", type_1: "Hospital urgencias 24h", type_2: "Hospital general", type_3: "Médico con cédula", type_4: "Clínica", type_5: "Farmacia", sum_1: "Atención 24h", sum_2: "Atención general", sum_3: "Consulta especialista", sum_4: "Servicios básicos", sum_5: "Venta medicamentos" },
+      en: { radius: "Radius (km)", mode: "Travel mode", driving: "🚗 Driving", transit: "🚌 Transit", walking: "🚶 Walking", includePharmacies: "💊 Include pharmacies", search: "Search", loading: "Loading...", noResults: "No results", geoError: "Location error", geoPrompt: "Allow location", footerText: "Free community tool · Ad-free", donateBtn: "☕ Support us", donateMsg: "SaludCerca | NearMed is <strong>free and ad-free</strong>. Your support, starting at <strong>$3 USD</strong>, helps us keep helping those who need it most.", donateNote: "Every amount matters to us. On the next screen you can choose it.", routeBtn: "🗺️ Directions", sponsor: "⭐ Sponsor", type_1: "24h Emergency", type_2: "General Hospital", type_3: "Licensed Doctor", type_4: "Clinic", type_5: "Pharmacy", sum_1: "24h care", sum_2: "General care", sum_3: "Specialist", sum_4: "Basic services", sum_5: "Medicine sales" }
     };
-    // Por simplicidad se cargan los demás idiomas con copia de inglés (se pueden ampliar luego)
-    for(let lang of ['pt','fr','ru','zh','hi','ar']) i18n[lang] = i18n.en;
+    // Copiar inglés para otros idiomas (por simplicidad)
+    for(let l of ['pt','fr','ru','zh','hi','ar']) i18n[l] = i18n.en;
 
     let lang = 'es';
     let userLoc = null;
@@ -396,11 +344,32 @@
     let searchResults = [];
 
     function t(key) { return i18n[lang][key] || i18n['es'][key] || key; }
-    function changeLang(newLang) { lang = newLang; document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if(el.tagName!=='INPUT') el.innerText = t(k); }); if(searchResults.length) renderResults(); }
+    
+    function changeLang(newLang) { 
+      lang = newLang; 
+      document.querySelectorAll('[data-i18n]').forEach(el => { 
+        const k = el.getAttribute('data-i18n'); 
+        if(el.tagName !== 'INPUT') el.innerHTML = t(k); 
+      }); 
+      if(searchResults.length) renderResults(); 
+    }
+    
     function calcKmFromSlider(val) { return Math.round(1 * Math.pow(50, val/100)); }
     function updateRadiusLabel(val) { radiusKm = calcKmFromSlider(val); document.getElementById('radVal').innerText = radiusKm + " km"; }
-    function getDistance(lat1, lon1, lat2, lon2) { const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180, a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); }
-    function generateMockData() { const templates=[{cIdx:'1',pIdx:1,c:'#2B6CB0',e:true},{cIdx:'2',pIdx:2,c:'#ED8936',e:false},{cIdx:'3',pIdx:3,c:'#3182CE',e:false},{cIdx:'4',pIdx:4,c:'#00A3C4',e:false},{cIdx:'5',pIdx:5,c:'#38A169',e:false}]; for(let i=0;i<40;i++){ const rDist=Math.random()*50, rAngle=Math.random()*Math.PI*2, lat=userLoc.lat+(rDist/111)*Math.cos(rAngle), lon=userLoc.lon+(rDist/(111*Math.cos(userLoc.lat*Math.PI/180)))*Math.sin(rAngle), tmpl=templates[Math.floor(Math.random()*templates.length)]; mockData.push({ id:i, typeKey:`type_${tmpl.cIdx}`, sumKey:`sum_${tmpl.cIdx}`, priority:tmpl.pIdx, urgent:tmpl.e, color:tmpl.c, lat, lon, name:`Centro ${String.fromCharCode(65+(i%26))}`, address:`Calle ${i+1}`, phone:`+00 ${1000+i}`, sponsor:(i===0||i===1) }); } }
+    
+    function getDistance(lat1, lon1, lat2, lon2) { 
+      const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; 
+      const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; 
+      return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); 
+    }
+    
+    function generateMockData() { 
+      const templates=[{cIdx:'1',pIdx:1,c:'#2B6CB0',e:true},{cIdx:'2',pIdx:2,c:'#ED8936',e:false},{cIdx:'3',pIdx:3,c:'#3182CE',e:false},{cIdx:'4',pIdx:4,c:'#00A3C4',e:false},{cIdx:'5',pIdx:5,c:'#38A169',e:false}]; 
+      for(let i=0;i<40;i++){ 
+        const rDist=Math.random()*50, rAngle=Math.random()*Math.PI*2, lat=userLoc.lat+(rDist/111)*Math.cos(rAngle), lon=userLoc.lon+(rDist/(111*Math.cos(userLoc.lat*Math.PI/180)))*Math.sin(rAngle), tmpl=templates[Math.floor(Math.random()*templates.length)]; 
+        mockData.push({ id:i, typeKey:`type_${tmpl.cIdx}`, sumKey:`sum_${tmpl.cIdx}`, priority:tmpl.pIdx, urgent:tmpl.e, color:tmpl.c, lat, lon, name:`Centro ${String.fromCharCode(65+(i%26))}`, address:`Calle ${i+1}`, phone:`+00 ${1000+i}`, sponsor:(i===0||i===1) }); 
+      } 
+    }
     
     function abrirRutaConSelector(destLat, destLon) {
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -426,6 +395,7 @@
       renderResults();
       renderMarkers();
     }
+    
     function renderResults() {
       const list = document.getElementById('resultsList');
       if(searchResults.length===0){ list.innerHTML=`<div class="status-msg">${t('noResults')}</div>`; return; }
@@ -434,6 +404,7 @@
       html+=`<div class="${cardClass}" onclick="map.setView([${r.lat}, ${r.lon}], 14)">${sponHTML}<div class="card-header"><div class="card-title">${uIcon}${r.name}</div></div><div class="tag-type" style="background:${r.color}">${typeStr}</div><div class="card-info">📍 ${r.dist.toFixed(1)} km · ${r.address}</div><div class="card-info">📞 ${r.phone}</div><div class="card-info">💡 ${sumStr}</div><button class="btn-route" onclick="event.stopPropagation(); abrirRutaConSelector(${r.lat}, ${r.lon})">${t('routeBtn')}</button></div>`; });
       list.innerHTML=html;
     }
+    
     function renderMarkers() {
       facilityMarkers.forEach(m=>map.removeLayer(m)); facilityMarkers=[];
       const bounds=[[userLoc.lat, userLoc.lon]];
@@ -441,11 +412,10 @@
       if(bounds.length>1) map.fitBounds(bounds,{padding:[30,30]});
     }
 
-    // DONACIONES REALES CON BUY ME A COFFEE
+    // DONACIONES - SIMPLIFICADO
     function toggleModal(show) { document.getElementById('donateModal').classList.toggle('active', show); }
-    function alertDonate(amount) {
-      const bmcLink = 'https://buymeacoffee.com/SaludCercaNearMed';
-      window.open(bmcLink, '_blank');
+    function abrirDonacion() {
+      window.open('https://buymeacoffee.com/SaludCercaNearMed', '_blank');
       toggleModal(false);
     }
 
