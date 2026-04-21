@@ -177,6 +177,8 @@
       font-weight: 600; 
       text-align: center; 
       width: 100%;
+      border: none;
+      cursor: pointer;
     }
     .btn-route:hover { background: #2B6CB0; }
 
@@ -485,7 +487,12 @@
       
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        el.innerText = t(key);
+        if (el.tagName === 'INPUT' && el.type === 'checkbox') {
+          const span = el.nextElementSibling;
+          if (span && span.getAttribute('data-i18n')) span.innerText = t(key);
+        } else {
+          el.innerText = t(key);
+        }
       });
       
       if (document.getElementById('resultsList').innerHTML.indexOf('card') !== -1 || mockData.length > 0) {
@@ -548,6 +555,53 @@
 
     let searchResults = [];
 
+    // FUNCIÓN PARA ABRIR RUTA CON SELECTOR DE APP
+    function abrirRutaConSelector(destLat, destLon, destinoNombre) {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const userLat = userLoc.lat;
+      const userLon = userLoc.lon;
+      
+      const checkWaze = () => {
+        const wazeUrl = `waze://?ll=${destLat},${destLon}&navigate=yes`;
+        window.location.href = wazeUrl;
+        setTimeout(() => {
+          window.location.href = `https://www.waze.com/ul?ll=${destLat},${destLon}&navigate=yes`;
+        }, 2000);
+      };
+      
+      let opciones = [];
+      let mensaje = "🗺️ ¿Cómo quieres llegar?\n\n";
+      
+      if (isIOS) {
+        opciones = [
+          { id: 1, nombre: "🗺️ Apple Maps", url: `http://maps.apple.com/?daddr=${destLat},${destLon}&dirflg=d` },
+          { id: 2, nombre: "📱 Google Maps", url: `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}&travelmode=driving` },
+          { id: 3, nombre: "🚗 Waze", url: null, funcion: checkWaze }
+        ];
+        mensaje += "1. Apple Maps\n2. Google Maps\n3. Waze (si instalado)\n\nElige un número:";
+      } else {
+        opciones = [
+          { id: 1, nombre: "📱 Google Maps", url: `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}&travelmode=driving` },
+          { id: 2, nombre: "🚗 Waze", url: null, funcion: checkWaze }
+        ];
+        mensaje += "1. Google Maps\n2. Waze (si instalado)\n\nElige un número:";
+      }
+      
+      const seleccion = prompt(mensaje, "1");
+      const opcionElegida = opciones.find(o => o.id == seleccion);
+      
+      if (opcionElegida) {
+        if (opcionElegida.url) {
+          window.open(opcionElegida.url);
+        } else if (opcionElegida.funcion) {
+          opcionElegida.funcion();
+        }
+      } else {
+        alert("Opción no válida. Se abrirá Google Maps por defecto.");
+        window.open(`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}&travelmode=driving`);
+      }
+    }
+
     function doSearch() {
       if(!userLoc) return;
       document.getElementById('resultsList').innerHTML = `<div class="status-msg">${t('loading')}</div>`;
@@ -582,14 +636,12 @@
       }
 
       let html = '';
-      const mode = document.getElementById('modeSelect').value;
 
       searchResults.forEach(r => {
         const typeStr = t(r.typeKey);
         const sumStr = t(r.sumKey);
         const uIcon = r.urgent ? '⚡ ' : '';
         const sponHTML = r.sponsor ? `<div class="tag-sponsor">${t('sponsor')}</div>` : '';
-        const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLoc.lat},${userLoc.lon}&destination=${r.lat},${r.lon}&travelmode=${mode}`;
         const cardClass = r.urgent ? "card urgent-card" : "card";
 
         html += `
@@ -602,7 +654,7 @@
             <div class="card-info">📍 ${r.dist.toFixed(1)} km · ${r.address}</div>
             <div class="card-info">📞 ${r.phone}</div>
             <div class="card-info" style="margin-top:8px;">💡 ${sumStr}</div>
-            <a href="${mapUrl}" target="_blank" class="btn-route">${t('routeBtn')}</a>
+            <button class="btn-route" onclick="event.stopPropagation(); abrirRutaConSelector(${r.lat}, ${r.lon}, '${r.name.replace(/'/g, "\\'")}')">${t('routeBtn')}</button>
           </div>
         `;
       });
@@ -612,7 +664,6 @@
     function renderMarkers() {
       facilityMarkers.forEach(m => map.removeLayer(m));
       facilityMarkers = [];
-      const mode = document.getElementById('modeSelect').value;
 
       const bounds = [[userLoc.lat, userLoc.lon]];
 
@@ -623,11 +674,14 @@
           iconSize: [24, 24],
           iconAnchor: [12, 12]
         });
-
-        const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLoc.lat},${userLoc.lon}&destination=${r.lat},${r.lon}&travelmode=${mode}`;
         
         const m = L.marker([r.lat, r.lon], { icon: customIcon }).addTo(map)
-          .bindPopup(`<b>${r.name}</b><br>${t(r.typeKey)}<br>${r.dist.toFixed(1)} km<br><a href="${mapUrl}" target="_blank">Ruta</a>`);
+          .bindPopup(`
+            <b>${r.name}</b><br>
+            ${t(r.typeKey)}<br>
+            ${r.dist.toFixed(1)} km<br>
+            <button onclick="abrirRutaConSelector(${r.lat}, ${r.lon}, '${r.name.replace(/'/g, "\\'")}')" style="margin-top:8px; background:#3182CE; color:white; border:none; padding:5px 10px; border-radius:6px; cursor:pointer;">${t('routeBtn')}</button>
+          `);
         
         facilityMarkers.push(m);
         bounds.push([r.lat, r.lon]);
@@ -674,7 +728,6 @@
       
       changeLang('es');
       
-      // Ajustar altura del mapa en móvil
       if (window.innerWidth < 768) {
         document.querySelector('.map-area').style.height = '300px';
       }
