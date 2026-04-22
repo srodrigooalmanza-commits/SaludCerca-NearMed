@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
-  <title>SaludCerca | NearMed</title>
+  <title>SaludCerca | NearMed - Hospitales y urgencias reales</title>
   
-  <!-- FAVICON (logo en la pestaña del navegador) -->
+  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="SaludCerca.png">
   
   <!-- Leaflet CSS & JS -->
@@ -58,7 +58,6 @@
       z-index: 100;
     }
     
-    /* LOGO JUNTO AL TÍTULO */
     .logo-title {
       display: flex;
       align-items: center;
@@ -332,7 +331,7 @@
       </div>
       
       <footer>
-        <span data-i18n="footerText">Herramienta comunitaria gratuita · Sin publicidad</span>
+        <span data-i18n="footerText">Herramienta comunitaria gratuita · Sin publicidad · Datos de OpenStreetMap</span>
       </footer>
     </aside>
 
@@ -354,9 +353,12 @@
   </div>
 
   <script>
+    // ============================================================
+    // TRADUCCIONES (8 idiomas)
+    // ============================================================
     const i18n = {
-      es: { radius: "Radio (km)", mode: "Modo viaje", driving: "🚗 Coche", transit: "🚌 Transporte", walking: "🚶 Caminando", includePharmacies: "💊 Incluir farmacias", search: "Buscar", loading: "Cargando...", noResults: "No se encontraron resultados", geoError: "Error de geolocalización", geoPrompt: "Permite la ubicación", footerText: "Herramienta comunitaria gratuita · Sin publicidad", donateBtn: "☕ Apóyanos", donateMsg: "SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Tu apoyo, desde <strong>$3 USD</strong>, nos ayuda a seguir ayudando a quien más lo necesita.", donateNote: "Cualquier monto es enorme para nosotros. En la siguiente pantalla podrás elegirlo.", routeBtn: "🗺️ Cómo llegar", sponsor: "⭐ Patrocinador", type_1: "Hospital urgencias 24h", type_2: "Hospital general", type_3: "Médico con cédula", type_4: "Clínica", type_5: "Farmacia", sum_1: "Atención 24h", sum_2: "Atención general", sum_3: "Consulta especialista", sum_4: "Servicios básicos", sum_5: "Venta medicamentos" },
-      en: { radius: "Radius (km)", mode: "Travel mode", driving: "🚗 Driving", transit: "🚌 Transit", walking: "🚶 Walking", includePharmacies: "💊 Include pharmacies", search: "Search", loading: "Loading...", noResults: "No results", geoError: "Location error", geoPrompt: "Allow location", footerText: "Free community tool · Ad-free", donateBtn: "☕ Support us", donateMsg: "SaludCerca | NearMed is <strong>free and ad-free</strong>. Your support, starting at <strong>$3 USD</strong>, helps us keep helping those who need it most.", donateNote: "Every amount matters to us. On the next screen you can choose it.", routeBtn: "🗺️ Directions", sponsor: "⭐ Sponsor", type_1: "24h Emergency", type_2: "General Hospital", type_3: "Licensed Doctor", type_4: "Clinic", type_5: "Pharmacy", sum_1: "24h care", sum_2: "General care", sum_3: "Specialist", sum_4: "Basic services", sum_5: "Medicine sales" }
+      es: { radius: "Radio (km)", mode: "Modo viaje", driving: "🚗 Coche", transit: "🚌 Transporte", walking: "🚶 Caminando", includePharmacies: "💊 Incluir farmacias", search: "Buscar", loading: "Cargando...", noResults: "No se encontraron resultados en este radio. Prueba aumentarlo.", geoError: "Error de geolocalización. Permite el acceso o escribe una ubicación manual.", geoPrompt: "Permite la ubicación para encontrar centros cercanos", footerText: "Herramienta comunitaria gratuita · Sin publicidad · Datos de OpenStreetMap", donateBtn: "☕ Apóyanos", donateMsg: "SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Tu apoyo, desde <strong>$3 USD</strong>, nos ayuda a seguir ayudando a quien más lo necesita.", donateNote: "Cualquier monto es enorme para nosotros. En la siguiente pantalla podrás elegirlo.", routeBtn: "🗺️ Cómo llegar", sponsor: "⭐ Patrocinador", type_1: "Hospital urgencias 24h", type_2: "Hospital general", type_3: "Médico con cédula", type_4: "Clínica", type_5: "Farmacia", sum_1: "Atención 24h", sum_2: "Atención general", sum_3: "Consulta especialista", sum_4: "Servicios básicos", sum_5: "Venta medicamentos" },
+      en: { radius: "Radius (km)", mode: "Travel mode", driving: "🚗 Driving", transit: "🚌 Transit", walking: "🚶 Walking", includePharmacies: "💊 Include pharmacies", search: "Search", loading: "Loading...", noResults: "No results found in this radius. Try increasing it.", geoError: "Geolocation error. Please allow access or enter a manual location.", geoPrompt: "Allow location to find nearby centers", footerText: "Free community tool · Ad-free · Data from OpenStreetMap", donateBtn: "☕ Support us", donateMsg: "SaludCerca | NearMed is <strong>free and ad-free</strong>. Your support, starting at <strong>$3 USD</strong>, helps us keep helping those who need it most.", donateNote: "Every amount matters to us. On the next screen you can choose it.", routeBtn: "🗺️ Directions", sponsor: "⭐ Sponsor", type_1: "24h Emergency", type_2: "General Hospital", type_3: "Licensed Doctor", type_4: "Clinic", type_5: "Pharmacy", sum_1: "24h care", sum_2: "General care", sum_3: "Specialist", sum_4: "Basic services", sum_5: "Medicine sales" }
     };
     for(let l of ['pt','fr','ru','zh','hi','ar']) i18n[l] = i18n.en;
 
@@ -365,7 +367,6 @@
     let radiusKm = 10;
     let map = null;
     let facilityMarkers = [];
-    let mockData = [];
     let searchResults = [];
 
     function t(key) { return i18n[lang][key] || i18n['es'][key] || key; }
@@ -388,69 +389,284 @@
       return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); 
     }
     
-    function generateMockData() { 
-      const templates=[{cIdx:'1',pIdx:1,c:'#2B6CB0',e:true},{cIdx:'2',pIdx:2,c:'#ED8936',e:false},{cIdx:'3',pIdx:3,c:'#3182CE',e:false},{cIdx:'4',pIdx:4,c:'#00A3C4',e:false},{cIdx:'5',pIdx:5,c:'#38A169',e:false}]; 
-      for(let i=0;i<40;i++){ 
-        const rDist=Math.random()*50, rAngle=Math.random()*Math.PI*2, lat=userLoc.lat+(rDist/111)*Math.cos(rAngle), lon=userLoc.lon+(rDist/(111*Math.cos(userLoc.lat*Math.PI/180)))*Math.sin(rAngle), tmpl=templates[Math.floor(Math.random()*templates.length)]; 
-        mockData.push({ id:i, typeKey:`type_${tmpl.cIdx}`, sumKey:`sum_${tmpl.cIdx}`, priority:tmpl.pIdx, urgent:tmpl.e, color:tmpl.c, lat, lon, name:`Centro ${String.fromCharCode(65+(i%26))}`, address:`Calle ${i+1}`, phone:`+00 ${1000+i}`, sponsor:(i===0||i===1) }); 
-      } 
+    // ============================================================
+    // CONSULTA REAL A OPENSTREETMAP (OVERPAST API)
+    // ============================================================
+    async function fetchRealHealthFacilities(lat, lon, radiusKm, includePharmacy) {
+      const overpassUrl = 'https://overpass-api.de/api/interpreter';
+      const radiusMeters = radiusKm * 1000;
+      
+      // Construir consulta Overpass QL
+      let query = `[out:json][timeout:25];
+      (
+        node["amenity"="hospital"](around:${radiusMeters},${lat},${lon});
+        node["amenity"="clinic"](around:${radiusMeters},${lat},${lon});
+        node["healthcare"="doctor"](around:${radiusMeters},${lat},${lon});
+        node["healthcare"="clinic"](around:${radiusMeters},${lat},${lon});
+        node["amenity"="doctors"](around:${radiusMeters},${lat},${lon});
+      `;
+      
+      if (includePharmacy) {
+        query += `node["amenity"="pharmacy"](around:${radiusMeters},${lat},${lon});`;
+      }
+      
+      query += `);
+      out body;
+      >;
+      out skel qt;`;
+      
+      try {
+        const response = await fetch(overpassUrl, {
+          method: 'POST',
+          body: query,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+        
+        if (!response.ok) throw new Error('Error en la API');
+        
+        const data = await response.json();
+        
+        // Procesar resultados
+        const facilities = [];
+        const seen = new Set();
+        
+        for (const element of data.elements) {
+          if (element.type !== 'node') continue;
+          
+          const tags = element.tags || {};
+          const name = tags.name || "Centro médico";
+          
+          // Evitar duplicados por nombre y coordenadas cercanas
+          const key = `${name}-${Math.round(element.lat*1000)}-${Math.round(element.lon*1000)}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          
+          // Determinar prioridad y tipo
+          let priority = 4;
+          let typeKey = 'type_4';
+          let urgent = false;
+          let color = '#00A3C4';
+          
+          if (tags.amenity === 'hospital') {
+            priority = 2;
+            typeKey = 'type_2';
+            color = '#ED8936';
+            // Verificar si tiene urgencias 24h
+            if (tags.emergency === 'yes' || tags['24h'] === 'yes' || tags.emergency_room === 'yes') {
+              priority = 1;
+              typeKey = 'type_1';
+              urgent = true;
+              color = '#2B6CB0';
+            }
+          } else if (tags.amenity === 'clinic' || tags.healthcare === 'clinic') {
+            priority = 4;
+            typeKey = 'type_4';
+            color = '#00A3C4';
+          } else if (tags.healthcare === 'doctor' || tags.amenity === 'doctors') {
+            priority = 3;
+            typeKey = 'type_3';
+            color = '#3182CE';
+          } else if (tags.amenity === 'pharmacy') {
+            priority = 5;
+            typeKey = 'type_5';
+            color = '#38A169';
+          }
+          
+          const distance = getDistance(lat, lon, element.lat, element.lon);
+          
+          facilities.push({
+            id: element.id,
+            name: name,
+            typeKey: typeKey,
+            sumKey: `sum_${typeKey.split('_')[1]}`,
+            priority: priority,
+            urgent: urgent,
+            color: color,
+            lat: element.lat,
+            lon: element.lon,
+            address: tags['addr:street'] ? `${tags['addr:street']} ${tags['addr:housenumber'] || ''}` : "Dirección no disponible",
+            phone: tags.phone || tags.contact_phone || "No disponible",
+            sponsor: false,
+            dist: distance
+          });
+        }
+        
+        return facilities;
+      } catch (error) {
+        console.error('Error fetching OSM data:', error);
+        return [];
+      }
     }
     
     function abrirRutaConSelector(destLat, destLon) {
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       const userLat = userLoc.lat, userLon = userLoc.lon;
-      const checkWaze = () => { window.location.href = `waze://?ll=${destLat},${destLon}&navigate=yes`; setTimeout(()=>{ window.location.href = `https://www.waze.com/ul?ll=${destLat},${destLon}&navigate=yes`; },2000); };
+      const checkWaze = () => { 
+        const wazeUrl = `waze://?ll=${destLat},${destLon}&navigate=yes`;
+        window.location.href = wazeUrl;
+        setTimeout(() => { 
+          window.location.href = `https://www.waze.com/ul?ll=${destLat},${destLon}&navigate=yes`;
+        }, 2000);
+      };
+      
       let opciones = [], msg = "🗺️ ¿Cómo llegar?\n\n";
-      if(isIOS){ opciones=[{id:1,nombre:"Apple Maps",url:`http://maps.apple.com/?daddr=${destLat},${destLon}`},{id:2,nombre:"Google Maps",url:`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}`},{id:3,nombre:"Waze",url:null,funcion:checkWaze}]; msg+="1. Apple Maps\n2. Google Maps\n3. Waze\n\nElige número:"; }
-      else{ opciones=[{id:1,nombre:"Google Maps",url:`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}`},{id:2,nombre:"Waze",url:null,funcion:checkWaze}]; msg+="1. Google Maps\n2. Waze\n\nElige número:"; }
-      const sel = prompt(msg,"1");
-      const opt = opciones.find(o=>o.id==sel);
-      if(opt){ if(opt.url) window.open(opt.url); else if(opt.funcion) opt.funcion(); }
-      else window.open(`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}`);
+      if(isIOS) {
+        opciones = [
+          { id: 1, nombre: "Apple Maps", url: `http://maps.apple.com/?daddr=${destLat},${destLon}` },
+          { id: 2, nombre: "Google Maps", url: `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}` },
+          { id: 3, nombre: "Waze", url: null, funcion: checkWaze }
+        ];
+        msg += "1. Apple Maps\n2. Google Maps\n3. Waze\n\nElige número:";
+      } else {
+        opciones = [
+          { id: 1, nombre: "Google Maps", url: `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}` },
+          { id: 2, nombre: "Waze", url: null, funcion: checkWaze }
+        ];
+        msg += "1. Google Maps\n2. Waze\n\nElige número:";
+      }
+      
+      const sel = prompt(msg, "1");
+      const opt = opciones.find(o => o.id == sel);
+      if(opt) {
+        if(opt.url) window.open(opt.url);
+        else if(opt.funcion) opt.funcion();
+      } else {
+        window.open(`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}`);
+      }
     }
 
-    function doSearch() {
+    async function doSearch() {
       if(!userLoc) return;
-      document.getElementById('resultsList').innerHTML = `<div class="status-msg">${t('loading')}</div>`;
+      
+      const listEl = document.getElementById('resultsList');
+      listEl.innerHTML = `<div class="status-msg">${t('loading')}</div>`;
+      
       const includePharm = document.getElementById('checkPharm').checked;
-      let filtered = mockData.map(f=> ({...f, dist: getDistance(userLoc.lat, userLoc.lon, f.lat, f.lon)})).filter(f=> f.dist <= radiusKm);
-      if(!includePharm) filtered = filtered.filter(f=> f.priority !== 5);
-      filtered.sort((a,b)=> { if(a.urgent && !b.urgent) return -1; if(!a.urgent && b.urgent) return 1; if(a.priority!==b.priority) return a.priority-b.priority; return a.dist-b.dist; });
-      searchResults = filtered.slice(0,12);
-      renderResults();
-      renderMarkers();
+      
+      try {
+        // Obtener datos reales de OpenStreetMap
+        let facilities = await fetchRealHealthFacilities(userLoc.lat, userLoc.lon, radiusKm, includePharm);
+        
+        // Ordenar por prioridad y distancia
+        facilities.sort((a, b) => {
+          if(a.urgent && !b.urgent) return -1;
+          if(!a.urgent && b.urgent) return 1;
+          if(a.priority !== b.priority) return a.priority - b.priority;
+          return a.dist - b.dist;
+        });
+        
+        searchResults = facilities.slice(0, 15);
+        
+        if(searchResults.length === 0) {
+          listEl.innerHTML = `<div class="status-msg">${t('noResults')}</div>`;
+        } else {
+          renderResults();
+          renderMarkers();
+        }
+      } catch (error) {
+        console.error(error);
+        listEl.innerHTML = `<div class="status-msg">Error al cargar datos. Intenta de nuevo.</div>`;
+      }
     }
     
     function renderResults() {
       const list = document.getElementById('resultsList');
-      if(searchResults.length===0){ list.innerHTML=`<div class="status-msg">${t('noResults')}</div>`; return; }
-      let html='';
-      searchResults.forEach(r=>{ const typeStr=t(r.typeKey), sumStr=t(r.sumKey), uIcon=r.urgent?'⚡ ':'', sponHTML=r.sponsor?`<div class="tag-sponsor">${t('sponsor')}</div>`:'', cardClass=r.urgent?"card urgent-card":"card";
-      html+=`<div class="${cardClass}" onclick="map.setView([${r.lat}, ${r.lon}], 14)">${sponHTML}<div class="card-header"><div class="card-title">${uIcon}${r.name}</div></div><div class="tag-type" style="background:${r.color}">${typeStr}</div><div class="card-info">📍 ${r.dist.toFixed(1)} km · ${r.address}</div><div class="card-info">📞 ${r.phone}</div><div class="card-info">💡 ${sumStr}</div><button class="btn-route" onclick="event.stopPropagation(); abrirRutaConSelector(${r.lat}, ${r.lon})">${t('routeBtn')}</button></div>`; });
-      list.innerHTML=html;
+      if(searchResults.length === 0) {
+        list.innerHTML = `<div class="status-msg">${t('noResults')}</div>`;
+        return;
+      }
+      
+      let html = '';
+      searchResults.forEach(r => {
+        const typeStr = t(r.typeKey);
+        const sumStr = t(r.sumKey);
+        const uIcon = r.urgent ? '⚡ ' : '';
+        const cardClass = r.urgent ? "card urgent-card" : "card";
+        
+        html += `
+          <div class="${cardClass}" onclick="map.setView([${r.lat}, ${r.lon}], 16)">
+            <div class="card-header">
+              <div class="card-title">${uIcon}${r.name}</div>
+            </div>
+            <div class="tag-type" style="background:${r.color}">${typeStr}</div>
+            <div class="card-info">📍 ${r.dist.toFixed(1)} km · ${r.address}</div>
+            <div class="card-info">📞 ${r.phone}</div>
+            <div class="card-info">💡 ${sumStr}</div>
+            <button class="btn-route" onclick="event.stopPropagation(); abrirRutaConSelector(${r.lat}, ${r.lon})">${t('routeBtn')}</button>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
     }
     
     function renderMarkers() {
-      facilityMarkers.forEach(m=>map.removeLayer(m)); facilityMarkers=[];
-      const bounds=[[userLoc.lat, userLoc.lon]];
-      searchResults.forEach(r=>{ const icon=L.divIcon({className:`pin-${r.id}`,html:`<div class="marker-pin" style="background:${r.color};">${r.urgent?'⚡':''}</div>`,iconSize:[24,24]}); const m=L.marker([r.lat,r.lon],{icon}).addTo(map).bindPopup(`<b>${r.name}</b><br>${t(r.typeKey)}<br>${r.dist.toFixed(1)} km<br><button onclick="abrirRutaConSelector(${r.lat}, ${r.lon})" style="background:#3182CE;color:white;border:none;padding:4px 10px;border-radius:20px;">${t('routeBtn')}</button>`); facilityMarkers.push(m); bounds.push([r.lat,r.lon]); });
-      if(bounds.length>1) map.fitBounds(bounds,{padding:[30,30]});
+      if(facilityMarkers.length) {
+        facilityMarkers.forEach(m => map.removeLayer(m));
+        facilityMarkers = [];
+      }
+      
+      const bounds = [[userLoc.lat, userLoc.lon]];
+      
+      searchResults.forEach(r => {
+        const customIcon = L.divIcon({
+          className: `pin-${r.id}`,
+          html: `<div class="marker-pin" style="background:${r.color};">${r.urgent ? '⚡' : ''}</div>`,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        });
+        
+        const m = L.marker([r.lat, r.lon], { icon: customIcon }).addTo(map)
+          .bindPopup(`
+            <b>${r.name}</b><br>
+            ${t(r.typeKey)}<br>
+            ${r.dist.toFixed(1)} km<br>
+            <button onclick="abrirRutaConSelector(${r.lat}, ${r.lon})" style="margin-top:8px; background:#3182CE; color:white; border:none; padding:4px 10px; border-radius:20px; cursor:pointer;">${t('routeBtn')}</button>
+          `);
+        
+        facilityMarkers.push(m);
+        bounds.push([r.lat, r.lon]);
+      });
+      
+      if(bounds.length > 1) {
+        map.fitBounds(bounds, { padding: [30, 30] });
+      }
     }
 
-    function toggleModal(show) { document.getElementById('donateModal').classList.toggle('active', show); }
+    function toggleModal(show) { 
+      document.getElementById('donateModal').classList.toggle('active', show); 
+    }
+    
     function abrirDonacion() {
       window.open('https://buymeacoffee.com/SaludCercaNearMed', '_blank');
       toggleModal(false);
     }
 
     window.onload = () => {
-      map = L.map('map').setView([0,0],2);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(pos=>{ userLoc={lat:pos.coords.latitude, lon:pos.coords.longitude}; map.setView([userLoc.lat,userLoc.lon],13); L.marker([userLoc.lat,userLoc.lon]).addTo(map).bindPopup("Tu ubicación"); generateMockData(); doSearch(); }, err=>{ document.getElementById('resultsList').innerHTML=`<div class="status-msg">${t('geoError')}</div>`; });
-      } else { document.getElementById('resultsList').innerHTML=`<div class="status-msg">${t('geoError')}</div>`; }
+      map = L.map('map').setView([0, 0], 2);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO'
+      }).addTo(map);
+      
+      if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+            map.setView([userLoc.lat, userLoc.lon], 13);
+            L.marker([userLoc.lat, userLoc.lon]).addTo(map).bindPopup("Tu ubicación");
+            doSearch();
+          },
+          err => {
+            document.getElementById('resultsList').innerHTML = `<div class="status-msg">${t('geoError')}</div>`;
+          }
+        );
+      } else {
+        document.getElementById('resultsList').innerHTML = `<div class="status-msg">${t('geoError')}</div>`;
+      }
+      
       changeLang('es');
-      if(window.innerWidth<768) document.querySelector('.map-area').style.height='260px';
+      if(window.innerWidth < 768) {
+        document.querySelector('.map-area').style.height = '260px';
+      }
     };
   </script>
 </body>
