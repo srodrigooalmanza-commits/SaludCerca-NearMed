@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
   <title>SaludCerca | NearMed</title>
   
+  <!-- FAVICON (logo en la pestaña del navegador) -->
+  <link rel="icon" type="image/png" href="SaludCerca.png">
+  
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -54,8 +57,26 @@
       top: 0;
       z-index: 100;
     }
-    h1 { font-size: 1.3rem; font-weight: 600; color: var(--primary); }
-    .lang-selector select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; background: var(--bg); }
+    
+    /* LOGO JUNTO AL TÍTULO */
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0;
+    }
+    
+    .lang-selector select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; background: var(--bg); cursor: pointer; }
 
     .app-container { display: flex; flex-direction: column; min-height: 100%; }
     @media (min-width: 768px) { .app-container { flex-direction: row; } }
@@ -81,7 +102,7 @@
     
     .slider-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .slider-val { font-weight: 600; font-size: 14px; }
-    input[type=range] { width: 100%; accent-color: var(--primary); }
+    input[type=range] { width: 100%; accent-color: var(--primary); cursor: pointer; }
     
     select.filter-select { 
       width: 100%; 
@@ -106,6 +127,7 @@
       cursor: pointer; 
       margin-top: 8px;
     }
+    .btn-search:hover { opacity: 0.9; }
 
     .results-list { 
       flex: 1; 
@@ -125,7 +147,9 @@
       padding: 12px; 
       margin-bottom: 12px; 
       cursor: pointer;
+      transition: 0.1s;
     }
+    .card:hover { border-color: var(--text-muted); }
     .card.urgent-card { background-color: #EBF8FF; border-top: 3px solid var(--c-urgent); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
     .card-title { font-size: 15px; font-weight: 700; }
@@ -148,6 +172,7 @@
       width: 100%;
       cursor: pointer;
     }
+    .btn-route:hover { background: #2B6CB0; }
 
     .map-area { 
       width: 100%;
@@ -188,6 +213,7 @@
       cursor: pointer; 
       z-index: 1000;
     }
+    .btn-donate:hover { transform: translateY(-2px); }
     
     footer { 
       text-align: center; 
@@ -198,7 +224,6 @@
       border-top: 1px solid var(--border); 
     }
 
-    /* MODAL DONACIÓN - SIMPLIFICADO */
     .modal-overlay { 
       position: fixed; 
       top: 0; 
@@ -254,7 +279,10 @@
 <body>
 
   <header>
-    <h1>SaludCerca | NearMed</h1>
+    <div class="logo-title">
+      <img src="SaludCerca.png" alt="SaludCerca" class="logo-img" onerror="this.style.display='none'">
+      <h1>SaludCerca | NearMed</h1>
+    </div>
     <div class="lang-selector">
       <select id="langSelect" onchange="changeLang(this.value)">
         <option value="es">Español</option>
@@ -315,7 +343,6 @@
 
   <button class="btn-donate" data-i18n="donateBtn" onclick="toggleModal(true)">☕ Apóyanos</button>
 
-  <!-- MODAL SIMPLIFICADO - UN SOLO BOTÓN -->
   <div class="modal-overlay" id="donateModal">
     <div class="modal">
       <button class="modal-close" onclick="toggleModal(false)">&times;</button>
@@ -327,12 +354,10 @@
   </div>
 
   <script>
-    // DICCIONARIO DE TRADUCCIONES (8 idiomas - simplificado)
     const i18n = {
       es: { radius: "Radio (km)", mode: "Modo viaje", driving: "🚗 Coche", transit: "🚌 Transporte", walking: "🚶 Caminando", includePharmacies: "💊 Incluir farmacias", search: "Buscar", loading: "Cargando...", noResults: "No se encontraron resultados", geoError: "Error de geolocalización", geoPrompt: "Permite la ubicación", footerText: "Herramienta comunitaria gratuita · Sin publicidad", donateBtn: "☕ Apóyanos", donateMsg: "SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Tu apoyo, desde <strong>$3 USD</strong>, nos ayuda a seguir ayudando a quien más lo necesita.", donateNote: "Cualquier monto es enorme para nosotros. En la siguiente pantalla podrás elegirlo.", routeBtn: "🗺️ Cómo llegar", sponsor: "⭐ Patrocinador", type_1: "Hospital urgencias 24h", type_2: "Hospital general", type_3: "Médico con cédula", type_4: "Clínica", type_5: "Farmacia", sum_1: "Atención 24h", sum_2: "Atención general", sum_3: "Consulta especialista", sum_4: "Servicios básicos", sum_5: "Venta medicamentos" },
       en: { radius: "Radius (km)", mode: "Travel mode", driving: "🚗 Driving", transit: "🚌 Transit", walking: "🚶 Walking", includePharmacies: "💊 Include pharmacies", search: "Search", loading: "Loading...", noResults: "No results", geoError: "Location error", geoPrompt: "Allow location", footerText: "Free community tool · Ad-free", donateBtn: "☕ Support us", donateMsg: "SaludCerca | NearMed is <strong>free and ad-free</strong>. Your support, starting at <strong>$3 USD</strong>, helps us keep helping those who need it most.", donateNote: "Every amount matters to us. On the next screen you can choose it.", routeBtn: "🗺️ Directions", sponsor: "⭐ Sponsor", type_1: "24h Emergency", type_2: "General Hospital", type_3: "Licensed Doctor", type_4: "Clinic", type_5: "Pharmacy", sum_1: "24h care", sum_2: "General care", sum_3: "Specialist", sum_4: "Basic services", sum_5: "Medicine sales" }
     };
-    // Copiar inglés para otros idiomas (por simplicidad)
     for(let l of ['pt','fr','ru','zh','hi','ar']) i18n[l] = i18n.en;
 
     let lang = 'es';
@@ -355,7 +380,7 @@
     }
     
     function calcKmFromSlider(val) { return Math.round(1 * Math.pow(50, val/100)); }
-    function updateRadiusLabel(val) { radiusKm = calcKmFromSlider(val); document.getElementById('radVal').innerText = radiusKm + " km"; }
+    function updateRadiusLabel(val) { radiusKm = calcKmFromSlider(val); document.getElementById('radVal').innerHTML = radiusKm + " km"; }
     
     function getDistance(lat1, lon1, lat2, lon2) { 
       const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; 
@@ -412,7 +437,6 @@
       if(bounds.length>1) map.fitBounds(bounds,{padding:[30,30]});
     }
 
-    // DONACIONES - SIMPLIFICADO
     function toggleModal(show) { document.getElementById('donateModal').classList.toggle('active', show); }
     function abrirDonacion() {
       window.open('https://buymeacoffee.com/SaludCercaNearMed', '_blank');
