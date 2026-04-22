@@ -3,16 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
-  <title>SaludCerca | NearMed - Hospitales y urgencias reales</title>
+  <title>SaludCerca | NearMed - Hospitales reales cerca de ti</title>
   
-  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="SaludCerca.png">
-  
-  <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     :root {
       --primary: #2C7A7B;
       --bg: #F7F9FC;
@@ -25,10 +24,7 @@
       --c-doctor: #3182CE;
       --c-clinic: #00A3C4;
       --c-pharmacy: #38A169;
-      --c-warning: #D69E2E;
     }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     
     html, body {
       width: 100%;
@@ -46,628 +42,507 @@
       overflow-y: auto;
     }
 
+    /* HEADER */
     header { 
       background-color: var(--card-bg); 
-      padding: 12px 16px; 
+      padding: 10px 12px; 
       border-bottom: 1px solid var(--border); 
       display: flex; 
+      flex-wrap: wrap;
       justify-content: space-between; 
       align-items: center; 
       position: sticky;
       top: 0;
       z-index: 100;
+      gap: 8px;
     }
-    
     .logo-title {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .logo-img {
-      height: 36px;
+      height: 32px;
       width: auto;
-      display: block;
     }
     h1 {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 600;
       color: var(--primary);
-      margin: 0;
     }
-    
-    .lang-selector select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; background: var(--bg); cursor: pointer; }
-
-    .app-container { display: flex; flex-direction: column; min-height: 100%; }
-    @media (min-width: 768px) { .app-container { flex-direction: row; } }
-
-    .sidebar { 
-      width: 100%; 
-      display: flex; 
-      flex-direction: column; 
-      background: var(--card-bg); 
-      border-right: 1px solid var(--border);
-      flex: 2;
+    .lang-selector select { 
+      padding: 5px 8px; 
+      border-radius: 8px; 
+      border: 1px solid var(--border); 
+      font-size: 12px; 
+      background: var(--bg); 
     }
-    @media (min-width: 768px) { .sidebar { width: 45%; max-width: 500px; } }
-    
+
+    /* PESTAÑAS */
+    .tabs {
+      display: flex;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+    }
+    .tab-content {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* CONTROLES */
     .controls { 
-      padding: 16px; 
-      border-bottom: 1px solid var(--border); 
-      background-color: var(--bg);
-      flex-shrink: 0;
+      padding: 12px; 
+      background: var(--card-bg); 
+      border-bottom: 1px solid var(--border);
+    }
+    .mode-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+    .mode-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
     }
     .control-group { margin-bottom: 12px; }
-    .control-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
-    
-    .slider-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    .slider-val { font-weight: 600; font-size: 14px; }
-    input[type=range] { width: 100%; accent-color: var(--primary); cursor: pointer; }
-    
-    select.filter-select { 
-      width: 100%; 
-      padding: 8px 12px; 
-      border: 1px solid var(--border); 
-      border-radius: 10px; 
-      background: var(--card-bg); 
-      font-size: 14px; 
+    .control-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; display: block; }
+    .slider-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+    input[type=range] { width: 100%; accent-color: var(--primary); }
+    .city-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      font-size: 14px;
     }
-    
-    .checkbox-lbl { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
-    
-    .btn-search { 
-      width: 100%; 
-      background: var(--primary); 
-      color: white; 
-      border: none; 
-      padding: 12px; 
-      border-radius: 40px; 
-      font-size: 16px; 
-      font-weight: 600; 
-      cursor: pointer; 
-      margin-top: 8px;
+    .search-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
     }
-    .btn-search:hover { opacity: 0.9; }
+    .btn-search {
+      flex: 1;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      background: var(--c-doctor);
+    }
 
+    /* LISTA DE RESULTADOS */
     .results-list { 
       flex: 1; 
       padding: 12px; 
-      background: var(--bg);
       overflow-y: auto;
-      min-height: 40vh;
     }
-    @media (min-width: 768px) { .results-list { min-height: 60vh; } }
-    
-    .status-msg { text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 20px; }
-    
     .card { 
       background: var(--card-bg); 
       border: 1px solid var(--border); 
       border-radius: 16px; 
       padding: 12px; 
-      margin-bottom: 12px; 
+      margin-bottom: 10px; 
       cursor: pointer;
-      transition: 0.1s;
     }
-    .card:hover { border-color: var(--text-muted); }
     .card.urgent-card { background-color: #EBF8FF; border-top: 3px solid var(--c-urgent); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
     .card-title { font-size: 15px; font-weight: 700; }
-    .tag-sponsor { font-size: 10px; background: #FFF8E1; color: var(--c-warning); padding: 2px 8px; border-radius: 20px; }
-    .tag-type { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; display: inline-block; margin-bottom: 8px; color: white; }
-    
-    .card-info { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; display: inline-block; margin-bottom: 8px; color: white; }
+    .card-info { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
     .btn-route { 
-      display: block; 
-      margin-top: 10px; 
-      padding: 8px 12px; 
+      display: inline-block; 
+      margin-top: 8px; 
+      padding: 6px 12px; 
       background: var(--c-doctor); 
       color: white; 
-      text-align: center; 
-      text-decoration: none; 
       border-radius: 40px; 
-      font-size: 13px; 
+      font-size: 12px; 
       font-weight: 600; 
       border: none;
-      width: 100%;
       cursor: pointer;
     }
-    .btn-route:hover { background: #2B6CB0; }
 
-    .map-area { 
-      width: 100%;
-      height: 260px;
-      position: relative;
-      flex-shrink: 0;
-    }
-    @media (min-width: 768px) {
-      .map-area { flex: 1; height: auto; min-height: 400px; }
-    }
+    /* MAPA */
+    .map-area { height: 280px; width: 100%; }
+    @media (min-width: 768px) { .map-area { height: 400px; } }
     #map { width: 100%; height: 100%; background: #E9E5DE; }
-    
-    .marker-pin { 
-      width: 24px; 
-      height: 24px; 
-      border-radius: 50%; 
-      border: 2px solid white; 
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3); 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      font-size: 11px; 
-      font-weight: bold;
-    }
-    
-    .btn-donate { 
-      position: fixed; 
-      bottom: 16px; 
-      right: 16px; 
-      background: var(--c-general); 
-      color: white; 
-      border: none; 
-      padding: 10px 18px; 
-      border-radius: 40px; 
-      font-weight: 600; 
-      font-size: 14px; 
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
-      cursor: pointer; 
-      z-index: 1000;
-    }
-    .btn-donate:hover { transform: translateY(-2px); }
-    
-    footer { 
-      text-align: center; 
-      padding: 10px; 
-      font-size: 10px; 
-      color: var(--text-muted); 
-      background: var(--card-bg); 
-      border-top: 1px solid var(--border); 
-    }
+    .marker-pin { width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
 
+    /* MODAL DETALLES */
     .modal-overlay { 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      right: 0; 
-      bottom: 0; 
-      background: rgba(0,0,0,0.5); 
-      display: none; 
-      justify-content: center; 
-      align-items: center; 
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+      background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; 
       z-index: 2000; 
     }
     .modal-overlay.active { display: flex; }
-    .modal { 
-      background: var(--card-bg); 
-      width: 85%; 
-      max-width: 320px; 
-      border-radius: 28px; 
-      padding: 24px 20px; 
-      text-align: center; 
-      position: relative; 
+    .modal-detail { 
+      background: var(--card-bg); width: 90%; max-width: 400px; 
+      border-radius: 28px; padding: 20px; max-height: 80vh; overflow-y: auto; 
     }
+    .modal-detail h3 { margin-bottom: 10px; }
+    .modal-detail p { margin-bottom: 8px; font-size: 14px; }
     .modal-close { 
-      position: absolute; 
-      top: 12px; 
-      right: 16px; 
-      background: none; 
-      border: none; 
-      font-size: 22px; 
-      cursor: pointer; 
+      float: right; background: none; border: none; font-size: 24px; cursor: pointer; 
     }
-    .modal h2 { font-size: 1.4rem; margin-bottom: 8px; }
-    .modal p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-    .btn-donate-modal { 
-      width: 100%; 
-      padding: 12px; 
-      background: var(--c-general); 
-      color: white; 
-      border: none; 
-      border-radius: 40px; 
-      font-weight: 600; 
-      font-size: 16px; 
-      cursor: pointer; 
-      margin-bottom: 10px;
+
+    /* FEEDBACK */
+    .feedback-area {
+      padding: 20px;
+      text-align: center;
     }
-    .donation-note {
-      font-size: 11px;
+    .feedback-btn {
+      background: var(--c-general);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .feedback-email {
+      margin-top: 20px;
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 12px;
+      word-break: break-all;
     }
+    .feedback-email a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .btn-donate { 
+      position: fixed; bottom: 16px; right: 16px; 
+      background: var(--c-general); color: white; border: none; 
+      padding: 10px 18px; border-radius: 40px; font-weight: 600; font-size: 14px; 
+      cursor: pointer; z-index: 1000; 
+    }
+    footer { text-align: center; padding: 10px; font-size: 10px; color: var(--text-muted); background: var(--card-bg); border-top: 1px solid var(--border); }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo-title">
-      <img src="SaludCerca.png" alt="SaludCerca" class="logo-img" onerror="this.style.display='none'">
-      <h1>SaludCerca | NearMed</h1>
+<header>
+  <div class="logo-title">
+    <img src="SaludCerca.png" alt="SaludCerca" class="logo-img" onerror="this.style.display='none'">
+    <h1>SaludCerca | NearMed</h1>
+  </div>
+  <div class="lang-selector">
+    <select id="langSelect" onchange="changeLang(this.value)">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ar">العربية</option>
+    </select>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('search')">🔍 Buscar</button>
+  <button class="tab-btn" onclick="switchTab('feedback')">💬 Feedback</button>
+</div>
+
+<div id="tab-search" class="tab-content active">
+  <div class="controls">
+    <div class="mode-selector">
+      <div id="modeNearMe" class="mode-btn active" onclick="setSearchMode('nearme')">📍 Cerca de mí</div>
+      <div id="modeCity" class="mode-btn" onclick="setSearchMode('city')">🏙️ Por ciudad</div>
     </div>
-    <div class="lang-selector">
-      <select id="langSelect" onchange="changeLang(this.value)">
-        <option value="es">Español</option>
-        <option value="en">English</option>
-        <option value="pt">Português</option>
-        <option value="fr">Français</option>
-        <option value="ru">Русский</option>
-        <option value="zh">中文</option>
-        <option value="hi">हिन्दी</option>
-        <option value="ar">العربية</option>
-      </select>
+    
+    <div id="nearme-controls">
+      <div class="control-group">
+        <div class="slider-row">
+          <label>📡 Radio (km)</label>
+          <span id="radVal">10 km</span>
+        </div>
+        <input type="range" id="radiusSlider" min="1" max="55" value="10" oninput="updateRadiusLabel(this.value)">
+      </div>
     </div>
-  </header>
-
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="controls">
-        <div class="control-group">
-          <div class="slider-row">
-            <label data-i18n="radius">Radio de búsqueda (km)</label>
-            <span class="slider-val" id="radVal">10 km</span>
-          </div>
-          <input type="range" id="radiusSlider" min="0" max="100" value="59" oninput="updateRadiusLabel(this.value)">
-        </div>
-
-        <div class="control-group">
-          <label data-i18n="mode">Modo de viaje</label>
-          <select id="modeSelect" class="filter-select">
-            <option value="driving" data-i18n="driving">🚗 Coche</option>
-            <option value="transit" data-i18n="transit">🚌 Transporte</option>
-            <option value="walking" data-i18n="walking">🚶 Caminando</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label class="checkbox-lbl">
-            <input type="checkbox" id="checkPharm">
-            <span data-i18n="includePharmacies">💊 Incluir farmacias</span>
-          </label>
-        </div>
-
-        <button class="btn-search" data-i18n="search" onclick="doSearch()">Buscar</button>
+    
+    <div id="city-controls" style="display:none;">
+      <div class="control-group">
+        <label>🌆 Ciudad / Localidad</label>
+        <input type="text" id="cityInput" class="city-input" placeholder="Ej: Madrid, Nueva York, Tokyo...">
       </div>
-
-      <div class="results-list" id="resultsList">
-        <div class="status-msg" data-i18n="geoPrompt">Permite la ubicación para encontrar centros cercanos</div>
+      <div class="control-group">
+        <div class="slider-row">
+          <label>📡 Radio (km)</label>
+          <span id="radValCity">10 km</span>
+        </div>
+        <input type="range" id="radiusSliderCity" min="1" max="55" value="10" oninput="updateRadiusLabelCity(this.value)">
       </div>
-      
-      <footer>
-        <span data-i18n="footerText">Herramienta comunitaria gratuita · Sin publicidad · Datos de OpenStreetMap</span>
-      </footer>
-    </aside>
-
-    <div class="map-area">
-      <div id="map"></div>
+    </div>
+    
+    <div class="search-row">
+      <button class="btn-search" onclick="doSearch()">🔍 Buscar centros de salud</button>
     </div>
   </div>
+  
+  <div class="map-area">
+    <div id="map"></div>
+  </div>
+  
+  <div class="results-list" id="resultsList">
+    <div class="status-msg" style="padding:20px; text-align:center;">📍 Activa ubicación o busca por ciudad</div>
+  </div>
+</div>
 
-  <button class="btn-donate" data-i18n="donateBtn" onclick="toggleModal(true)">☕ Apóyanos</button>
-
-  <div class="modal-overlay" id="donateModal">
-    <div class="modal">
-      <button class="modal-close" onclick="toggleModal(false)">&times;</button>
-      <h2>🙏 ¡Gracias por estar aquí!</h2>
-      <p data-i18n="donateMsg">SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Tu apoyo, desde <strong>$3 USD</strong>, nos ayuda a seguir ayudando a quien más lo necesita.</p>
-      <button class="btn-donate-modal" onclick="abrirDonacion()">☕ Invítanos un café</button>
-      <div class="donation-note" data-i18n="donateNote">Cualquier monto es enorme para nosotros. En la siguiente pantalla podrás elegirlo.</div>
+<div id="tab-feedback" class="tab-content">
+  <div class="feedback-area">
+    <h3>💬 Tu opinión nos mejora</h3>
+    <p style="margin:15px 0;">¿Encontraste lo que buscabas? ¿Falta algún hospital? ¿Algún error? Cuéntanos.</p>
+    <button class="feedback-btn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
+    <div class="feedback-email">
+      📧 También puedes escribirnos directamente:<br>
+      <a href="mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia">rodrigooctavioalmanza@gmail.com</a>
     </div>
   </div>
+</div>
 
-  <script>
-    // ============================================================
-    // TRADUCCIONES (8 idiomas)
-    // ============================================================
-    const i18n = {
-      es: { radius: "Radio (km)", mode: "Modo viaje", driving: "🚗 Coche", transit: "🚌 Transporte", walking: "🚶 Caminando", includePharmacies: "💊 Incluir farmacias", search: "Buscar", loading: "Cargando...", noResults: "No se encontraron resultados en este radio. Prueba aumentarlo.", geoError: "Error de geolocalización. Permite el acceso o escribe una ubicación manual.", geoPrompt: "Permite la ubicación para encontrar centros cercanos", footerText: "Herramienta comunitaria gratuita · Sin publicidad · Datos de OpenStreetMap", donateBtn: "☕ Apóyanos", donateMsg: "SaludCerca | NearMed es <strong>gratuito y sin publicidad</strong>. Tu apoyo, desde <strong>$3 USD</strong>, nos ayuda a seguir ayudando a quien más lo necesita.", donateNote: "Cualquier monto es enorme para nosotros. En la siguiente pantalla podrás elegirlo.", routeBtn: "🗺️ Cómo llegar", sponsor: "⭐ Patrocinador", type_1: "Hospital urgencias 24h", type_2: "Hospital general", type_3: "Médico con cédula", type_4: "Clínica", type_5: "Farmacia", sum_1: "Atención 24h", sum_2: "Atención general", sum_3: "Consulta especialista", sum_4: "Servicios básicos", sum_5: "Venta medicamentos" },
-      en: { radius: "Radius (km)", mode: "Travel mode", driving: "🚗 Driving", transit: "🚌 Transit", walking: "🚶 Walking", includePharmacies: "💊 Include pharmacies", search: "Search", loading: "Loading...", noResults: "No results found in this radius. Try increasing it.", geoError: "Geolocation error. Please allow access or enter a manual location.", geoPrompt: "Allow location to find nearby centers", footerText: "Free community tool · Ad-free · Data from OpenStreetMap", donateBtn: "☕ Support us", donateMsg: "SaludCerca | NearMed is <strong>free and ad-free</strong>. Your support, starting at <strong>$3 USD</strong>, helps us keep helping those who need it most.", donateNote: "Every amount matters to us. On the next screen you can choose it.", routeBtn: "🗺️ Directions", sponsor: "⭐ Sponsor", type_1: "24h Emergency", type_2: "General Hospital", type_3: "Licensed Doctor", type_4: "Clinic", type_5: "Pharmacy", sum_1: "24h care", sum_2: "General care", sum_3: "Specialist", sum_4: "Basic services", sum_5: "Medicine sales" }
-    };
-    for(let l of ['pt','fr','ru','zh','hi','ar']) i18n[l] = i18n.en;
+<button class="btn-donate" onclick="toggleModalDonate(true)">☕ Apóyanos</button>
 
-    let lang = 'es';
-    let userLoc = null;
-    let radiusKm = 10;
-    let map = null;
-    let facilityMarkers = [];
-    let searchResults = [];
+<!-- Modal de donación -->
+<div id="donateModal" class="modal-overlay">
+  <div class="modal-detail" style="max-width:300px;">
+    <button class="modal-close" onclick="toggleModalDonate(false)">✖</button>
+    <h3>🙏 Gracias por apoyarnos</h3>
+    <p>SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.</p>
+    <button class="btn-search" style="margin-top:15px;" onclick="abrirDonacion()">☕ Invítanos un café</button>
+  </div>
+</div>
 
-    function t(key) { return i18n[lang][key] || i18n['es'][key] || key; }
+<!-- Modal de detalles -->
+<div id="detailModal" class="modal-overlay">
+  <div class="modal-detail">
+    <button class="modal-close" onclick="closeDetailModal()">✖</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<script>
+  // ==================== TRADUCCIONES ====================
+  const i18n = {
+    es: { loading: "Buscando centros de salud...", noResults: "No se encontraron centros en este radio. Prueba aumentarlo o cambiar de ciudad.", geoError: "Error de ubicación. Permite el acceso o usa búsqueda por ciudad.", routeBtn: "🗺️ Cómo llegar", emergency: "Urgencias 24h" },
+    en: { loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.", geoError: "Location error. Allow access or use city search.", routeBtn: "🗺️ Directions", emergency: "24h Emergency" }
+  };
+  for(let l of ['pt','fr','ru','zh','hi','ar']) i18n[l] = i18n.en;
+  
+  let lang = 'es';
+  function t(key) { return i18n[lang][key] || i18n['es'][key] || key; }
+  function changeLang(newLang) { lang = newLang; location.reload(); }
+  
+  // ==================== VARIABLES GLOBALES ====================
+  let map, userLoc = null, searchMode = 'nearme', cityLatLon = null;
+  let radiusKm = 10, currentMarkers = [], currentResults = [];
+  
+  // ==================== INICIALIZACIÓN ====================
+  function initMap() {
+    map = L.map('map').setView([20, -100], 4);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO'
+    }).addTo(map);
+  }
+  
+  function setSearchMode(mode) {
+    searchMode = mode;
+    document.getElementById('modeNearMe').classList.toggle('active', mode === 'nearme');
+    document.getElementById('modeCity').classList.toggle('active', mode === 'city');
+    document.getElementById('nearme-controls').style.display = mode === 'nearme' ? 'block' : 'none';
+    document.getElementById('city-controls').style.display = mode === 'city' ? 'block' : 'none';
+  }
+  
+  function updateRadiusLabel(val) { radiusKm = parseInt(val); document.getElementById('radVal').innerHTML = radiusKm + " km"; }
+  function updateRadiusLabelCity(val) { document.getElementById('radValCity').innerHTML = val + " km"; }
+  
+  // ==================== BÚSQUEDA REAL ====================
+  async function geocodeCity(cityName) {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityName)}&format=json&limit=1`;
+    try {
+      const resp = await fetch(url);
+      const data = await resp.json();
+      if(data.length) return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), name: data[0].display_name };
+      return null;
+    } catch(e) { return null; }
+  }
+  
+  async function fetchNearby(lat, lon, radiusKm) {
+    const overpass = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon}););out body;`;
+    try {
+      const resp = await fetch(overpass);
+      const data = await resp.json();
+      const results = [];
+      for(let el of data.elements) {
+        if(el.type !== 'node') continue;
+        let name = el.tags?.name || "Centro médico";
+        let type = el.tags?.amenity || el.tags?.healthcare || "centro";
+        let color = '#00A3C4', urgent = false;
+        if(type === 'hospital') { color = '#ED8936'; if(el.tags?.emergency === 'yes') { urgent = true; color = '#2B6CB0'; } }
+        else if(type === 'doctor' || type === 'doctors') color = '#3182CE';
+        else if(type === 'pharmacy') color = '#38A169';
+        results.push({
+          id: el.id, name: name, lat: el.lat, lon: el.lon, type: type,
+          urgent: urgent, color: color, phone: el.tags?.phone || "No disponible",
+          address: el.tags?.['addr:street'] || "Dirección no disponible"
+        });
+      }
+      return results;
+    } catch(e) { return []; }
+  }
+  
+  function getDistance(lat1, lon1, lat2, lon2) {
+    const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180;
+    const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  }
+  
+  async function doSearch() {
+    const resultsDiv = document.getElementById('resultsList');
+    resultsDiv.innerHTML = `<div class="status-msg">${t('loading')}</div>`;
+    let centerLat, centerLon;
     
-    function changeLang(newLang) { 
-      lang = newLang; 
-      document.querySelectorAll('[data-i18n]').forEach(el => { 
-        const k = el.getAttribute('data-i18n'); 
-        if(el.tagName !== 'INPUT') el.innerHTML = t(k); 
-      }); 
-      if(searchResults.length) renderResults(); 
+    if(searchMode === 'nearme') {
+      if(!userLoc) {
+        if(!navigator.geolocation) { resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}</div>`; return; }
+        await new Promise((resolve) => {
+          navigator.geolocation.getCurrentPosition(pos => { userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude }; resolve(); },
+            () => { resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}</div>`; resolve(); });
+        });
+        if(!userLoc) return;
+      }
+      centerLat = userLoc.lat; centerLon = userLoc.lon;
+    } else {
+      const city = document.getElementById('cityInput').value.trim();
+      if(!city) { resultsDiv.innerHTML = `<div class="status-msg">Ingresa una ciudad</div>`; return; }
+      const geo = await geocodeCity(city);
+      if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">Ciudad no encontrada</div>`; return; }
+      centerLat = geo.lat; centerLon = geo.lon;
     }
     
-    function calcKmFromSlider(val) { return Math.round(1 * Math.pow(50, val/100)); }
-    function updateRadiusLabel(val) { radiusKm = calcKmFromSlider(val); document.getElementById('radVal').innerHTML = radiusKm + " km"; }
+    map.setView([centerLat, centerLon], 12);
+    const facilities = await fetchNearby(centerLat, centerLon, radiusKm);
+    if(facilities.length === 0) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
     
-    function getDistance(lat1, lon1, lat2, lon2) { 
-      const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180; 
-      const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; 
-      return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); 
-    }
+    currentResults = facilities.map(f => ({ ...f, dist: getDistance(centerLat, centerLon, f.lat, f.lon) }))
+      .sort((a,b) => (a.urgent === b.urgent ? a.dist - b.dist : (a.urgent ? -1 : 1)))
+      .slice(0, 20);
     
-    // ============================================================
-    // CONSULTA REAL A OPENSTREETMAP (OVERPAST API)
-    // ============================================================
-    async function fetchRealHealthFacilities(lat, lon, radiusKm, includePharmacy) {
-      const overpassUrl = 'https://overpass-api.de/api/interpreter';
-      const radiusMeters = radiusKm * 1000;
-      
-      // Construir consulta Overpass QL
-      let query = `[out:json][timeout:25];
-      (
-        node["amenity"="hospital"](around:${radiusMeters},${lat},${lon});
-        node["amenity"="clinic"](around:${radiusMeters},${lat},${lon});
-        node["healthcare"="doctor"](around:${radiusMeters},${lat},${lon});
-        node["healthcare"="clinic"](around:${radiusMeters},${lat},${lon});
-        node["amenity"="doctors"](around:${radiusMeters},${lat},${lon});
+    renderResults(currentResults);
+    renderMarkers(currentResults);
+  }
+  
+  function renderResults(results) {
+    const container = document.getElementById('resultsList');
+    let html = '';
+    for(let r of results) {
+      const safeName = r.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      html += `
+        <div class="card ${r.urgent ? 'urgent-card' : ''}" onclick='showDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
+          <div class="card-header"><span class="card-title">${r.urgent ? '⚡ ' : ''}${r.name}</span></div>
+          <div class="tag-type" style="background:${r.color}">${r.type}</div>
+          <div class="card-info">📍 ${r.dist.toFixed(1)} km · ${r.address}</div>
+          <div class="card-info">📞 ${r.phone}</div>
+          <button class="btn-route" onclick="event.stopPropagation(); abrirRuta(${r.lat}, ${r.lon})">${t('routeBtn')}</button>
+        </div>
       `;
-      
-      if (includePharmacy) {
-        query += `node["amenity"="pharmacy"](around:${radiusMeters},${lat},${lon});`;
-      }
-      
-      query += `);
-      out body;
-      >;
-      out skel qt;`;
-      
-      try {
-        const response = await fetch(overpassUrl, {
-          method: 'POST',
-          body: query,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
-        
-        if (!response.ok) throw new Error('Error en la API');
-        
-        const data = await response.json();
-        
-        // Procesar resultados
-        const facilities = [];
-        const seen = new Set();
-        
-        for (const element of data.elements) {
-          if (element.type !== 'node') continue;
-          
-          const tags = element.tags || {};
-          const name = tags.name || "Centro médico";
-          
-          // Evitar duplicados por nombre y coordenadas cercanas
-          const key = `${name}-${Math.round(element.lat*1000)}-${Math.round(element.lon*1000)}`;
-          if (seen.has(key)) continue;
-          seen.add(key);
-          
-          // Determinar prioridad y tipo
-          let priority = 4;
-          let typeKey = 'type_4';
-          let urgent = false;
-          let color = '#00A3C4';
-          
-          if (tags.amenity === 'hospital') {
-            priority = 2;
-            typeKey = 'type_2';
-            color = '#ED8936';
-            // Verificar si tiene urgencias 24h
-            if (tags.emergency === 'yes' || tags['24h'] === 'yes' || tags.emergency_room === 'yes') {
-              priority = 1;
-              typeKey = 'type_1';
-              urgent = true;
-              color = '#2B6CB0';
-            }
-          } else if (tags.amenity === 'clinic' || tags.healthcare === 'clinic') {
-            priority = 4;
-            typeKey = 'type_4';
-            color = '#00A3C4';
-          } else if (tags.healthcare === 'doctor' || tags.amenity === 'doctors') {
-            priority = 3;
-            typeKey = 'type_3';
-            color = '#3182CE';
-          } else if (tags.amenity === 'pharmacy') {
-            priority = 5;
-            typeKey = 'type_5';
-            color = '#38A169';
-          }
-          
-          const distance = getDistance(lat, lon, element.lat, element.lon);
-          
-          facilities.push({
-            id: element.id,
-            name: name,
-            typeKey: typeKey,
-            sumKey: `sum_${typeKey.split('_')[1]}`,
-            priority: priority,
-            urgent: urgent,
-            color: color,
-            lat: element.lat,
-            lon: element.lon,
-            address: tags['addr:street'] ? `${tags['addr:street']} ${tags['addr:housenumber'] || ''}` : "Dirección no disponible",
-            phone: tags.phone || tags.contact_phone || "No disponible",
-            sponsor: false,
-            dist: distance
-          });
-        }
-        
-        return facilities;
-      } catch (error) {
-        console.error('Error fetching OSM data:', error);
-        return [];
-      }
     }
-    
-    function abrirRutaConSelector(destLat, destLon) {
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const userLat = userLoc.lat, userLon = userLoc.lon;
-      const checkWaze = () => { 
-        const wazeUrl = `waze://?ll=${destLat},${destLon}&navigate=yes`;
-        window.location.href = wazeUrl;
-        setTimeout(() => { 
-          window.location.href = `https://www.waze.com/ul?ll=${destLat},${destLon}&navigate=yes`;
-        }, 2000);
-      };
-      
-      let opciones = [], msg = "🗺️ ¿Cómo llegar?\n\n";
-      if(isIOS) {
-        opciones = [
-          { id: 1, nombre: "Apple Maps", url: `http://maps.apple.com/?daddr=${destLat},${destLon}` },
-          { id: 2, nombre: "Google Maps", url: `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}` },
-          { id: 3, nombre: "Waze", url: null, funcion: checkWaze }
-        ];
-        msg += "1. Apple Maps\n2. Google Maps\n3. Waze\n\nElige número:";
-      } else {
-        opciones = [
-          { id: 1, nombre: "Google Maps", url: `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}` },
-          { id: 2, nombre: "Waze", url: null, funcion: checkWaze }
-        ];
-        msg += "1. Google Maps\n2. Waze\n\nElige número:";
-      }
-      
-      const sel = prompt(msg, "1");
-      const opt = opciones.find(o => o.id == sel);
-      if(opt) {
-        if(opt.url) window.open(opt.url);
-        else if(opt.funcion) opt.funcion();
-      } else {
-        window.open(`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${destLat},${destLon}`);
-      }
+    container.innerHTML = html;
+  }
+  
+  function renderMarkers(results) {
+    currentMarkers.forEach(m => map.removeLayer(m));
+    currentMarkers = [];
+    for(let r of results) {
+      const icon = L.divIcon({ html: `<div class="marker-pin" style="background:${r.color};">${r.urgent ? '⚡' : ''}</div>`, iconSize: [24,24] });
+      const m = L.marker([r.lat, r.lon], { icon }).addTo(map).bindPopup(`<b>${r.name}</b><br>${r.type}<br><button onclick="abrirRuta(${r.lat}, ${r.lon})">${t('routeBtn')}</button>`);
+      currentMarkers.push(m);
     }
-
-    async function doSearch() {
-      if(!userLoc) return;
-      
-      const listEl = document.getElementById('resultsList');
-      listEl.innerHTML = `<div class="status-msg">${t('loading')}</div>`;
-      
-      const includePharm = document.getElementById('checkPharm').checked;
-      
-      try {
-        // Obtener datos reales de OpenStreetMap
-        let facilities = await fetchRealHealthFacilities(userLoc.lat, userLoc.lon, radiusKm, includePharm);
-        
-        // Ordenar por prioridad y distancia
-        facilities.sort((a, b) => {
-          if(a.urgent && !b.urgent) return -1;
-          if(!a.urgent && b.urgent) return 1;
-          if(a.priority !== b.priority) return a.priority - b.priority;
-          return a.dist - b.dist;
-        });
-        
-        searchResults = facilities.slice(0, 15);
-        
-        if(searchResults.length === 0) {
-          listEl.innerHTML = `<div class="status-msg">${t('noResults')}</div>`;
-        } else {
-          renderResults();
-          renderMarkers();
-        }
-      } catch (error) {
-        console.error(error);
-        listEl.innerHTML = `<div class="status-msg">Error al cargar datos. Intenta de nuevo.</div>`;
-      }
+  }
+  
+  function showDetail(facility) {
+    document.getElementById('detailContent').innerHTML = `
+      <h3>${facility.urgent ? '⚡ ' : ''}${facility.name}</h3>
+      <p><strong>Tipo:</strong> ${facility.type}</p>
+      <p><strong>Distancia:</strong> ${facility.dist.toFixed(1)} km</p>
+      <p><strong>Dirección:</strong> ${facility.address}</p>
+      <p><strong>Teléfono:</strong> ${facility.phone}</p>
+      <button class="btn-search" style="margin-top:15px;" onclick="abrirRuta(${facility.lat}, ${facility.lon})">${t('routeBtn')}</button>
+    `;
+    document.getElementById('detailModal').classList.add('active');
+  }
+  
+  function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
+  
+  function abrirRuta(lat, lon) {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const url = isIOS ? `http://maps.apple.com/?daddr=${lat},${lon}` : `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+    window.open(url);
+  }
+  
+  function toggleModalDonate(show) { document.getElementById('donateModal').classList.toggle('active', show); }
+  function abrirDonacion() { window.open('https://buymeacoffee.com/SaludCercaNearMed', '_blank'); toggleModalDonate(false); }
+  function openFeedback() { 
+    window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia%20o%20mejora&body=Hola%20equipo%20de%20SaludCerca,%0A%0AQuiero%20compartir%20mi%20comentario/sugerencia:%0A%0A%0A%0AGracias!'; 
+  }
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    if(tab === 'search') document.querySelector('.tab-btn:first-child').classList.add('active');
+    else document.querySelector('.tab-btn:last-child').classList.add('active');
+  }
+  
+  window.onload = () => {
+    initMap();
+    setSearchMode('nearme');
+    document.getElementById('radiusSlider').value = 10;
+    document.getElementById('radiusSliderCity').value = 10;
+    updateRadiusLabel(10);
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => { userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude }; });
     }
-    
-    function renderResults() {
-      const list = document.getElementById('resultsList');
-      if(searchResults.length === 0) {
-        list.innerHTML = `<div class="status-msg">${t('noResults')}</div>`;
-        return;
-      }
-      
-      let html = '';
-      searchResults.forEach(r => {
-        const typeStr = t(r.typeKey);
-        const sumStr = t(r.sumKey);
-        const uIcon = r.urgent ? '⚡ ' : '';
-        const cardClass = r.urgent ? "card urgent-card" : "card";
-        
-        html += `
-          <div class="${cardClass}" onclick="map.setView([${r.lat}, ${r.lon}], 16)">
-            <div class="card-header">
-              <div class="card-title">${uIcon}${r.name}</div>
-            </div>
-            <div class="tag-type" style="background:${r.color}">${typeStr}</div>
-            <div class="card-info">📍 ${r.dist.toFixed(1)} km · ${r.address}</div>
-            <div class="card-info">📞 ${r.phone}</div>
-            <div class="card-info">💡 ${sumStr}</div>
-            <button class="btn-route" onclick="event.stopPropagation(); abrirRutaConSelector(${r.lat}, ${r.lon})">${t('routeBtn')}</button>
-          </div>
-        `;
-      });
-      list.innerHTML = html;
-    }
-    
-    function renderMarkers() {
-      if(facilityMarkers.length) {
-        facilityMarkers.forEach(m => map.removeLayer(m));
-        facilityMarkers = [];
-      }
-      
-      const bounds = [[userLoc.lat, userLoc.lon]];
-      
-      searchResults.forEach(r => {
-        const customIcon = L.divIcon({
-          className: `pin-${r.id}`,
-          html: `<div class="marker-pin" style="background:${r.color};">${r.urgent ? '⚡' : ''}</div>`,
-          iconSize: [24, 24],
-          iconAnchor: [12, 12]
-        });
-        
-        const m = L.marker([r.lat, r.lon], { icon: customIcon }).addTo(map)
-          .bindPopup(`
-            <b>${r.name}</b><br>
-            ${t(r.typeKey)}<br>
-            ${r.dist.toFixed(1)} km<br>
-            <button onclick="abrirRutaConSelector(${r.lat}, ${r.lon})" style="margin-top:8px; background:#3182CE; color:white; border:none; padding:4px 10px; border-radius:20px; cursor:pointer;">${t('routeBtn')}</button>
-          `);
-        
-        facilityMarkers.push(m);
-        bounds.push([r.lat, r.lon]);
-      });
-      
-      if(bounds.length > 1) {
-        map.fitBounds(bounds, { padding: [30, 30] });
-      }
-    }
-
-    function toggleModal(show) { 
-      document.getElementById('donateModal').classList.toggle('active', show); 
-    }
-    
-    function abrirDonacion() {
-      window.open('https://buymeacoffee.com/SaludCercaNearMed', '_blank');
-      toggleModal(false);
-    }
-
-    window.onload = () => {
-      map = L.map('map').setView([0, 0], 2);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO'
-      }).addTo(map);
-      
-      if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          pos => {
-            userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-            map.setView([userLoc.lat, userLoc.lon], 13);
-            L.marker([userLoc.lat, userLoc.lon]).addTo(map).bindPopup("Tu ubicación");
-            doSearch();
-          },
-          err => {
-            document.getElementById('resultsList').innerHTML = `<div class="status-msg">${t('geoError')}</div>`;
-          }
-        );
-      } else {
-        document.getElementById('resultsList').innerHTML = `<div class="status-msg">${t('geoError')}</div>`;
-      }
-      
-      changeLang('es');
-      if(window.innerWidth < 768) {
-        document.querySelector('.map-area').style.height = '260px';
-      }
-    };
-  </script>
+  };
+</script>
 </body>
 </html>
