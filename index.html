@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
-  <title>SaludCerca | NearMed - Hospitales reales cerca de ti</title>
+  <title>SaludCerca | NearMed - Hospitales, ambulancias y urgencias reales</title>
   
   <link rel="icon" type="image/png" href="SaludCerca.png">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -24,6 +24,10 @@
       --c-doctor: #3182CE;
       --c-clinic: #00A3C4;
       --c-pharmacy: #38A169;
+      --c-ambulance: #9B59B6;
+      --c-air: #E67E22;
+      --c-icu: #C0392B;
+      --c-warning: #D69E2E;
     }
     
     html, body {
@@ -42,7 +46,6 @@
       overflow-y: auto;
     }
 
-    /* HEADER */
     header { 
       background-color: var(--card-bg); 
       padding: 10px 12px; 
@@ -76,9 +79,9 @@
       border: 1px solid var(--border); 
       font-size: 12px; 
       background: var(--bg); 
+      cursor: pointer;
     }
 
-    /* PESTAÑAS */
     .tabs {
       display: flex;
       background: var(--card-bg);
@@ -109,7 +112,6 @@
       flex-direction: column;
     }
 
-    /* CONTROLES */
     .controls { 
       padding: 12px; 
       background: var(--card-bg); 
@@ -147,6 +149,20 @@
       border-radius: 40px;
       font-size: 14px;
     }
+    .checkbox-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: normal;
+      cursor: pointer;
+      font-size: 13px;
+    }
     .search-row {
       display: flex;
       gap: 8px;
@@ -162,11 +178,7 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .btn-secondary {
-      background: var(--c-doctor);
-    }
 
-    /* LISTA DE RESULTADOS */
     .results-list { 
       flex: 1; 
       padding: 12px; 
@@ -181,6 +193,9 @@
       cursor: pointer;
     }
     .card.urgent-card { background-color: #EBF8FF; border-top: 3px solid var(--c-urgent); }
+    .card.ambulance-card { background-color: #F5E6FF; border-top: 3px solid var(--c-ambulance); }
+    .card.air-card { background-color: #FEF5E6; border-top: 3px solid var(--c-air); }
+    .card.icu-card { background-color: #FCE8E8; border-top: 3px solid var(--c-icu); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
     .card-title { font-size: 15px; font-weight: 700; }
     .tag-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; display: inline-block; margin-bottom: 8px; color: white; }
@@ -197,14 +212,20 @@
       border: none;
       cursor: pointer;
     }
+    .certified-badge {
+      background: #27AE60;
+      color: white;
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 12px;
+      margin-left: 6px;
+    }
 
-    /* MAPA */
     .map-area { height: 280px; width: 100%; }
     @media (min-width: 768px) { .map-area { height: 400px; } }
     #map { width: 100%; height: 100%; background: #E9E5DE; }
     .marker-pin { width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
 
-    /* MODAL DETALLES */
     .modal-overlay { 
       position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
       background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; 
@@ -221,7 +242,6 @@
       float: right; background: none; border: none; font-size: 24px; cursor: pointer; 
     }
 
-    /* FEEDBACK */
     .feedback-area {
       padding: 20px;
       text-align: center;
@@ -242,7 +262,6 @@
       margin-top: 20px;
       font-size: 12px;
       color: var(--text-muted);
-      word-break: break-all;
     }
     .feedback-email a {
       color: var(--primary);
@@ -256,6 +275,24 @@
       cursor: pointer; z-index: 1000; 
     }
     footer { text-align: center; padding: 10px; font-size: 10px; color: var(--text-muted); background: var(--card-bg); border-top: 1px solid var(--border); }
+    .geo-warning {
+      background: #FEF5E6;
+      border: 1px solid var(--c-warning);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 13px;
+    }
+    .geo-warning button {
+      background: var(--c-doctor);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 40px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -267,34 +304,38 @@
   </div>
   <div class="lang-selector">
     <select id="langSelect" onchange="changeLang(this.value)">
-      <option value="es">Español</option>
-      <option value="en">English</option>
-      <option value="pt">Português</option>
-      <option value="fr">Français</option>
-      <option value="ru">Русский</option>
-      <option value="zh">中文</option>
-      <option value="hi">हिन्दी</option>
-      <option value="ar">العربية</option>
+      <option value="es">🇪🇸 Español</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="pt">🇵🇹 Português</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="ru">🇷🇺 Русский</option>
+      <option value="zh">🇨🇳 中文</option>
+      <option value="hi">🇮🇳 हिन्दी</option>
+      <option value="ar">🇸🇦 العربية</option>
     </select>
   </div>
 </header>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('search')">🔍 Buscar</button>
-  <button class="tab-btn" onclick="switchTab('feedback')">💬 Feedback</button>
+  <button class="tab-btn active" data-i18n="tabSearch" onclick="switchTab('search')">🔍 Buscar</button>
+  <button class="tab-btn" data-i18n="tabFeedback" onclick="switchTab('feedback')">💬 Feedback</button>
 </div>
 
 <div id="tab-search" class="tab-content active">
   <div class="controls">
     <div class="mode-selector">
-      <div id="modeNearMe" class="mode-btn active" onclick="setSearchMode('nearme')">📍 Cerca de mí</div>
-      <div id="modeCity" class="mode-btn" onclick="setSearchMode('city')">🏙️ Por ciudad</div>
+      <div id="modeNearMe" class="mode-btn active" data-i18n="modeNearMe" onclick="setSearchMode('nearme')">📍 Cerca de mí</div>
+      <div id="modeCity" class="mode-btn" data-i18n="modeCity" onclick="setSearchMode('city')">🏙️ Por ciudad</div>
     </div>
     
     <div id="nearme-controls">
+      <div id="geoWarning" class="geo-warning" style="display:none;">
+        <span data-i18n="geoWarningMsg">⚠️ Geolocalización no disponible o no permitida.</span><br>
+        <button data-i18n="geoWarningBtn" onclick="solicitarGeolocalizacion()">📍 Activar ubicación manualmente</button>
+      </div>
       <div class="control-group">
         <div class="slider-row">
-          <label>📡 Radio (km)</label>
+          <label data-i18n="radiusLabel">📡 Radio (km)</label>
           <span id="radVal">10 km</span>
         </div>
         <input type="range" id="radiusSlider" min="1" max="55" value="10" oninput="updateRadiusLabel(this.value)">
@@ -303,20 +344,29 @@
     
     <div id="city-controls" style="display:none;">
       <div class="control-group">
-        <label>🌆 Ciudad / Localidad</label>
+        <label data-i18n="cityLabel">🌆 Ciudad / Localidad</label>
         <input type="text" id="cityInput" class="city-input" placeholder="Ej: Madrid, Nueva York, Tokyo...">
       </div>
       <div class="control-group">
         <div class="slider-row">
-          <label>📡 Radio (km)</label>
+          <label data-i18n="radiusLabelCity">📡 Radio (km)</label>
           <span id="radValCity">10 km</span>
         </div>
         <input type="range" id="radiusSliderCity" min="1" max="55" value="10" oninput="updateRadiusLabelCity(this.value)">
       </div>
     </div>
     
+    <div class="checkbox-group">
+      <label>
+        <input type="checkbox" id="includePharmacy"> <span data-i18n="includePharmacy">💊 Incluir farmacias</span>
+      </label>
+      <label>
+        <input type="checkbox" id="includeAmbulance"> <span data-i18n="includeAmbulance">🚑 Incluir ambulancias</span>
+      </label>
+    </div>
+    
     <div class="search-row">
-      <button class="btn-search" onclick="doSearch()">🔍 Buscar centros de salud</button>
+      <button class="btn-search" data-i18n="searchBtn" onclick="doSearch()">🔍 Buscar centros de salud</button>
     </div>
   </div>
   
@@ -325,35 +375,33 @@
   </div>
   
   <div class="results-list" id="resultsList">
-    <div class="status-msg" style="padding:20px; text-align:center;">📍 Activa ubicación o busca por ciudad</div>
+    <div class="status-msg" data-i18n="initialMsg" style="padding:20px; text-align:center;">📍 Activa ubicación o busca por ciudad</div>
   </div>
 </div>
 
 <div id="tab-feedback" class="tab-content">
   <div class="feedback-area">
-    <h3>💬 Tu opinión nos mejora</h3>
-    <p style="margin:15px 0;">¿Encontraste lo que buscabas? ¿Falta algún hospital? ¿Algún error? Cuéntanos.</p>
-    <button class="feedback-btn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
+    <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
+    <p data-i18n="feedbackDesc" style="margin:15px 0;">¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.</p>
+    <button class="feedback-btn" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
     <div class="feedback-email">
-      📧 También puedes escribirnos directamente:<br>
+      <span data-i18n="feedbackEmailText">📧 También puedes escribirnos directamente:</span><br>
       <a href="mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia">rodrigooctavioalmanza@gmail.com</a>
     </div>
   </div>
 </div>
 
-<button class="btn-donate" onclick="toggleModalDonate(true)">☕ Apóyanos</button>
+<button class="btn-donate" data-i18n="donateBtn" onclick="toggleModalDonate(true)">☕ Apóyanos</button>
 
-<!-- Modal de donación -->
 <div id="donateModal" class="modal-overlay">
   <div class="modal-detail" style="max-width:300px;">
     <button class="modal-close" onclick="toggleModalDonate(false)">✖</button>
-    <h3>🙏 Gracias por apoyarnos</h3>
-    <p>SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.</p>
-    <button class="btn-search" style="margin-top:15px;" onclick="abrirDonacion()">☕ Invítanos un café</button>
+    <h3 data-i18n="donateTitle">🙏 Gracias por apoyarnos</h3>
+    <p data-i18n="donateDesc">SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.</p>
+    <button class="btn-search" data-i18n="donateCta" onclick="abrirDonacion()">☕ Invítanos un café</button>
   </div>
 </div>
 
-<!-- Modal de detalles -->
 <div id="detailModal" class="modal-overlay">
   <div class="modal-detail">
     <button class="modal-close" onclick="closeDetailModal()">✖</button>
@@ -362,22 +410,195 @@
 </div>
 
 <script>
-  // ==================== TRADUCCIONES ====================
-  const i18n = {
-    es: { loading: "Buscando centros de salud...", noResults: "No se encontraron centros en este radio. Prueba aumentarlo o cambiar de ciudad.", geoError: "Error de ubicación. Permite el acceso o usa búsqueda por ciudad.", routeBtn: "🗺️ Cómo llegar", emergency: "Urgencias 24h" },
-    en: { loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.", geoError: "Location error. Allow access or use city search.", routeBtn: "🗺️ Directions", emergency: "24h Emergency" }
+  // ==================== TRADUCCIONES COMPLETAS (8 IDIOMAS) ====================
+  const translations = {
+    es: {
+      tabSearch: "🔍 Buscar", tabFeedback: "💬 Feedback",
+      modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad",
+      geoWarningMsg: "⚠️ Geolocalización no disponible o no permitida.",
+      geoWarningBtn: "📍 Activar ubicación manualmente",
+      radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)",
+      cityLabel: "🌆 Ciudad / Localidad",
+      includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias",
+      searchBtn: "🔍 Buscar centros de salud",
+      initialMsg: "📍 Activa ubicación o busca por ciudad",
+      loading: "Buscando centros de salud...", noResults: "No se encontraron centros en este radio. Prueba aumentarlo o cambiar de ciudad.",
+      geoError: "Error de ubicación. Permite el acceso o usa búsqueda por ciudad.",
+      routeBtn: "🗺️ Cómo llegar",
+      feedbackTitle: "💬 Tu opinión nos mejora", feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.",
+      feedbackBtn: "📝 Enviar comentario o sugerencia", feedbackEmailText: "📧 También puedes escribirnos directamente:",
+      donateBtn: "☕ Apóyanos", donateTitle: "🙏 Gracias por apoyarnos", donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.", donateCta: "☕ Invítanos un café",
+      certified: "Certificado", airAmbulance: "✈️ Servicio de aeroambulancia - Atención inmediata vía aérea", icuService: "🫀 Unidad de Cuidados Intensivos (UCI) - Terapia intensiva especializada", ambulanceService: "🚑 Servicio de ambulancia certificado", type_hospital: "Hospital", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_ambulance: "Ambulancia", type_emergency: "Urgencias",
+      address: "Dirección", phone: "Teléfono", distance: "Distancia", type: "Tipo"
+    },
+    en: {
+      tabSearch: "🔍 Search", tabFeedback: "💬 Feedback",
+      modeNearMe: "📍 Near me", modeCity: "🏙️ By city",
+      geoWarningMsg: "⚠️ Geolocation not available or not allowed.",
+      geoWarningBtn: "📍 Activate location manually",
+      radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)",
+      cityLabel: "🌆 City / Town",
+      includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances",
+      searchBtn: "🔍 Search health centers",
+      initialMsg: "📍 Enable location or search by city",
+      loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.",
+      geoError: "Location error. Allow access or use city search.",
+      routeBtn: "🗺️ Directions",
+      feedbackTitle: "💬 Your opinion improves us", feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.",
+      feedbackBtn: "📝 Send comment or suggestion", feedbackEmailText: "📧 You can also write to us directly:",
+      donateBtn: "☕ Support us", donateTitle: "🙏 Thank you for supporting us", donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", donateCta: "☕ Buy us a coffee",
+      certified: "Certified", airAmbulance: "✈️ Air ambulance service - Immediate air assistance", icuService: "🫀 Intensive Care Unit (ICU) - Specialized intensive therapy", ambulanceService: "🚑 Certified ambulance service", type_hospital: "Hospital", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_ambulance: "Ambulance", type_emergency: "Emergency",
+      address: "Address", phone: "Phone", distance: "Distance", type: "Type"
+    },
+    pt: {
+      tabSearch: "🔍 Buscar", tabFeedback: "💬 Feedback",
+      modeNearMe: "📍 Perto de mim", modeCity: "🏙️ Por cidade",
+      geoWarningMsg: "⚠️ Geolocalização não disponível ou não permitida.",
+      geoWarningBtn: "📍 Ativar localização manualmente",
+      radiusLabel: "📡 Raio (km)", radiusLabelCity: "📡 Raio (km)",
+      cityLabel: "🌆 Cidade / Localidade",
+      includePharmacy: "💊 Incluir farmácias", includeAmbulance: "🚑 Incluir ambulâncias",
+      searchBtn: "🔍 Buscar centros de saúde",
+      initialMsg: "📍 Ative a localização ou busque por cidade",
+      loading: "Buscando centros de saúde...", noResults: "Nenhum centro encontrado neste raio. Tente aumentar ou mudar de cidade.",
+      geoError: "Erro de localização. Permita o acesso ou use busca por cidade.",
+      routeBtn: "🗺️ Como chegar",
+      feedbackTitle: "💬 Sua opinião nos melhora", feedbackDesc: "Encontrou o que procurava? Falta algum hospital, ambulância ou serviço? Conte-nos.",
+      feedbackBtn: "📝 Enviar comentário ou sugestão", feedbackEmailText: "📧 Você também pode nos escrever diretamente:",
+      donateBtn: "☕ Apoie-nos", donateTitle: "🙏 Obrigado por nos apoiar", donateDesc: "SaludCerca é gratuito e sem publicidade. Sua ajuda, a partir de $3 USD, nos permite continuar melhorando.", donateCta: "☕ Pague-nos um café",
+      certified: "Certificado", airAmbulance: "✈️ Serviço de ambulância aérea - Atendimento aéreo imediato", icuService: "🫀 Unidade de Terapia Intensiva (UTI) - Terapia intensiva especializada", ambulanceService: "🚑 Serviço de ambulância certificado", type_hospital: "Hospital", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmácia", type_ambulance: "Ambulância", type_emergency: "Emergência",
+      address: "Endereço", phone: "Telefone", distance: "Distância", type: "Tipo"
+    },
+    fr: {
+      tabSearch: "🔍 Rechercher", tabFeedback: "💬 Retour",
+      modeNearMe: "📍 Près de moi", modeCity: "🏙️ Par ville",
+      geoWarningMsg: "⚠️ Géolocalisation non disponible ou non autorisée.",
+      geoWarningBtn: "📍 Activer la localisation manuellement",
+      radiusLabel: "📡 Rayon (km)", radiusLabelCity: "📡 Rayon (km)",
+      cityLabel: "🌆 Ville / Localité",
+      includePharmacy: "💊 Inclure les pharmacies", includeAmbulance: "🚑 Inclure les ambulances",
+      searchBtn: "🔍 Rechercher des centres de santé",
+      initialMsg: "📍 Activez la localisation ou recherchez par ville",
+      loading: "Recherche de centres de santé...", noResults: "Aucun centre trouvé dans ce rayon. Essayez d'augmenter ou de changer de ville.",
+      geoError: "Erreur de localisation. Autorisez l'accès ou utilisez la recherche par ville.",
+      routeBtn: "🗺️ Itinéraire",
+      feedbackTitle: "💬 Votre avis nous améliore", feedbackDesc: "Avez-vous trouvé ce que vous cherchiez? Il manque un hôpital, une ambulance ou un service? Dites-nous.",
+      feedbackBtn: "📝 Envoyer un commentaire ou une suggestion", feedbackEmailText: "📧 Vous pouvez également nous écrire directement:",
+      donateBtn: "☕ Soutenez-nous", donateTitle: "🙏 Merci de nous soutenir", donateDesc: "SaludCerca est gratuit et sans publicité. Votre aide, à partir de 3 $ USD, nous permet de continuer à nous améliorer.", donateCta: "☕ Offrez-nous un café",
+      certified: "Certifié", airAmbulance: "✈️ Service d'ambulance aérienne - Assistance aérienne immédiate", icuService: "🫀 Unité de soins intensifs (USI) - Thérapie intensive spécialisée", ambulanceService: "🚑 Service d'ambulance certifié", type_hospital: "Hôpital", type_clinic: "Clinique", type_doctor: "Médecin", type_pharmacy: "Pharmacie", type_ambulance: "Ambulance", type_emergency: "Urgence",
+      address: "Adresse", phone: "Téléphone", distance: "Distance", type: "Type"
+    },
+    ru: {
+      tabSearch: "🔍 Поиск", tabFeedback: "💬 Обратная связь",
+      modeNearMe: "📍 Рядом со мной", modeCity: "🏙️ По городу",
+      geoWarningMsg: "⚠️ Геолокация недоступна или запрещена.",
+      geoWarningBtn: "📍 Активировать местоположение вручную",
+      radiusLabel: "📡 Радиус (км)", radiusLabelCity: "📡 Радиус (км)",
+      cityLabel: "🌆 Город / Населенный пункт",
+      includePharmacy: "💊 Включить аптеки", includeAmbulance: "🚑 Включить скорую помощь",
+      searchBtn: "🔍 Поиск медицинских центров",
+      initialMsg: "📍 Включите геолокацию или ищите по городу",
+      loading: "Поиск медицинских учреждений...", noResults: "В этом радиусе ничего не найдено. Попробуйте увеличить радиус или сменить город.",
+      geoError: "Ошибка геолокации. Разрешите доступ или используйте поиск по городу.",
+      routeBtn: "🗺️ Маршрут",
+      feedbackTitle: "💬 Ваше мнение помогает нам расти", feedbackDesc: "Нашли то, что искали? Не хватает больницы, скорой или услуги? Расскажите нам.",
+      feedbackBtn: "📝 Отправить комментарий или предложение", feedbackEmailText: "📧 Вы также можете написать нам напрямую:",
+      donateBtn: "☕ Поддержать нас", donateTitle: "🙏 Спасибо за поддержку", donateDesc: "SaludCerca бесплатен и не содержит рекламы. Ваша помощь от $3 USD позволяет нам продолжать совершенствоваться.", donateCta: "☕ Купите нам кофе",
+      certified: "Сертифицировано", airAmbulance: "✈️ Санитарная авиация - Немедленная воздушная помощь", icuService: "🫀 Отделение реанимации и интенсивной терапии", ambulanceService: "🚑 Сертифицированная служба скорой помощи", type_hospital: "Больница", type_clinic: "Клиника", type_doctor: "Врач", type_pharmacy: "Аптека", type_ambulance: "Скорая помощь", type_emergency: "Неотложная помощь",
+      address: "Адрес", phone: "Телефон", distance: "Расстояние", type: "Тип"
+    },
+    zh: {
+      tabSearch: "🔍 搜索", tabFeedback: "💬 反馈",
+      modeNearMe: "📍 我附近", modeCity: "🏙️ 按城市",
+      geoWarningMsg: "⚠️ 无法获取地理位置或未授权。",
+      geoWarningBtn: "📍 手动激活位置",
+      radiusLabel: "📡 半径（公里）", radiusLabelCity: "📡 半径（公里）",
+      cityLabel: "🌆 城市 / 地区",
+      includePharmacy: "💊 包括药店", includeAmbulance: "🚑 包括救护车",
+      searchBtn: "🔍 搜索医疗中心",
+      initialMsg: "📍 启用位置或按城市搜索",
+      loading: "正在搜索医疗机构...", noResults: "在此半径内未找到任何机构。请尝试增加半径或更换城市。",
+      geoError: "定位错误。请允许访问或使用城市搜索。",
+      routeBtn: "🗺️ 路线",
+      feedbackTitle: "💬 您的意见帮助我们改进", feedbackDesc: "您找到需要的内容了吗？缺少医院、救护车或服务？请告诉我们。",
+      feedbackBtn: "📝 发送评论或建议", feedbackEmailText: "📧 您也可以直接给我们写信：",
+      donateBtn: "☕ 支持我们", donateTitle: "🙏 感谢您的支持", donateDesc: "SaludCerca 免费且无广告。您从 3 美元起的帮助使我们能够不断改进。", donateCta: "☕ 请我们喝杯咖啡",
+      certified: "认证", airAmbulance: "✈️ 空中救护服务 - 即时空中援助", icuService: "🫀 重症监护室 (ICU) - 专业重症治疗", ambulanceService: "🚑 认证救护服务", type_hospital: "医院", type_clinic: "诊所", type_doctor: "医生", type_pharmacy: "药店", type_ambulance: "救护车", type_emergency: "急救",
+      address: "地址", phone: "电话", distance: "距离", type: "类型"
+    },
+    hi: {
+      tabSearch: "🔍 खोजें", tabFeedback: "💬 प्रतिक्रिया",
+      modeNearMe: "📍 मेरे आस-पास", modeCity: "🏙️ शहर द्वारा",
+      geoWarningMsg: "⚠️ भू-स्थान उपलब्ध नहीं है या अनुमति नहीं है।",
+      geoWarningBtn: "📍 मैन्युअल रूप से स्थान सक्रिय करें",
+      radiusLabel: "📡 दायरा (किमी)", radiusLabelCity: "📡 दायरा (किमी)",
+      cityLabel: "🌆 शहर / कस्बा",
+      includePharmacy: "💊 फार्मेसियों को शामिल करें", includeAmbulance: "🚑 एम्बुलेंस शामिल करें",
+      searchBtn: "🔍 स्वास्थ्य केंद्र खोजें",
+      initialMsg: "📍 स्थान सक्षम करें या शहर द्वारा खोजें",
+      loading: "स्वास्थ्य सुविधाओं की खोज...", noResults: "इस दायरे में कोई सुविधा नहीं मिली। दायरा बढ़ाएं या शहर बदलें।",
+      geoError: "स्थान त्रुटि। पहुंच की अनुमति दें या शहर खोज का उपयोग करें।",
+      routeBtn: "🗺️ दिशा-निर्देश",
+      feedbackTitle: "💬 आपकी राय हमें बेहतर बनाती है", feedbackDesc: "क्या आपको वह मिला जो आप ढूंढ रहे थे? कोई अस्पताल, एम्बुलेंस या सेवा छूट गई? हमें बताएं।",
+      feedbackBtn: "📝 टिप्पणी या सुझाव भेजें", feedbackEmailText: "📧 आप हमें सीधे भी लिख सकते हैं:",
+      donateBtn: "☕ हमारा समर्थन करें", donateTitle: "🙏 हमारा समर्थन करने के लिए धन्यवाद", donateDesc: "SaludCerca मुफ्त और विज्ञापन-मुक्त है। $3 USD से आपकी मदद हमें बेहतर बनाती रहती है।", donateCta: "☕ हमें कॉफी पिलाएं",
+      certified: "प्रमाणित", airAmbulance: "✈️ एयर एम्बुलेंस सेवा - तत्काल हवाई सहायता", icuService: "🫀 गहन चिकित्सा इकाई (ICU) - विशेष गहन चिकित्सा", ambulanceService: "🚑 प्रमाणित एम्बुलेंस सेवा", type_hospital: "अस्पताल", type_clinic: "क्लिनिक", type_doctor: "डॉक्टर", type_pharmacy: "फार्मेसी", type_ambulance: "एम्बुलेंस", type_emergency: "आपातकाल",
+      address: "पता", phone: "फोन", distance: "दूरी", type: "प्रकार"
+    },
+    ar: {
+      tabSearch: "🔍 بحث", tabFeedback: "💬 ملاحظات",
+      modeNearMe: "📍 بالقرب مني", modeCity: "🏙️ حسب المدينة",
+      geoWarningMsg: "⚠️ تحديد الموقع الجغرافي غير متاح أو غير مسموح به.",
+      geoWarningBtn: "📍 تفعيل الموقع يدويًا",
+      radiusLabel: "📡 نصف القطر (كم)", radiusLabelCity: "📡 نصف القطر (كم)",
+      cityLabel: "🌆 المدينة / المنطقة",
+      includePharmacy: "💊 تضمين الصيدليات", includeAmbulance: "🚑 تضمين سيارات الإسعاف",
+      searchBtn: "🔍 بحث عن مراكز صحية",
+      initialMsg: "📍 فعّل الموقع أو ابحث حسب المدينة",
+      loading: "جاري البحث عن مرافق صحية...", noResults: "لم يتم العثور على مرافق في هذا النطاق. حاول زيادة النطاق أو تغيير المدينة.",
+      geoError: "خطأ في الموقع. اسمح بالوصول أو استخدم البحث حسب المدينة.",
+      routeBtn: "🗺️ الاتجاهات",
+      feedbackTitle: "💬 رأيك يحسننا", feedbackDesc: "هل وجدت ما كنت تبحث عنه؟ هل ينقصك مستشفى أو إسعاف أو خدمة؟ أخبرنا.",
+      feedbackBtn: "📝 إرسال تعليق أو اقتراح", feedbackEmailText: "📧 يمكنك أيضًا الكتابة لنا مباشرة:",
+      donateBtn: "☕ ادعمنا", donateTitle: "🙏 شكرًا لدعمك", donateDesc: "SaludCerca مجاني وخالٍ من الإعلانات. مساعدتك بدءًا من 3 دولارات أمريكية تسمح لنا بمواصلة التحسين.", donateCta: "☕ اشترِ لنا قهوة",
+      certified: "معتمد", airAmbulance: "✈️ خدمة إسعاف جوي - مساعدة جوية فورية", icuService: "🫀 وحدة العناية المركزة (ICU) - علاج مكثف متخصص", ambulanceService: "🚑 خدمة إسعاف معتمدة", type_hospital: "مستشفى", type_clinic: "عيادة", type_doctor: "طبيب", type_pharmacy: "صيدلية", type_ambulance: "سيارة إسعاف", type_emergency: "طوارئ",
+      address: "العنوان", phone: "الهاتف", distance: "المسافة", type: "النوع"
+    }
   };
-  for(let l of ['pt','fr','ru','zh','hi','ar']) i18n[l] = i18n.en;
-  
-  let lang = 'es';
-  function t(key) { return i18n[lang][key] || i18n['es'][key] || key; }
-  function changeLang(newLang) { lang = newLang; location.reload(); }
-  
-  // ==================== VARIABLES GLOBALES ====================
-  let map, userLoc = null, searchMode = 'nearme', cityLatLon = null;
+
+  let currentLang = 'es';
+  let map, userLoc = null, searchMode = 'nearme';
   let radiusKm = 10, currentMarkers = [], currentResults = [];
-  
-  // ==================== INICIALIZACIÓN ====================
+
+  function t(key) {
+    return translations[currentLang]?.[key] || translations['es'][key] || key;
+  }
+
+  function updateAllTexts() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (el.tagName === 'INPUT' && el.type === 'checkbox') {
+        const span = el.nextElementSibling;
+        if (span && span.hasAttribute('data-i18n')) span.innerText = t(key);
+      } else {
+        el.innerText = t(key);
+      }
+    });
+    if (currentResults.length) renderResults(currentResults);
+    const warningDiv = document.getElementById('geoWarning');
+    if (warningDiv) {
+      const msgSpan = warningDiv.querySelector('[data-i18n="geoWarningMsg"]');
+      const btnSpan = warningDiv.querySelector('[data-i18n="geoWarningBtn"]');
+      if (msgSpan) msgSpan.innerText = t('geoWarningMsg');
+      if (btnSpan) btnSpan.innerText = t('geoWarningBtn');
+    }
+  }
+
+  function changeLang(newLang) {
+    currentLang = newLang;
+    updateAllTexts();
+  }
+
   function initMap() {
     map = L.map('map').setView([20, -100], 4);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -396,7 +617,23 @@
   function updateRadiusLabel(val) { radiusKm = parseInt(val); document.getElementById('radVal').innerHTML = radiusKm + " km"; }
   function updateRadiusLabelCity(val) { document.getElementById('radValCity').innerHTML = val + " km"; }
   
-  // ==================== BÚSQUEDA REAL ====================
+  function solicitarGeolocalizacion() {
+    const warningDiv = document.getElementById('geoWarning');
+    warningDiv.style.display = 'none';
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => { 
+          userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+          map.setView([userLoc.lat, userLoc.lon], 12);
+          doSearch();
+        },
+        err => { warningDiv.style.display = 'block'; }
+      );
+    } else {
+      warningDiv.style.display = 'block';
+    }
+  }
+  
   async function geocodeCity(cityName) {
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityName)}&format=json&limit=1`;
     try {
@@ -407,24 +644,54 @@
     } catch(e) { return null; }
   }
   
-  async function fetchNearby(lat, lon, radiusKm) {
-    const overpass = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon}););out body;`;
+  async function fetchNearby(lat, lon, radiusKm, includePharmacy, includeAmbulance) {
+    let overpass = `[out:json][timeout:25];(`;
+    overpass += `node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
+    overpass += `node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
+    overpass += `node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});`;
+    overpass += `node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon});`;
+    if(includePharmacy) overpass += `node["amenity"="pharmacy"](around:${radiusKm*1000},${lat},${lon});`;
+    if(includeAmbulance) {
+      overpass += `node["emergency"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
+      overpass += `node["amenity"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
+    }
+    overpass += `);out body;`;
+    
     try {
-      const resp = await fetch(overpass);
+      const resp = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpass)}`);
       const data = await resp.json();
       const results = [];
       for(let el of data.elements) {
         if(el.type !== 'node') continue;
         let name = el.tags?.name || "Centro médico";
-        let type = el.tags?.amenity || el.tags?.healthcare || "centro";
-        let color = '#00A3C4', urgent = false;
-        if(type === 'hospital') { color = '#ED8936'; if(el.tags?.emergency === 'yes') { urgent = true; color = '#2B6CB0'; } }
-        else if(type === 'doctor' || type === 'doctors') color = '#3182CE';
-        else if(type === 'pharmacy') color = '#38A169';
+        let type = el.tags?.amenity || el.tags?.healthcare || el.tags?.emergency || "centro";
+        let color = '#00A3C4', urgent = false, special = '';
+        let typeKey = 'type_clinic';
+        
+        if(type === 'hospital') { 
+          color = '#ED8936'; typeKey = 'type_hospital';
+          if(el.tags?.emergency === 'yes') { urgent = true; color = '#2B6CB0'; typeKey = 'type_emergency'; }
+        }
+        else if(type === 'ambulance_station') { 
+          color = '#9B59B6'; typeKey = 'type_ambulance';
+          special = 'ambulance';
+          if(el.tags?.air_ambulance === 'yes' || (name && name.toLowerCase().includes('air'))) { 
+            color = '#E67E22'; special = 'air';
+          }
+          if(el.tags?.icu === 'yes' || (name && (name.toLowerCase().includes('intensiva') || name.toLowerCase().includes('icu')))) { 
+            color = '#C0392B'; special = 'icu';
+          }
+        }
+        else if(type === 'doctor' || type === 'doctors') { color = '#3182CE'; typeKey = 'type_doctor'; }
+        else if(type === 'pharmacy') { color = '#38A169'; typeKey = 'type_pharmacy'; }
+        else if(type === 'clinic') { color = '#00A3C4'; typeKey = 'type_clinic'; }
+        
         results.push({
-          id: el.id, name: name, lat: el.lat, lon: el.lon, type: type,
-          urgent: urgent, color: color, phone: el.tags?.phone || "No disponible",
-          address: el.tags?.['addr:street'] || "Dirección no disponible"
+          id: el.id, name: name, lat: el.lat, lon: el.lon, typeKey: typeKey,
+          urgent: urgent, special: special, color: color,
+          phone: el.tags?.phone || "No disponible",
+          address: el.tags?.['addr:street'] || (el.tags?.['addr:full'] || "Dirección no disponible"),
+          certified: (type === 'ambulance_station' || el.tags?.emergency === 'yes')
         });
       }
       return results;
@@ -444,29 +711,41 @@
     
     if(searchMode === 'nearme') {
       if(!userLoc) {
-        if(!navigator.geolocation) { resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}</div>`; return; }
-        await new Promise((resolve) => {
-          navigator.geolocation.getCurrentPosition(pos => { userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude }; resolve(); },
-            () => { resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}</div>`; resolve(); });
-        });
-        if(!userLoc) return;
+        resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('geoWarningBtn')}</button></div>`;
+        return;
       }
       centerLat = userLoc.lat; centerLon = userLoc.lon;
     } else {
       const city = document.getElementById('cityInput').value.trim();
-      if(!city) { resultsDiv.innerHTML = `<div class="status-msg">Ingresa una ciudad</div>`; return; }
+      if(!city) { resultsDiv.innerHTML = `<div class="status-msg">${t('cityLabel')}</div>`; return; }
       const geo = await geocodeCity(city);
-      if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">Ciudad no encontrada</div>`; return; }
+      if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
       centerLat = geo.lat; centerLon = geo.lon;
     }
     
     map.setView([centerLat, centerLon], 12);
-    const facilities = await fetchNearby(centerLat, centerLon, radiusKm);
+    const includePharmacy = document.getElementById('includePharmacy').checked;
+    const includeAmbulance = document.getElementById('includeAmbulance').checked;
+    const facilities = await fetchNearby(centerLat, centerLon, radiusKm, includePharmacy, includeAmbulance);
+    
     if(facilities.length === 0) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
     
     currentResults = facilities.map(f => ({ ...f, dist: getDistance(centerLat, centerLon, f.lat, f.lon) }))
-      .sort((a,b) => (a.urgent === b.urgent ? a.dist - b.dist : (a.urgent ? -1 : 1)))
-      .slice(0, 20);
+      .sort((a,b) => {
+        const priority = { 'air': 1, 'icu': 2, 'urgent': 3, 'hospital': 4, 'ambulance': 5, 'clinic': 6, 'doctor': 7, 'pharmacy': 8 };
+        const getPriority = (f) => {
+          if(f.special === 'air') return priority.air;
+          if(f.special === 'icu') return priority.icu;
+          if(f.urgent) return priority.urgent;
+          if(f.typeKey === 'type_hospital') return priority.hospital;
+          if(f.special === 'ambulance') return priority.ambulance;
+          if(f.typeKey === 'type_clinic') return priority.clinic;
+          if(f.typeKey === 'type_doctor') return priority.doctor;
+          return priority.pharmacy;
+        };
+        return getPriority(a) - getPriority(b);
+      })
+      .slice(0, 25);
     
     renderResults(currentResults);
     renderMarkers(currentResults);
@@ -476,11 +755,22 @@
     const container = document.getElementById('resultsList');
     let html = '';
     for(let r of results) {
-      const safeName = r.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      let cardClass = '';
+      let specialIcon = '';
+      if(r.special === 'air') { cardClass = 'air-card'; specialIcon = '✈️ '; }
+      else if(r.special === 'icu') { cardClass = 'icu-card'; specialIcon = '🫀 '; }
+      else if(r.special === 'ambulance') { cardClass = 'ambulance-card'; specialIcon = '🚑 '; }
+      else if(r.urgent) cardClass = 'urgent-card';
+      
+      const certifiedBadge = r.certified ? `<span class="certified-badge">${t('certified')}</span>` : '';
+      const typeText = t(r.typeKey);
+      
       html += `
-        <div class="card ${r.urgent ? 'urgent-card' : ''}" onclick='showDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
-          <div class="card-header"><span class="card-title">${r.urgent ? '⚡ ' : ''}${r.name}</span></div>
-          <div class="tag-type" style="background:${r.color}">${r.type}</div>
+        <div class="card ${cardClass}" onclick='showDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
+          <div class="card-header">
+            <span class="card-title">${specialIcon}${r.name} ${certifiedBadge}</span>
+          </div>
+          <div class="tag-type" style="background:${r.color}">${typeText}</div>
           <div class="card-info">📍 ${r.dist.toFixed(1)} km · ${r.address}</div>
           <div class="card-info">📞 ${r.phone}</div>
           <button class="btn-route" onclick="event.stopPropagation(); abrirRuta(${r.lat}, ${r.lon})">${t('routeBtn')}</button>
@@ -494,19 +784,31 @@
     currentMarkers.forEach(m => map.removeLayer(m));
     currentMarkers = [];
     for(let r of results) {
-      const icon = L.divIcon({ html: `<div class="marker-pin" style="background:${r.color};">${r.urgent ? '⚡' : ''}</div>`, iconSize: [24,24] });
-      const m = L.marker([r.lat, r.lon], { icon }).addTo(map).bindPopup(`<b>${r.name}</b><br>${r.type}<br><button onclick="abrirRuta(${r.lat}, ${r.lon})">${t('routeBtn')}</button>`);
+      let markerIcon = '';
+      if(r.urgent) markerIcon = '⚡';
+      else if(r.special === 'air') markerIcon = '✈️';
+      else if(r.special === 'icu') markerIcon = '🫀';
+      else if(r.special === 'ambulance') markerIcon = '🚑';
+      const icon = L.divIcon({ html: `<div class="marker-pin" style="background:${r.color};">${markerIcon}</div>`, iconSize: [24,24] });
+      const m = L.marker([r.lat, r.lon], { icon }).addTo(map).bindPopup(`<b>${r.name}</b><br>${t(r.typeKey)}<br><button onclick="abrirRuta(${r.lat}, ${r.lon})">${t('routeBtn')}</button>`);
       currentMarkers.push(m);
     }
   }
   
   function showDetail(facility) {
+    let specialSection = '';
+    if(facility.special === 'air') specialSection = `<p><strong>${t('airAmbulance')}</strong></p>`;
+    if(facility.special === 'icu') specialSection = `<p><strong>${t('icuService')}</strong></p>`;
+    if(facility.special === 'ambulance') specialSection = `<p><strong>${t('ambulanceService')}</strong></p>`;
+    
     document.getElementById('detailContent').innerHTML = `
-      <h3>${facility.urgent ? '⚡ ' : ''}${facility.name}</h3>
-      <p><strong>Tipo:</strong> ${facility.type}</p>
-      <p><strong>Distancia:</strong> ${facility.dist.toFixed(1)} km</p>
-      <p><strong>Dirección:</strong> ${facility.address}</p>
-      <p><strong>Teléfono:</strong> ${facility.phone}</p>
+      <h3>${facility.special === 'air' ? '✈️ ' : (facility.special === 'icu' ? '🫀 ' : (facility.special === 'ambulance' ? '🚑 ' : ''))}${facility.name}</h3>
+      <p><strong>${t('type')}:</strong> ${t(facility.typeKey)}</p>
+      <p><strong>${t('distance')}:</strong> ${facility.dist.toFixed(1)} km</p>
+      <p><strong>${t('address')}:</strong> ${facility.address}</p>
+      <p><strong>${t('phone')}:</strong> ${facility.phone}</p>
+      ${specialSection}
+      ${facility.certified ? `<p><strong>✅ ${t('certified')}</strong></p>` : ''}
       <button class="btn-search" style="margin-top:15px;" onclick="abrirRuta(${facility.lat}, ${facility.lon})">${t('routeBtn')}</button>
     `;
     document.getElementById('detailModal').classList.add('active');
@@ -539,8 +841,20 @@
     document.getElementById('radiusSlider').value = 10;
     document.getElementById('radiusSliderCity').value = 10;
     updateRadiusLabel(10);
+    updateAllTexts();
+    
     if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => { userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude }; });
+      navigator.geolocation.getCurrentPosition(
+        pos => { 
+          userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+          map.setView([userLoc.lat, userLoc.lon], 12);
+        },
+        err => { 
+          document.getElementById('geoWarning').style.display = 'block';
+        }
+      );
+    } else {
+      document.getElementById('geoWarning').style.display = 'block';
     }
   };
 </script>
