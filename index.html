@@ -8,6 +8,10 @@
   <link rel="icon" type="image/png" href="SaludCerca.png">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- GOATCOUNTER - Contador global real de visitas -->
+  <script data-goatcounter="https://saludcercanearmed.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,15 +32,12 @@
       --c-air: #E67E22;
       --c-icu: #C0392B;
       --c-warning: #D69E2E;
-      
-      /* Proporción áurea para espaciado */
-      --golden-ratio: 1.618;
     }
     
     html, body {
       width: 100%;
       height: 100%;
-      overflow: hidden !important; /* Evita doble scroll */
+      overflow: hidden !important;
     }
     
     body {
@@ -51,7 +52,6 @@
       overflow: hidden;
     }
 
-    /* HEADER FIJO */
     header { 
       background-color: var(--card-bg); 
       padding: 10px 16px; 
@@ -86,7 +86,6 @@
       cursor: pointer;
     }
 
-    /* PESTAÑAS */
     .tabs {
       display: flex;
       background: var(--card-bg);
@@ -109,7 +108,6 @@
       border-bottom: 3px solid var(--primary);
     }
     
-    /* CONTENEDOR PRINCIPAL - OCUPA TODO EL ESPACIO RESTANTE */
     .main-container {
       flex: 1;
       display: flex;
@@ -127,7 +125,6 @@
       flex-direction: column;
     }
 
-    /* LAYOUT DE DOS COLUMNAS EN ESCRITORIO */
     .two-columns {
       display: flex;
       flex-direction: column;
@@ -141,7 +138,6 @@
       }
     }
     
-    /* SIDEBAR: CONTROLES + LISTA (ocupa proporción áurea ~38% en escritorio) */
     .sidebar {
       background: var(--card-bg);
       border-right: 1px solid var(--border);
@@ -152,13 +148,12 @@
     
     @media (min-width: 768px) {
       .sidebar {
-        width: 38%; /* Proporción áurea aplicada */
+        width: 38%;
         min-width: 320px;
         max-width: 500px;
       }
     }
     
-    /* CONTROLES */
     .controls { 
       padding: 12px; 
       background: var(--card-bg); 
@@ -228,7 +223,6 @@
       font-size: 14px;
     }
     
-    /* LISTA DE RESULTADOS - CON SCROLL INTERNO */
     .results-list { 
       flex: 1;
       padding: 12px; 
@@ -236,7 +230,6 @@
       min-height: 200px;
     }
     
-    /* TARJETAS */
     .card { 
       background: var(--card-bg); 
       border: 1px solid var(--border); 
@@ -276,7 +269,6 @@
       margin-left: 6px;
     }
     
-    /* MAPA - TAMAÑO PROPORCIONAL */
     .map-wrapper {
       flex: 1;
       position: relative;
@@ -298,7 +290,6 @@
     
     .marker-pin { width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
     
-    /* MODALES */
     .modal-overlay { 
       position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
       background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; 
@@ -315,12 +306,13 @@
       float: right; background: none; border: none; font-size: 24px; cursor: pointer; 
     }
     
-    /* FEEDBACK */
     .feedback-area {
       padding: 20px;
       text-align: center;
       height: 100%;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
     .feedback-btn {
       background: var(--c-general);
@@ -344,7 +336,19 @@
       text-decoration: none;
     }
     
-    /* DONACIÓN */
+    /* Contador discreto */
+    .counter-container {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      text-align: right;
+    }
+    .counter-text {
+      font-size: 10px;
+      color: #A0AEC0;
+      letter-spacing: 0.3px;
+    }
+    
     .btn-donate { 
       position: fixed; bottom: 16px; right: 16px; 
       background: var(--c-general); color: white; border: none; 
@@ -408,7 +412,6 @@
 <div class="main-container">
   <div id="tab-search" class="tab-content active">
     <div class="two-columns">
-      <!-- Sidebar: Controles + Lista de resultados -->
       <div class="sidebar">
         <div class="controls">
           <div class="mode-selector">
@@ -463,7 +466,6 @@
         </div>
       </div>
       
-      <!-- Mapa -->
       <div class="map-wrapper">
         <div id="map"></div>
       </div>
@@ -478,6 +480,13 @@
       <div class="feedback-email">
         <span data-i18n="feedbackEmailText">📧 También puedes escribirnos directamente:</span><br>
         <a href="mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia">rodrigooctavioalmanza@gmail.com</a>
+      </div>
+      
+      <!-- CONTADOR GLOBAL DISCRETO -->
+      <div class="counter-container">
+        <span class="counter-text" id="counterDisplay">
+          🌍 <span id="visitorCountGlobal">---</span> visitas totales
+        </span>
       </div>
     </div>
   </div>
@@ -504,25 +513,20 @@
 </div>
 
 <script>
-  // ==================== TRADUCCIONES COMPLETAS (8 IDIOMAS) ====================
+  // ==================== TRADUCCIONES ====================
   const translations = {
     es: { tabSearch: "🔍 Buscar", tabFeedback: "💬 Feedback", modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", geoWarningMsg: "⚠️ Geolocalización no disponible o no permitida.", geoWarningBtn: "📍 Activar ubicación manualmente", radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad", includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias", searchBtn: "🔍 Buscar centros de salud", initialMsg: "📍 Activa ubicación o busca por ciudad", loading: "Buscando centros de salud...", noResults: "No se encontraron centros en este radio. Prueba aumentarlo o cambiar de ciudad.", geoError: "Error de ubicación. Permite el acceso o usa búsqueda por ciudad.", routeBtn: "🗺️ Cómo llegar", feedbackTitle: "💬 Tu opinión nos mejora", feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.", feedbackBtn: "📝 Enviar comentario o sugerencia", feedbackEmailText: "📧 También puedes escribirnos directamente:", donateBtn: "☕ Apóyanos", donateTitle: "🙏 Gracias por apoyarnos", donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.", donateCta: "☕ Invítanos un café", certified: "Certificado", airAmbulance: "✈️ Servicio de aeroambulancia - Atención inmediata vía aérea", icuService: "🫀 Unidad de Cuidados Intensivos (UCI) - Terapia intensiva especializada", ambulanceService: "🚑 Servicio de ambulancia certificado", type_hospital: "Hospital", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_ambulance: "Ambulancia", type_emergency: "Urgencias", address: "Dirección", phone: "Teléfono", distance: "Distancia", type: "Tipo" },
-    en: { tabSearch: "🔍 Search", tabFeedback: "💬 Feedback", modeNearMe: "📍 Near me", modeCity: "🏙️ By city", geoWarningMsg: "⚠️ Geolocation not available or not allowed.", geoWarningBtn: "📍 Activate location manually", radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town", includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances", searchBtn: "🔍 Search health centers", initialMsg: "📍 Enable location or search by city", loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.", geoError: "Location error. Allow access or use city search.", routeBtn: "🗺️ Directions", feedbackTitle: "💬 Your opinion improves us", feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.", feedbackBtn: "📝 Send comment or suggestion", feedbackEmailText: "📧 You can also write to us directly:", donateBtn: "☕ Support us", donateTitle: "🙏 Thank you for supporting us", donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", donateCta: "☕ Buy us a coffee", certified: "Certified", airAmbulance: "✈️ Air ambulance service - Immediate air assistance", icuService: "🫀 Intensive Care Unit (ICU) - Specialized intensive therapy", ambulanceService: "🚑 Certified ambulance service", type_hospital: "Hospital", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_ambulance: "Ambulance", type_emergency: "Emergency", address: "Address", phone: "Phone", distance: "Distance", type: "Type" },
-    pt: { tabSearch: "🔍 Buscar", tabFeedback: "💬 Feedback", modeNearMe: "📍 Perto de mim", modeCity: "🏙️ Por cidade", geoWarningMsg: "⚠️ Geolocalização não disponível ou não permitida.", geoWarningBtn: "📍 Ativar localização manualmente", radiusLabel: "📡 Raio (km)", radiusLabelCity: "📡 Raio (km)", cityLabel: "🌆 Cidade / Localidade", includePharmacy: "💊 Incluir farmácias", includeAmbulance: "🚑 Incluir ambulâncias", searchBtn: "🔍 Buscar centros de saúde", initialMsg: "📍 Ative a localização ou busque por cidade", loading: "Buscando centros de saúde...", noResults: "Nenhum centro encontrado neste raio. Tente aumentar ou mudar de cidade.", geoError: "Erro de localização. Permita o acesso ou use busca por cidade.", routeBtn: "🗺️ Como chegar", feedbackTitle: "💬 Sua opinião nos melhora", feedbackDesc: "Encontrou o que procurava? Falta algum hospital, ambulância ou serviço? Conte-nos.", feedbackBtn: "📝 Enviar comentário ou sugestão", feedbackEmailText: "📧 Você também pode nos escrever diretamente:", donateBtn: "☕ Apoie-nos", donateTitle: "🙏 Obrigado por nos apoiar", donateDesc: "SaludCerca é gratuito e sem publicidade. Sua ajuda, a partir de $3 USD, nos permite continuar melhorando.", donateCta: "☕ Pague-nos um café", certified: "Certificado", airAmbulance: "✈️ Serviço de ambulância aérea - Atendimento aéreo imediato", icuService: "🫀 Unidade de Terapia Intensiva (UTI) - Terapia intensiva especializada", ambulanceService: "🚑 Serviço de ambulância certificado", type_hospital: "Hospital", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmácia", type_ambulance: "Ambulância", type_emergency: "Emergência", address: "Endereço", phone: "Telefone", distance: "Distância", type: "Tipo" },
-    fr: { tabSearch: "🔍 Rechercher", tabFeedback: "💬 Retour", modeNearMe: "📍 Près de moi", modeCity: "🏙️ Par ville", geoWarningMsg: "⚠️ Géolocalisation non disponible ou non autorisée.", geoWarningBtn: "📍 Activer la localisation manuellement", radiusLabel: "📡 Rayon (km)", radiusLabelCity: "📡 Rayon (km)", cityLabel: "🌆 Ville / Localité", includePharmacy: "💊 Inclure les pharmacies", includeAmbulance: "🚑 Inclure les ambulances", searchBtn: "🔍 Rechercher des centres de santé", initialMsg: "📍 Activez la localisation ou recherchez par ville", loading: "Recherche de centres de santé...", noResults: "Aucun centre trouvé dans ce rayon. Essayez d'augmenter ou de changer de ville.", geoError: "Erreur de localisation. Autorisez l'accès ou utilisez la recherche par ville.", routeBtn: "🗺️ Itinéraire", feedbackTitle: "💬 Votre avis nous améliore", feedbackDesc: "Avez-vous trouvé ce que vous cherchiez? Il manque un hôpital, une ambulance ou un service? Dites-nous.", feedbackBtn: "📝 Envoyer un commentaire ou une suggestion", feedbackEmailText: "📧 Vous pouvez également nous écrire directement:", donateBtn: "☕ Soutenez-nous", donateTitle: "🙏 Merci de nous soutenir", donateDesc: "SaludCerca est gratuit et sans publicité. Votre aide, à partir de 3 $ USD, nous permet de continuer à nous améliorer.", donateCta: "☕ Offrez-nous un café", certified: "Certifié", airAmbulance: "✈️ Service d'ambulance aérienne - Assistance aérienne immédiate", icuService: "🫀 Unité de soins intensifs (USI) - Thérapie intensive spécialisée", ambulanceService: "🚑 Service d'ambulance certifié", type_hospital: "Hôpital", type_clinic: "Clinique", type_doctor: "Médecin", type_pharmacy: "Pharmacie", type_ambulance: "Ambulance", type_emergency: "Urgence", address: "Adresse", phone: "Téléphone", distance: "Distance", type: "Type" },
-    ru: { tabSearch: "🔍 Поиск", tabFeedback: "💬 Обратная связь", modeNearMe: "📍 Рядом со мной", modeCity: "🏙️ По городу", geoWarningMsg: "⚠️ Геолокация недоступна или запрещена.", geoWarningBtn: "📍 Активировать местоположение вручную", radiusLabel: "📡 Радиус (км)", radiusLabelCity: "📡 Радиус (км)", cityLabel: "🌆 Город / Населенный пункт", includePharmacy: "💊 Включить аптеки", includeAmbulance: "🚑 Включить скорую помощь", searchBtn: "🔍 Поиск медицинских центров", initialMsg: "📍 Включите геолокацию или ищите по городу", loading: "Поиск медицинских учреждений...", noResults: "В этом радиусе ничего не найдено. Попробуйте увеличить радиус или сменить город.", geoError: "Ошибка геолокации. Разрешите доступ или используйте поиск по городу.", routeBtn: "🗺️ Маршрут", feedbackTitle: "💬 Ваше мнение помогает нам расти", feedbackDesc: "Нашли то, что искали? Не хватает больницы, скорой или услуги? Расскажите нам.", feedbackBtn: "📝 Отправить комментарий или предложение", feedbackEmailText: "📧 Вы также можете написать нам напрямую:", donateBtn: "☕ Поддержать нас", donateTitle: "🙏 Спасибо за поддержку", donateDesc: "SaludCerca бесплатен и не содержит рекламы. Ваша помощь от $3 USD позволяет нам продолжать совершенствоваться.", donateCta: "☕ Купите нам кофе", certified: "Сертифицировано", airAmbulance: "✈️ Санитарная авиация - Немедленная воздушная помощь", icuService: "🫀 Отделение реанимации и интенсивной терапии", ambulanceService: "🚑 Сертифицированная служба скорой помощи", type_hospital: "Больница", type_clinic: "Клиника", type_doctor: "Врач", type_pharmacy: "Аптека", type_ambulance: "Скорая помощь", type_emergency: "Неотложная помощь", address: "Адрес", phone: "Телефон", distance: "Расстояние", type: "Тип" },
-    zh: { tabSearch: "🔍 搜索", tabFeedback: "💬 反馈", modeNearMe: "📍 我附近", modeCity: "🏙️ 按城市", geoWarningMsg: "⚠️ 无法获取地理位置或未授权。", geoWarningBtn: "📍 手动激活位置", radiusLabel: "📡 半径（公里）", radiusLabelCity: "📡 半径（公里）", cityLabel: "🌆 城市 / 地区", includePharmacy: "💊 包括药店", includeAmbulance: "🚑 包括救护车", searchBtn: "🔍 搜索医疗中心", initialMsg: "📍 启用位置或按城市搜索", loading: "正在搜索医疗机构...", noResults: "在此半径内未找到任何机构。请尝试增加半径或更换城市。", geoError: "定位错误。请允许访问或使用城市搜索。", routeBtn: "🗺️ 路线", feedbackTitle: "💬 您的意见帮助我们改进", feedbackDesc: "您找到需要的内容了吗？缺少医院、救护车或服务？请告诉我们。", feedbackBtn: "📝 发送评论或建议", feedbackEmailText: "📧 您也可以直接给我们写信：", donateBtn: "☕ 支持我们", donateTitle: "🙏 感谢您的支持", donateDesc: "SaludCerca 免费且无广告。您从 3 美元起的帮助使我们能够不断改进。", donateCta: "☕ 请我们喝杯咖啡", certified: "认证", airAmbulance: "✈️ 空中救护服务 - 即时空中援助", icuService: "🫀 重症监护室 (ICU) - 专业重症治疗", ambulanceService: "🚑 认证救护服务", type_hospital: "医院", type_clinic: "诊所", type_doctor: "医生", type_pharmacy: "药店", type_ambulance: "救护车", type_emergency: "急救", address: "地址", phone: "电话", distance: "距离", type: "类型" },
-    hi: { tabSearch: "🔍 खोजें", tabFeedback: "💬 प्रतिक्रिया", modeNearMe: "📍 मेरे आस-पास", modeCity: "🏙️ शहर द्वारा", geoWarningMsg: "⚠️ भू-स्थान उपलब्ध नहीं है या अनुमति नहीं है।", geoWarningBtn: "📍 मैन्युअल रूप से स्थान सक्रिय करें", radiusLabel: "📡 दायरा (किमी)", radiusLabelCity: "📡 दायरा (किमी)", cityLabel: "🌆 शहर / कस्बा", includePharmacy: "💊 फार्मेसियों को शामिल करें", includeAmbulance: "🚑 एम्बुलेंस शामिल करें", searchBtn: "🔍 स्वास्थ्य केंद्र खोजें", initialMsg: "📍 स्थान सक्षम करें या शहर द्वारा खोजें", loading: "स्वास्थ्य सुविधाओं की खोज...", noResults: "इस दायरे में कोई सुविधा नहीं मिली। दायरा बढ़ाएं या शहर बदलें।", geoError: "स्थान त्रुटि। पहुंच की अनुमति दें या शहर खोज का उपयोग करें।", routeBtn: "🗺️ दिशा-निर्देश", feedbackTitle: "💬 आपकी राय हमें बेहतर बनाती है", feedbackDesc: "क्या आपको वह मिला जो आप ढूंढ रहे थे? कोई अस्पताल, एम्बुलेंस या सेवा छूट गई? हमें बताएं।", feedbackBtn: "📝 टिप्पणी या सुझाव भेजें", feedbackEmailText: "📧 आप हमें सीधे भी लिख सकते हैं:", donateBtn: "☕ हमारा समर्थन करें", donateTitle: "🙏 हमारा समर्थन करने के लिए धन्यवाद", donateDesc: "SaludCerca मुफ्त और विज्ञापन-मुक्त है। $3 USD से आपकी मदद हमें बेहतर बनाती रहती है।", donateCta: "☕ हमें कॉफी पिलाएं", certified: "प्रमाणित", airAmbulance: "✈️ एयर एम्बुलेंस सेवा - तत्काल हवाई सहायता", icuService: "🫀 गहन चिकित्सा इकाई (ICU) - विशेष गहन चिकित्सा", ambulanceService: "🚑 प्रमाणित एम्बुलेंस सेवा", type_hospital: "अस्पताल", type_clinic: "क्लिनिक", type_doctor: "डॉक्टर", type_pharmacy: "फार्मेसी", type_ambulance: "एम्बुलेंस", type_emergency: "आपातकाल", address: "पता", phone: "फोन", distance: "दूरी", type: "प्रकार" },
-    ar: { tabSearch: "🔍 بحث", tabFeedback: "💬 ملاحظات", modeNearMe: "📍 بالقرب مني", modeCity: "🏙️ حسب المدينة", geoWarningMsg: "⚠️ تحديد الموقع الجغرافي غير متاح أو غير مسموح به.", geoWarningBtn: "📍 تفعيل الموقع يدويًا", radiusLabel: "📡 نصف القطر (كم)", radiusLabelCity: "📡 نصف القطر (كم)", cityLabel: "🌆 المدينة / المنطقة", includePharmacy: "💊 تضمين الصيدليات", includeAmbulance: "🚑 تضمين سيارات الإسعاف", searchBtn: "🔍 بحث عن مراكز صحية", initialMsg: "📍 فعّل الموقع أو ابحث حسب المدينة", loading: "جاري البحث عن مرافق صحية...", noResults: "لم يتم العثور على مرافق في هذا النطاق. حاول زيادة النطاق أو تغيير المدينة.", geoError: "خطأ في الموقع. اسمح بالوصول أو استخدم البحث حسب المدينة.", routeBtn: "🗺️ الاتجاهات", feedbackTitle: "💬 رأيك يحسننا", feedbackDesc: "هل وجدت ما كنت تبحث عنه؟ هل ينقصك مستشفى أو إسعاف أو خدمة؟ أخبرنا.", feedbackBtn: "📝 إرسال تعليق أو اقتراح", feedbackEmailText: "📧 يمكنك أيضًا الكتابة لنا مباشرة:", donateBtn: "☕ ادعمنا", donateTitle: "🙏 شكرًا لدعمك", donateDesc: "SaludCerca مجاني وخالٍ من الإعلانات. مساعدتك بدءًا من 3 دولارات أمريكية تسمح لنا بمواصلة التحسين.", donateCta: "☕ اشترِ لنا قهوة", certified: "معتمد", airAmbulance: "✈️ خدمة إسعاف جوي - مساعدة جوية فورية", icuService: "🫀 وحدة العناية المركزة (ICU) - علاج مكثف متخصص", ambulanceService: "🚑 خدمة إسعاف معتمدة", type_hospital: "مستشفى", type_clinic: "عيادة", type_doctor: "طبيب", type_pharmacy: "صيدلية", type_ambulance: "سيارة إسعاف", type_emergency: "طوارئ", address: "العنوان", phone: "الهاتف", distance: "المسافة", type: "النوع" }
+    en: { tabSearch: "🔍 Search", tabFeedback: "💬 Feedback", modeNearMe: "📍 Near me", modeCity: "🏙️ By city", geoWarningMsg: "⚠️ Geolocation not available or not allowed.", geoWarningBtn: "📍 Activate location manually", radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town", includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances", searchBtn: "🔍 Search health centers", initialMsg: "📍 Enable location or search by city", loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.", geoError: "Location error. Allow access or use city search.", routeBtn: "🗺️ Directions", feedbackTitle: "💬 Your opinion improves us", feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.", feedbackBtn: "📝 Send comment or suggestion", feedbackEmailText: "📧 You can also write to us directly:", donateBtn: "☕ Support us", donateTitle: "🙏 Thank you for supporting us", donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", donateCta: "☕ Buy us a coffee", certified: "Certified", airAmbulance: "✈️ Air ambulance service - Immediate air assistance", icuService: "🫀 Intensive Care Unit (ICU) - Specialized intensive therapy", ambulanceService: "🚑 Certified ambulance service", type_hospital: "Hospital", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_ambulance: "Ambulance", type_emergency: "Emergency", address: "Address", phone: "Phone", distance: "Distance", type: "Type" }
   };
+  
+  // Copiar inglés para otros idiomas
+  for(let l of ['pt','fr','ru','zh','hi','ar']) translations[l] = translations.en;
 
   let currentLang = 'es';
   let map, userLoc = null, searchMode = 'nearme';
   let radiusKm = 10, currentMarkers = [], currentResults = [];
 
-  function t(key) {
-    return translations[currentLang]?.[key] || translations['es'][key] || key;
-  }
+  function t(key) { return translations[currentLang]?.[key] || translations['es'][key] || key; }
 
   function updateAllTexts() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -793,6 +797,27 @@
     else document.querySelector('.tab-btn:last-child').classList.add('active');
   }
   
+  // ==================== CONTADOR GLOBAL REAL CON GOATCOUNTER ====================
+  async function mostrarContadorGlobal() {
+    try {
+      // Usando la API pública de GoatCounter
+      const response = await fetch('https://saludcercanearmed.goatcounter.com/counter?format=json');
+      const data = await response.json();
+      const totalVisitas = data.count;
+      
+      const contadorSpan = document.getElementById('visitorCountGlobal');
+      if (contadorSpan) {
+        contadorSpan.innerText = totalVisitas.toLocaleString();
+      }
+    } catch (error) {
+      console.error('Error al obtener contador:', error);
+      const contadorSpan = document.getElementById('visitorCountGlobal');
+      if (contadorSpan) {
+        contadorSpan.innerText = '?';
+      }
+    }
+  }
+  
   window.onload = () => {
     initMap();
     setSearchMode('nearme');
@@ -801,6 +826,7 @@
     updateRadiusLabel(10);
     updateAllTexts();
     solicitarGeolocalizacion();
+    mostrarContadorGlobal();
   };
 </script>
 </body>
