@@ -91,17 +91,20 @@
       background: var(--card-bg);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
+      overflow-x: auto;
+      white-space: nowrap;
     }
     .tab-btn {
       flex: 1;
-      padding: 12px;
+      padding: 12px 8px;
       background: none;
       border: none;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
       transition: 0.2s;
+      white-space: nowrap;
     }
     .tab-btn.active {
       color: var(--primary);
@@ -306,36 +309,55 @@
       float: right; background: none; border: none; font-size: 24px; cursor: pointer; 
     }
     
-    .feedback-area {
+    /* Estilos para páginas de contenido (Historia, Testimonios, Feedback) */
+    .content-page {
       padding: 20px;
-      text-align: center;
-      height: 100%;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      padding-bottom: 60px;
+      height: 100%;
     }
-    .feedback-btn {
-      background: var(--c-general);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 40px;
-      font-size: 16px;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      margin-top: 20px;
+    .content-page h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.4rem;
     }
-    .feedback-email {
-      margin-top: 20px;
+    .content-page h3 {
+      margin: 20px 0 10px 0;
+      color: var(--text-main);
+    }
+    .testimonial-card {
+      background: var(--card-bg);
+      border-left: 4px solid var(--c-general);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+    .testimonial-author {
       font-size: 12px;
       color: var(--text-muted);
+      text-align: right;
     }
-    .feedback-email a {
-      color: var(--primary);
+    .creator-testimonial {
+      background: #EBF8FF;
+      border-left: 4px solid var(--c-urgent);
+    }
+    .btn-testimonial {
+      display: inline-block;
+      background: var(--c-doctor);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 40px;
       text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 15px;
+      cursor: pointer;
+      border: none;
     }
     
     .counter-global {
@@ -408,10 +430,13 @@
 
 <div class="tabs">
   <button class="tab-btn active" data-i18n="tabSearch" onclick="switchTab('search')">🔍 Buscar</button>
+  <button class="tab-btn" data-i18n="tabTestimonials" onclick="switchTab('testimonials')">💬 Testimonios</button>
+  <button class="tab-btn" data-i18n="tabStory" onclick="switchTab('story')">📖 Historia</button>
   <button class="tab-btn" data-i18n="tabFeedback" onclick="switchTab('feedback')">💬 Feedback</button>
 </div>
 
 <div class="main-container">
+  <!-- PESTAÑA DE BÚSQUEDA -->
   <div id="tab-search" class="tab-content active">
     <div class="two-columns">
       <div class="sidebar">
@@ -474,12 +499,54 @@
     </div>
   </div>
   
+  <!-- PESTAÑA DE TESTIMONIOS -->
+  <div id="tab-testimonials" class="tab-content">
+    <div class="content-page">
+      <h2 data-i18n="testimonialsTitle">💬 Testimonios de usuarios</h2>
+      <p data-i18n="testimonialsDesc">Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.</p>
+      
+      <div id="testimonialsList">
+        <!-- Los testimonios se cargarán dinámicamente desde localStorage -->
+        <div class="testimonial-card">
+          <div class="testimonial-text">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
+          <div class="testimonial-author">— Laura M., viajera frecuente</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-text">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
+          <div class="testimonial-author">— Carlos R., productor audiovisual</div>
+        </div>
+      </div>
+      
+      <button class="btn-testimonial" onclick="abrirFormularioTestimonio()" data-i18n="shareTestimonialBtn">📝 Comparte tu testimonio</button>
+    </div>
+  </div>
+  
+  <!-- PESTAÑA DE HISTORIA (CREADOR) -->
+  <div id="tab-story" class="tab-content">
+    <div class="content-page">
+      <h2 data-i18n="storyTitle">📖 La historia detrás de SaludCerca</h2>
+      
+      <div class="testimonial-card creator-testimonial">
+        <div class="testimonial-text">
+          "Hace veintitrés años quien escribe sufrió un accidente automovilístico. Mis familiares cercanos (mis padres y mi hermana) no se encontraban en la ciudad. Mis tíos, primos y amigos padecieron horas de angustia al no poder encontrar con facilidad servicios de emergencia.<br><br>
+          La ambulancia que me salvó la vida me llevó a un hospital privado que mi seguro no cubría y mientras mis tíos buscaban el hospital y las ambulancias de terapia intensiva que me trasladaran pasaron 9 horas angustiosas en las que yo me desangraba en una tabla de madera habilitada como camilla en un pasillo de una sala de urgencias.<br><br>
+          Afortunadamente viví para contarlo, y, hoy muchos años después cuando me preguntaron '¿tú, de qué harías una app?' No tuve que pensarlo mucho.<br><br>
+          Espero que esta web app gratuita ayude a salvar muchas vidas y a ahorrarle horas de angustia a pacientes, familiares y amigos en situaciones de emergencia.<br><br>
+          Que el espíritu del universo esté con ustedes siempre.<br><br>
+          Abril, 2026."
+        </div>
+        <div class="testimonial-author">— El creador de SaludCerca | NearMed</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- PESTAÑA DE FEEDBACK (original) -->
   <div id="tab-feedback" class="tab-content">
-    <div class="feedback-area">
+    <div class="content-page">
       <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
       <p data-i18n="feedbackDesc" style="margin:15px 0;">¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.</p>
-      <button class="feedback-btn" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
-      <div class="feedback-email">
+      <button class="btn-testimonial" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
+      <div class="feedback-email" style="margin-top: 20px;">
         <span data-i18n="feedbackEmailText">📧 También puedes escribirnos directamente:</span><br>
         <a href="mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia">rodrigooctavioalmanza@gmail.com</a>
       </div>
@@ -515,8 +582,50 @@
 <script>
   // ==================== TRADUCCIONES ====================
   const translations = {
-    es: { tabSearch: "🔍 Buscar", tabFeedback: "💬 Feedback", modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", geoWarningMsg: "⚠️ Geolocalización no disponible o no permitida.", geoWarningBtn: "📍 Activar ubicación manualmente", radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad", includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias", searchBtn: "🔍 Buscar centros de salud", initialMsg: "📍 Activa ubicación o busca por ciudad", loading: "Buscando centros de salud...", noResults: "No se encontraron centros en este radio. Prueba aumentarlo o cambiar de ciudad.", geoError: "Error de ubicación. Permite el acceso o usa búsqueda por ciudad.", routeBtn: "🗺️ Cómo llegar", feedbackTitle: "💬 Tu opinión nos mejora", feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.", feedbackBtn: "📝 Enviar comentario o sugerencia", feedbackEmailText: "📧 También puedes escribirnos directamente:", donateBtn: "☕ Apóyanos", donateTitle: "🙏 Gracias por apoyarnos", donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.", donateCta: "☕ Invítanos un café", certified: "Certificado", airAmbulance: "✈️ Servicio de aeroambulancia - Atención inmediata vía aérea", icuService: "🫀 Unidad de Cuidados Intensivos (UCI) - Terapia intensiva especializada", ambulanceService: "🚑 Servicio de ambulancia certificado", type_hospital: "Hospital", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_ambulance: "Ambulancia", type_emergency: "Urgencias", address: "Dirección", phone: "Teléfono", distance: "Distancia", type: "Tipo" },
-    en: { tabSearch: "🔍 Search", tabFeedback: "💬 Feedback", modeNearMe: "📍 Near me", modeCity: "🏙️ By city", geoWarningMsg: "⚠️ Geolocation not available or not allowed.", geoWarningBtn: "📍 Activate location manually", radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town", includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances", searchBtn: "🔍 Search health centers", initialMsg: "📍 Enable location or search by city", loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.", geoError: "Location error. Allow access or use city search.", routeBtn: "🗺️ Directions", feedbackTitle: "💬 Your opinion improves us", feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.", feedbackBtn: "📝 Send comment or suggestion", feedbackEmailText: "📧 You can also write to us directly:", donateBtn: "☕ Support us", donateTitle: "🙏 Thank you for supporting us", donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", donateCta: "☕ Buy us a coffee", certified: "Certified", airAmbulance: "✈️ Air ambulance service - Immediate air assistance", icuService: "🫀 Intensive Care Unit (ICU) - Specialized intensive therapy", ambulanceService: "🚑 Certified ambulance service", type_hospital: "Hospital", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_ambulance: "Ambulance", type_emergency: "Emergency", address: "Address", phone: "Phone", distance: "Distance", type: "Type" }
+    es: { 
+      tabSearch: "🔍 Buscar", tabTestimonials: "💬 Testimonios", tabStory: "📖 Historia", tabFeedback: "💬 Feedback",
+      modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", 
+      geoWarningMsg: "⚠️ Geolocalización no disponible o no permitida.", geoWarningBtn: "📍 Activar ubicación manualmente",
+      radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad",
+      includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias",
+      searchBtn: "🔍 Buscar centros de salud", initialMsg: "📍 Activa ubicación o busca por ciudad",
+      loading: "Buscando centros de salud...", noResults: "No se encontraron centros en este radio. Prueba aumentarlo o cambiar de ciudad.",
+      geoError: "Error de ubicación. Permite el acceso o usa búsqueda por ciudad.",
+      routeBtn: "🗺️ Cómo llegar", donateBtn: "☕ Apóyanos",
+      donateTitle: "🙏 Gracias por apoyarnos", donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.",
+      donateCta: "☕ Invítanos un café", certified: "Certificado",
+      airAmbulance: "✈️ Servicio de aeroambulancia - Atención inmediata vía aérea",
+      icuService: "🫀 Unidad de Cuidados Intensivos (UCI) - Terapia intensiva especializada",
+      ambulanceService: "🚑 Servicio de ambulancia certificado",
+      type_hospital: "Hospital", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_ambulance: "Ambulancia", type_emergency: "Urgencias",
+      address: "Dirección", phone: "Teléfono", distance: "Distancia", type: "Tipo",
+      testimonialsTitle: "💬 Testimonios de usuarios", testimonialsDesc: "Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.",
+      shareTestimonialBtn: "📝 Comparte tu testimonio", storyTitle: "📖 La historia detrás de SaludCerca",
+      feedbackTitle: "💬 Tu opinión nos mejora", feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.",
+      feedbackBtn: "📝 Enviar comentario o sugerencia", feedbackEmailText: "📧 También puedes escribirnos directamente:"
+    },
+    en: { 
+      tabSearch: "🔍 Search", tabTestimonials: "💬 Testimonials", tabStory: "📖 Story", tabFeedback: "💬 Feedback",
+      modeNearMe: "📍 Near me", modeCity: "🏙️ By city",
+      geoWarningMsg: "⚠️ Geolocation not available or not allowed.", geoWarningBtn: "📍 Activate location manually",
+      radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town",
+      includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances",
+      searchBtn: "🔍 Search health centers", initialMsg: "📍 Enable location or search by city",
+      loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.",
+      geoError: "Location error. Allow access or use city search.",
+      routeBtn: "🗺️ Directions", donateBtn: "☕ Support us",
+      donateTitle: "🙏 Thank you for supporting us", donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.",
+      donateCta: "☕ Buy us a coffee", certified: "Certified",
+      airAmbulance: "✈️ Air ambulance service - Immediate air assistance",
+      icuService: "🫀 Intensive Care Unit (ICU) - Specialized intensive therapy",
+      ambulanceService: "🚑 Certified ambulance service",
+      type_hospital: "Hospital", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_ambulance: "Ambulance", type_emergency: "Emergency",
+      address: "Address", phone: "Phone", distance: "Distance", type: "Type",
+      testimonialsTitle: "💬 User Testimonials", testimonialsDesc: "Share your experience with SaludCerca | NearMed. Your story can help others.",
+      shareTestimonialBtn: "📝 Share your testimonial", storyTitle: "📖 The story behind SaludCerca",
+      feedbackTitle: "💬 Your opinion improves us", feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.",
+      feedbackBtn: "📝 Send comment or suggestion", feedbackEmailText: "📧 You can also write to us directly:"
+    }
   };
   
   // Copiar inglés para otros idiomas
@@ -525,7 +634,6 @@
   let currentLang = 'es';
   let map, userLoc = null, searchMode = 'nearme';
   let radiusKm = 10, currentMarkers = [], currentResults = [];
-  let lastCityCenter = null; // Guardar el centro de la última ciudad buscada
 
   function t(key) { return translations[currentLang]?.[key] || translations['es'][key] || key; }
 
@@ -678,14 +786,12 @@
         return;
       }
       centerLat = userLoc.lat; centerLon = userLoc.lon;
-      lastCityCenter = null;
     } else {
       const city = document.getElementById('cityInput').value.trim();
       if(!city) { resultsDiv.innerHTML = `<div class="status-msg">${t('cityLabel')}</div>`; return; }
       const geo = await geocodeCity(city);
       if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
       centerLat = geo.lat; centerLon = geo.lon;
-      lastCityCenter = { lat: centerLat, lon: centerLon };
     }
     
     map.setView([centerLat, centerLon], 12);
@@ -781,28 +887,21 @@
   
   function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
   
-  // ==================== FUNCIÓN DE RUTA CORREGIDA ====================
-  // Si estamos en modo "Cerca de mí": usa la ubicación real del usuario
-  // Si estamos en modo "Por ciudad": abre solo el lugar en el mapa (sin punto de origen)
   function abrirRuta(lat, lon) {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     let url;
     
     if (searchMode === 'nearme') {
-      // Modo "Cerca de mí": usar ubicación real del usuario
       if (userLoc) {
         url = isIOS 
           ? `http://maps.apple.com/?daddr=${lat},${lon}&saddr=${userLoc.lat},${userLoc.lon}`
           : `https://www.google.com/maps/dir/?api=1&origin=${userLoc.lat},${userLoc.lon}&destination=${lat},${lon}`;
       } else {
-        // Si no hay ubicación del usuario, mostrar solo el lugar
         url = isIOS 
           ? `http://maps.apple.com/?ll=${lat},${lon}` 
           : `https://www.google.com/maps?q=${lat},${lon}`;
       }
     } else {
-      // Modo "Por ciudad": mostrar solo el lugar en el mapa (sin ruta predefinida)
-      // El usuario decidirá desde dónde quiere llegar
       url = isIOS 
         ? `http://maps.apple.com/?ll=${lat},${lon}` 
         : `https://www.google.com/maps?q=${lat},${lon}`;
@@ -816,12 +915,19 @@
   function openFeedback() { 
     window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia%20o%20mejora&body=Hola%20equipo%20de%20SaludCerca,%0A%0AQuiero%20compartir%20mi%20comentario/sugerencia:%0A%0A%0A%0AGracias!'; 
   }
+  
+  function abrirFormularioTestimonio() {
+    window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Testimonio%20para%20SaludCerca&body=Hola,%20quiero%20compartir%20mi%20experiencia%20con%20SaludCerca:%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0AMi%20nombre%20(puede%20ser%20alias):%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0APaís%20o%20ciudad%20donde%20us%C3%A9%20la%20app:';
+  }
+  
   function switchTab(tab) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.getElementById(`tab-${tab}`).classList.add('active');
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     if(tab === 'search') document.querySelector('.tab-btn:first-child').classList.add('active');
-    else document.querySelector('.tab-btn:last-child').classList.add('active');
+    else if(tab === 'testimonials') document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+    else if(tab === 'story') document.querySelector('.tab-btn:nth-child(3)').classList.add('active');
+    else if(tab === 'feedback') document.querySelector('.tab-btn:nth-child(4)').classList.add('active');
   }
   
   // ==================== CONTADOR GLOBAL REAL CON GOATCOUNTER ====================
