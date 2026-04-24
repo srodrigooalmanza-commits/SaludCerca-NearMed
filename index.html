@@ -306,7 +306,6 @@
       float: right; background: none; border: none; font-size: 24px; cursor: pointer; 
     }
     
-    /* FEEDBACK AREA - con espacio para el contador en esquina inferior izquierda */
     .feedback-area {
       padding: 20px;
       text-align: center;
@@ -339,7 +338,6 @@
       text-decoration: none;
     }
     
-    /* CONTADOR GLOBAL - Esquina inferior izquierda dentro de Feedback */
     .counter-global {
       position: absolute;
       bottom: 15px;
@@ -527,6 +525,7 @@
   let currentLang = 'es';
   let map, userLoc = null, searchMode = 'nearme';
   let radiusKm = 10, currentMarkers = [], currentResults = [];
+  let lastCityCenter = null; // Guardar el centro de la última ciudad buscada
 
   function t(key) { return translations[currentLang]?.[key] || translations['es'][key] || key; }
 
@@ -679,12 +678,14 @@
         return;
       }
       centerLat = userLoc.lat; centerLon = userLoc.lon;
+      lastCityCenter = null;
     } else {
       const city = document.getElementById('cityInput').value.trim();
       if(!city) { resultsDiv.innerHTML = `<div class="status-msg">${t('cityLabel')}</div>`; return; }
       const geo = await geocodeCity(city);
       if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
       centerLat = geo.lat; centerLon = geo.lon;
+      lastCityCenter = { lat: centerLat, lon: centerLon };
     }
     
     map.setView([centerLat, centerLon], 12);
@@ -780,9 +781,33 @@
   
   function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
   
+  // ==================== FUNCIÓN DE RUTA CORREGIDA ====================
+  // Si estamos en modo "Cerca de mí": usa la ubicación real del usuario
+  // Si estamos en modo "Por ciudad": abre solo el lugar en el mapa (sin punto de origen)
   function abrirRuta(lat, lon) {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const url = isIOS ? `http://maps.apple.com/?daddr=${lat},${lon}` : `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+    let url;
+    
+    if (searchMode === 'nearme') {
+      // Modo "Cerca de mí": usar ubicación real del usuario
+      if (userLoc) {
+        url = isIOS 
+          ? `http://maps.apple.com/?daddr=${lat},${lon}&saddr=${userLoc.lat},${userLoc.lon}`
+          : `https://www.google.com/maps/dir/?api=1&origin=${userLoc.lat},${userLoc.lon}&destination=${lat},${lon}`;
+      } else {
+        // Si no hay ubicación del usuario, mostrar solo el lugar
+        url = isIOS 
+          ? `http://maps.apple.com/?ll=${lat},${lon}` 
+          : `https://www.google.com/maps?q=${lat},${lon}`;
+      }
+    } else {
+      // Modo "Por ciudad": mostrar solo el lugar en el mapa (sin ruta predefinida)
+      // El usuario decidirá desde dónde quiere llegar
+      url = isIOS 
+        ? `http://maps.apple.com/?ll=${lat},${lon}` 
+        : `https://www.google.com/maps?q=${lat},${lon}`;
+    }
+    
     window.open(url);
   }
   
