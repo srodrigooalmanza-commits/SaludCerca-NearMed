@@ -6,6 +6,10 @@
   <title>SaludCerca | NearMed - Hospitales, ambulancias y urgencias reales</title>
   
   <link rel="icon" type="image/png" href="SaludCerca.png">
+  <!-- MANIFEST PARA PWA INSTALABLE -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
@@ -309,55 +313,36 @@
       float: right; background: none; border: none; font-size: 24px; cursor: pointer; 
     }
     
-    /* Estilos para páginas de contenido (Historia, Testimonios, Feedback) */
-    .content-page {
+    .feedback-area {
       padding: 20px;
-      overflow-y: auto;
+      text-align: center;
       height: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-bottom: 60px;
     }
-    .content-page h2 {
-      color: var(--primary);
-      margin-bottom: 15px;
-      font-size: 1.4rem;
+    .feedback-btn {
+      background: var(--c-general);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 20px;
     }
-    .content-page h3 {
-      margin: 20px 0 10px 0;
-      color: var(--text-main);
-    }
-    .testimonial-card {
-      background: var(--card-bg);
-      border-left: 4px solid var(--c-general);
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .testimonial-text {
-      font-style: italic;
-      margin-bottom: 10px;
-      color: var(--text-main);
-    }
-    .testimonial-author {
+    .feedback-email {
+      margin-top: 20px;
       font-size: 12px;
       color: var(--text-muted);
-      text-align: right;
     }
-    .creator-testimonial {
-      background: #EBF8FF;
-      border-left: 4px solid var(--c-urgent);
-    }
-    .btn-testimonial {
-      display: inline-block;
-      background: var(--c-doctor);
-      color: white;
-      padding: 10px 16px;
-      border-radius: 40px;
+    .feedback-email a {
+      color: var(--primary);
       text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      margin-top: 15px;
-      cursor: pointer;
-      border: none;
     }
     
     .counter-global {
@@ -501,33 +486,32 @@
   
   <!-- PESTAÑA DE TESTIMONIOS -->
   <div id="tab-testimonials" class="tab-content">
-    <div class="content-page">
-      <h2 data-i18n="testimonialsTitle">💬 Testimonios de usuarios</h2>
+    <div class="content-page" style="padding: 20px; overflow-y: auto; height: 100%;">
+      <h2 data-i18n="testimonialsTitle" style="color: var(--primary); margin-bottom: 15px;">💬 Testimonios de usuarios</h2>
       <p data-i18n="testimonialsDesc">Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.</p>
       
       <div id="testimonialsList">
-        <!-- Los testimonios se cargarán dinámicamente desde localStorage -->
-        <div class="testimonial-card">
-          <div class="testimonial-text">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
-          <div class="testimonial-author">— Laura M., viajera frecuente</div>
+        <div class="testimonial-card" style="background: var(--card-bg); border-left: 4px solid var(--c-general); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+          <div class="testimonial-text" style="font-style: italic; margin-bottom: 10px;">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
+          <div class="testimonial-author" style="font-size: 12px; color: var(--text-muted); text-align: right;">— Laura M., viajera frecuente</div>
         </div>
-        <div class="testimonial-card">
-          <div class="testimonial-text">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
-          <div class="testimonial-author">— Carlos R., productor audiovisual</div>
+        <div class="testimonial-card" style="background: var(--card-bg); border-left: 4px solid var(--c-general); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+          <div class="testimonial-text" style="font-style: italic; margin-bottom: 10px;">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
+          <div class="testimonial-author" style="font-size: 12px; color: var(--text-muted); text-align: right;">— Carlos R., productor audiovisual</div>
         </div>
       </div>
       
-      <button class="btn-testimonial" onclick="abrirFormularioTestimonio()" data-i18n="shareTestimonialBtn">📝 Comparte tu testimonio</button>
+      <button class="btn-testimonial" onclick="abrirFormularioTestimonio()" style="display: inline-block; background: var(--c-doctor); color: white; padding: 10px 16px; border-radius: 40px; text-decoration: none; font-size: 13px; font-weight: 600; margin-top: 15px; cursor: pointer; border: none;">📝 Comparte tu testimonio</button>
     </div>
   </div>
   
   <!-- PESTAÑA DE HISTORIA (CREADOR) -->
   <div id="tab-story" class="tab-content">
-    <div class="content-page">
-      <h2 data-i18n="storyTitle">📖 La historia detrás de SaludCerca</h2>
+    <div class="content-page" style="padding: 20px; overflow-y: auto; height: 100%;">
+      <h2 style="color: var(--primary); margin-bottom: 15px;">📖 La historia detrás de SaludCerca</h2>
       
-      <div class="testimonial-card creator-testimonial">
-        <div class="testimonial-text">
+      <div class="testimonial-card creator-testimonial" style="background: #EBF8FF; border-left: 4px solid var(--c-urgent); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+        <div class="testimonial-text" style="font-style: italic; margin-bottom: 10px; line-height: 1.5;">
           "Hace veintitrés años quien escribe sufrió un accidente automovilístico. Mis familiares cercanos (mis padres y mi hermana) no se encontraban en la ciudad. Mis tíos, primos y amigos padecieron horas de angustia al no poder encontrar con facilidad servicios de emergencia.<br><br>
           La ambulancia que me salvó la vida me llevó a un hospital privado que mi seguro no cubría y mientras mis tíos buscaban el hospital y las ambulancias de terapia intensiva que me trasladaran pasaron 9 horas angustiosas en las que yo me desangraba en una tabla de madera habilitada como camilla en un pasillo de una sala de urgencias.<br><br>
           Afortunadamente viví para contarlo, y, hoy muchos años después cuando me preguntaron '¿tú, de qué harías una app?' No tuve que pensarlo mucho.<br><br>
@@ -535,17 +519,17 @@
           Que el espíritu del universo esté con ustedes siempre.<br><br>
           Abril, 2026."
         </div>
-        <div class="testimonial-author">— El creador de SaludCerca | NearMed</div>
+        <div class="testimonial-author" style="font-size: 12px; color: var(--text-muted); text-align: right;">— El creador de SaludCerca | NearMed</div>
       </div>
     </div>
   </div>
   
   <!-- PESTAÑA DE FEEDBACK (original) -->
   <div id="tab-feedback" class="tab-content">
-    <div class="content-page">
+    <div class="feedback-area">
       <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
       <p data-i18n="feedbackDesc" style="margin:15px 0;">¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.</p>
-      <button class="btn-testimonial" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
+      <button class="feedback-btn" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
       <div class="feedback-email" style="margin-top: 20px;">
         <span data-i18n="feedbackEmailText">📧 También puedes escribirnos directamente:</span><br>
         <a href="mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia">rodrigooctavioalmanza@gmail.com</a>
@@ -917,7 +901,7 @@
   }
   
   function abrirFormularioTestimonio() {
-    window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Testimonio%20para%20SaludCerca&body=Hola,%20quiero%20compartir%20mi%20experiencia%20con%20SaludCerca:%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0AMi%20nombre%20(puede%20ser%20alias):%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0APaís%20o%20ciudad%20donde%20us%C3%A9%20la%20app:';
+    window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Testimonio%20para%20SaludCerca&body=Hola,%20quiero%20compartir%20mi%20experiencia%20con%20SaludCerca:%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0AMi%20nombre%20(puede%20ser%20alias):%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0APa%C3%ADs%20o%20ciudad%20donde%20us%C3%A9%20la%20app:';
   }
   
   function switchTab(tab) {
