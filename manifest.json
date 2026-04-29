@@ -1,0 +1,22 @@
+{
+  "name": "SaludCerca | NearMed",
+  "short_name": "SaludCerca",
+  "description": "Encuentra hospitales, urgencias 24h y ambulancias certificadas cerca de ti. Gratis, sin publicidad y global.",
+  "start_url": "/SaludCerca-NearMed/",
+  "scope": "/SaludCerca-NearMed/",
+  "display": "standalone",
+  "theme_color": "#2C7A7B",
+  "background_color": "#F7F9FC",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "SaludCerca.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["medical", "health", "emergency", "navigation"],
+  "lang": "es",
+  "dir": "ltr"
+} Agrego manifest.json para PWA instalable
