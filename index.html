@@ -345,6 +345,45 @@
       text-decoration: none;
     }
     
+    .content-page {
+      padding: 20px;
+      overflow-y: auto;
+      height: 100%;
+    }
+    
+    .testimonial-card {
+      background: var(--card-bg);
+      border-left: 4px solid var(--c-general);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    .testimonial-author {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .creator-testimonial {
+      background: #EBF8FF;
+      border-left: 4px solid var(--c-urgent);
+    }
+    .btn-testimonial {
+      display: inline-block;
+      background: var(--c-doctor);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 15px;
+      cursor: pointer;
+      border: none;
+    }
+    
     .counter-global {
       position: absolute;
       bottom: 15px;
@@ -486,32 +525,30 @@
   
   <!-- PESTAÑA DE TESTIMONIOS -->
   <div id="tab-testimonials" class="tab-content">
-    <div class="content-page" style="padding: 20px; overflow-y: auto; height: 100%;">
-      <h2 data-i18n="testimonialsTitle" style="color: var(--primary); margin-bottom: 15px;">💬 Testimonios de usuarios</h2>
-      <p data-i18n="testimonialsDesc">Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.</p>
+    <div class="content-page">
+      <h2 style="color: var(--primary); margin-bottom: 15px;">💬 Testimonios de usuarios</h2>
+      <p>Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.</p>
       
-      <div id="testimonialsList">
-        <div class="testimonial-card" style="background: var(--card-bg); border-left: 4px solid var(--c-general); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
-          <div class="testimonial-text" style="font-style: italic; margin-bottom: 10px;">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
-          <div class="testimonial-author" style="font-size: 12px; color: var(--text-muted); text-align: right;">— Laura M., viajera frecuente</div>
-        </div>
-        <div class="testimonial-card" style="background: var(--card-bg); border-left: 4px solid var(--c-general); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
-          <div class="testimonial-text" style="font-style: italic; margin-bottom: 10px;">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
-          <div class="testimonial-author" style="font-size: 12px; color: var(--text-muted); text-align: right;">— Carlos R., productor audiovisual</div>
-        </div>
+      <div class="testimonial-card">
+        <div class="testimonial-text">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
+        <div class="testimonial-author">— Laura M., viajera frecuente</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-text">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
+        <div class="testimonial-author">— Carlos R., productor audiovisual</div>
       </div>
       
-      <button class="btn-testimonial" onclick="abrirFormularioTestimonio()" style="display: inline-block; background: var(--c-doctor); color: white; padding: 10px 16px; border-radius: 40px; text-decoration: none; font-size: 13px; font-weight: 600; margin-top: 15px; cursor: pointer; border: none;">📝 Comparte tu testimonio</button>
+      <button class="btn-testimonial" onclick="abrirFormularioTestimonio()">📝 Comparte tu testimonio</button>
     </div>
   </div>
   
   <!-- PESTAÑA DE HISTORIA (CREADOR) -->
   <div id="tab-story" class="tab-content">
-    <div class="content-page" style="padding: 20px; overflow-y: auto; height: 100%;">
+    <div class="content-page">
       <h2 style="color: var(--primary); margin-bottom: 15px;">📖 La historia detrás de SaludCerca</h2>
       
-      <div class="testimonial-card creator-testimonial" style="background: #EBF8FF; border-left: 4px solid var(--c-urgent); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
-        <div class="testimonial-text" style="font-style: italic; margin-bottom: 10px; line-height: 1.5;">
+      <div class="testimonial-card creator-testimonial">
+        <div class="testimonial-text">
           "Hace veintitrés años quien escribe sufrió un accidente automovilístico. Mis familiares cercanos (mis padres y mi hermana) no se encontraban en la ciudad. Mis tíos, primos y amigos padecieron horas de angustia al no poder encontrar con facilidad servicios de emergencia.<br><br>
           La ambulancia que me salvó la vida me llevó a un hospital privado que mi seguro no cubría y mientras mis tíos buscaban el hospital y las ambulancias de terapia intensiva que me trasladaran pasaron 9 horas angustiosas en las que yo me desangraba en una tabla de madera habilitada como camilla en un pasillo de una sala de urgencias.<br><br>
           Afortunadamente viví para contarlo, y, hoy muchos años después cuando me preguntaron '¿tú, de qué harías una app?' No tuve que pensarlo mucho.<br><br>
@@ -519,12 +556,12 @@
           Que el espíritu del universo esté con ustedes siempre.<br><br>
           Abril, 2026."
         </div>
-        <div class="testimonial-author" style="font-size: 12px; color: var(--text-muted); text-align: right;">— El creador de SaludCerca | NearMed</div>
+        <div class="testimonial-author">— El creador de SaludCerca | NearMed</div>
       </div>
     </div>
   </div>
   
-  <!-- PESTAÑA DE FEEDBACK (original) -->
+  <!-- PESTAÑA DE FEEDBACK -->
   <div id="tab-feedback" class="tab-content">
     <div class="feedback-area">
       <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
