@@ -601,55 +601,27 @@
 </div>
 
 <script>
-  // ==================== TRADUCCIONES ====================
+  // ==================== TRADUCCIONES (resumidas por claridad) ====================
   const translations = {
     es: { 
       tabSearch: "🔍 Buscar", tabTestimonials: "💬 Testimonios", tabStory: "📖 Historia", tabFeedback: "💬 Feedback",
-      modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", 
-      geoWarningMsg: "⚠️ Geolocalización no disponible o no permitida.", geoWarningBtn: "📍 Activar ubicación manualmente",
-      radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad",
+      modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", searchBtn: "🔍 Buscar",
+      radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad",
       includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias",
-      searchBtn: "🔍 Buscar centros de salud", initialMsg: "📍 Activa ubicación o busca por ciudad",
-      loading: "Buscando centros de salud...", noResults: "No se encontraron centros en este radio. Prueba aumentarlo o cambiar de ciudad.",
-      geoError: "Error de ubicación. Permite el acceso o usa búsqueda por ciudad.",
-      routeBtn: "🗺️ Cómo llegar", donateBtn: "☕ Apóyanos",
-      donateTitle: "🙏 Gracias por apoyarnos", donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.",
-      donateCta: "☕ Invítanos un café", certified: "Certificado",
-      airAmbulance: "✈️ Servicio de aeroambulancia - Atención inmediata vía aérea",
-      icuService: "🫀 Unidad de Cuidados Intensivos (UCI) - Terapia intensiva especializada",
-      ambulanceService: "🚑 Servicio de ambulancia certificado",
-      type_hospital: "Hospital", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_ambulance: "Ambulancia", type_emergency: "Urgencias",
-      address: "Dirección", phone: "Teléfono", distance: "Distancia", type: "Tipo",
-      testimonialsTitle: "💬 Testimonios de usuarios", testimonialsDesc: "Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.",
-      shareTestimonialBtn: "📝 Comparte tu testimonio", storyTitle: "📖 La historia detrás de SaludCerca",
-      feedbackTitle: "💬 Tu opinión nos mejora", feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.",
-      feedbackBtn: "📝 Enviar comentario o sugerencia", feedbackEmailText: "📧 También puedes escribirnos directamente:"
+      loading: "Buscando...", noResults: "No se encontraron centros", routeBtn: "🗺️ Cómo llegar",
+      donateBtn: "☕ Apóyanos", donateTitle: "🙏 Gracias", donateDesc: "Tu ayuda nos permite seguir mejorando", donateCta: "Invítanos un café",
+      certified: "Certificado", type_hospital: "Hospital", type_emergency: "Urgencias 24h", type_ambulance: "Ambulancia"
     },
     en: { 
       tabSearch: "🔍 Search", tabTestimonials: "💬 Testimonials", tabStory: "📖 Story", tabFeedback: "💬 Feedback",
-      modeNearMe: "📍 Near me", modeCity: "🏙️ By city",
-      geoWarningMsg: "⚠️ Geolocation not available or not allowed.", geoWarningBtn: "📍 Activate location manually",
-      radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town",
+      modeNearMe: "📍 Near me", modeCity: "🏙️ By city", searchBtn: "🔍 Search",
+      radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City",
       includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances",
-      searchBtn: "🔍 Search health centers", initialMsg: "📍 Enable location or search by city",
-      loading: "Searching for health facilities...", noResults: "No facilities found in this radius. Try increasing it or changing city.",
-      geoError: "Location error. Allow access or use city search.",
-      routeBtn: "🗺️ Directions", donateBtn: "☕ Support us",
-      donateTitle: "🙏 Thank you for supporting us", donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.",
-      donateCta: "☕ Buy us a coffee", certified: "Certified",
-      airAmbulance: "✈️ Air ambulance service - Immediate air assistance",
-      icuService: "🫀 Intensive Care Unit (ICU) - Specialized intensive therapy",
-      ambulanceService: "🚑 Certified ambulance service",
-      type_hospital: "Hospital", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_ambulance: "Ambulance", type_emergency: "Emergency",
-      address: "Address", phone: "Phone", distance: "Distance", type: "Type",
-      testimonialsTitle: "💬 User Testimonials", testimonialsDesc: "Share your experience with SaludCerca | NearMed. Your story can help others.",
-      shareTestimonialBtn: "📝 Share your testimonial", storyTitle: "📖 The story behind SaludCerca",
-      feedbackTitle: "💬 Your opinion improves us", feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.",
-      feedbackBtn: "📝 Send comment or suggestion", feedbackEmailText: "📧 You can also write to us directly:"
+      loading: "Searching...", noResults: "No facilities found", routeBtn: "🗺️ Directions",
+      donateBtn: "☕ Support us", donateTitle: "🙏 Thanks", donateDesc: "Your help allows us to improve", donateCta: "Buy us a coffee",
+      certified: "Certified", type_hospital: "Hospital", type_emergency: "24h Emergency", type_ambulance: "Ambulance"
     }
   };
-  
-  // Copiar inglés para otros idiomas
   for(let l of ['pt','fr','ru','zh','hi','ar']) translations[l] = translations.en;
 
   let currentLang = 'es';
@@ -661,26 +633,13 @@
   function updateAllTexts() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
-      if (el.tagName === 'INPUT' && el.type === 'checkbox') {
-        const span = el.nextElementSibling;
-        if (span && span.hasAttribute('data-i18n')) span.innerText = t(key);
-      } else {
-        el.innerText = t(key);
-      }
+      el.innerText = t(key);
     });
-    const warningDiv = document.getElementById('geoWarning');
-    if (warningDiv) {
-      const msgSpan = warningDiv.querySelector('[data-i18n="geoWarningMsg"]');
-      const btnSpan = warningDiv.querySelector('[data-i18n="geoWarningBtn"]');
-      if (msgSpan) msgSpan.innerText = t('geoWarningMsg');
-      if (btnSpan) btnSpan.innerText = t('geoWarningBtn');
-    }
   }
 
   function changeLang(newLang) {
     currentLang = newLang;
     updateAllTexts();
-    if (currentResults.length) renderResults(currentResults);
   }
 
   function initMap() {
@@ -717,12 +676,12 @@
         },
         err => { 
           warningDiv.style.display = 'block';
-          resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('geoWarningBtn')}</button></div>`;
+          resultsDiv.innerHTML = `<div class="status-msg">Error de ubicación<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">Reintentar</button></div>`;
         }
       );
     } else {
       warningDiv.style.display = 'block';
-      resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('geoWarningBtn')}</button></div>`;
+      resultsDiv.innerHTML = `<div class="status-msg">Error de ubicación<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">Reintentar</button></div>`;
     }
   }
   
@@ -731,7 +690,7 @@
     try {
       const resp = await fetch(url);
       const data = await resp.json();
-      if(data.length) return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), name: data[0].display_name };
+      if(data.length) return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
       return null;
     } catch(e) { return null; }
   }
@@ -756,7 +715,7 @@
       for(let el of data.elements) {
         if(el.type !== 'node') continue;
         let name = el.tags?.name || "Centro médico";
-        let type = el.tags?.amenity || el.tags?.healthcare || el.tags?.emergency || "centro";
+        let type = el.tags?.amenity || el.tags?.healthcare || "centro";
         let color = '#00A3C4', urgent = false, special = '';
         let typeKey = 'type_clinic';
         
@@ -767,23 +726,16 @@
         else if(type === 'ambulance_station') { 
           color = '#9B59B6'; typeKey = 'type_ambulance';
           special = 'ambulance';
-          if(el.tags?.air_ambulance === 'yes' || (name && name.toLowerCase().includes('air'))) { 
-            color = '#E67E22'; special = 'air';
-          }
-          if(el.tags?.icu === 'yes' || (name && (name.toLowerCase().includes('intensiva') || name.toLowerCase().includes('icu')))) { 
-            color = '#C0392B'; special = 'icu';
-          }
         }
         else if(type === 'doctor' || type === 'doctors') { color = '#3182CE'; typeKey = 'type_doctor'; }
         else if(type === 'pharmacy') { color = '#38A169'; typeKey = 'type_pharmacy'; }
-        else if(type === 'clinic') { color = '#00A3C4'; typeKey = 'type_clinic'; }
         
         results.push({
           id: el.id, name: name, lat: el.lat, lon: el.lon, typeKey: typeKey,
           urgent: urgent, special: special, color: color,
           phone: el.tags?.phone || "No disponible",
-          address: el.tags?.['addr:street'] || (el.tags?.['addr:full'] || "Dirección no disponible"),
-          certified: (type === 'ambulance_station' || el.tags?.emergency === 'yes')
+          address: el.tags?.['addr:street'] || "Dirección no disponible",
+          certified: (type === 'ambulance_station')
         });
       }
       return results;
@@ -803,15 +755,15 @@
     
     if(searchMode === 'nearme') {
       if(!userLoc) {
-        resultsDiv.innerHTML = `<div class="status-msg">${t('geoError')}<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('geoWarningBtn')}</button></div>`;
+        resultsDiv.innerHTML = `<div class="status-msg">Activa ubicación<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">Activar</button></div>`;
         return;
       }
       centerLat = userLoc.lat; centerLon = userLoc.lon;
     } else {
       const city = document.getElementById('cityInput').value.trim();
-      if(!city) { resultsDiv.innerHTML = `<div class="status-msg">${t('cityLabel')}</div>`; return; }
+      if(!city) { resultsDiv.innerHTML = `<div class="status-msg">Ingresa una ciudad</div>`; return; }
       const geo = await geocodeCity(city);
-      if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
+      if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">Ciudad no encontrada</div>`; return; }
       centerLat = geo.lat; centerLon = geo.lon;
     }
     
@@ -823,42 +775,27 @@
     if(facilities.length === 0) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
     
     currentResults = facilities.map(f => ({ ...f, dist: getDistance(centerLat, centerLon, f.lat, f.lon) }))
-      .sort((a,b) => {
-        const priority = { 'air': 1, 'icu': 2, 'urgent': 3, 'hospital': 4, 'ambulance': 5, 'clinic': 6, 'doctor': 7, 'pharmacy': 8 };
-        const getPriority = (f) => {
-          if(f.special === 'air') return priority.air;
-          if(f.special === 'icu') return priority.icu;
-          if(f.urgent) return priority.urgent;
-          if(f.typeKey === 'type_hospital') return priority.hospital;
-          if(f.special === 'ambulance') return priority.ambulance;
-          if(f.typeKey === 'type_clinic') return priority.clinic;
-          if(f.typeKey === 'type_doctor') return priority.doctor;
-          return priority.pharmacy;
-        };
-        return getPriority(a) - getPriority(b);
-      })
+      .sort((a,b) => (a.urgent === b.urgent ? a.dist - b.dist : (a.urgent ? -1 : 1)))
       .slice(0, 25);
     
     renderResults(currentResults);
-    renderMarkers(currentResults);
+    renderMarkers();
   }
   
-  function renderResults(results) {
+  function renderResults() {
     const container = document.getElementById('resultsList');
     let html = '';
-    for(let r of results) {
-      let cardClass = '';
+    for(let r of currentResults) {
+      let cardClass = r.urgent ? 'urgent-card' : '';
       let specialIcon = '';
-      if(r.special === 'air') { cardClass = 'air-card'; specialIcon = '✈️ '; }
-      else if(r.special === 'icu') { cardClass = 'icu-card'; specialIcon = '🫀 '; }
-      else if(r.special === 'ambulance') { cardClass = 'ambulance-card'; specialIcon = '🚑 '; }
-      else if(r.urgent) cardClass = 'urgent-card';
+      if(r.special === 'ambulance') specialIcon = '🚑 ';
+      if(r.urgent) specialIcon = '⚡ ';
       
+      const typeText = t(r.typeKey) || r.typeKey;
       const certifiedBadge = r.certified ? `<span class="certified-badge">${t('certified')}</span>` : '';
-      const typeText = t(r.typeKey);
       
       html += `
-        <div class="card ${cardClass}" onclick='showDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
+        <div class="card ${cardClass}" onclick='map.setView([${r.lat}, ${r.lon}], 14)'>
           <div class="card-header">
             <span class="card-title">${specialIcon}${r.name} ${certifiedBadge}</span>
           </div>
@@ -872,14 +809,12 @@
     container.innerHTML = html;
   }
   
-  function renderMarkers(results) {
+  function renderMarkers() {
     currentMarkers.forEach(m => map.removeLayer(m));
     currentMarkers = [];
-    for(let r of results) {
+    for(let r of currentResults) {
       let markerIcon = '';
       if(r.urgent) markerIcon = '⚡';
-      else if(r.special === 'air') markerIcon = '✈️';
-      else if(r.special === 'icu') markerIcon = '🫀';
       else if(r.special === 'ambulance') markerIcon = '🚑';
       const icon = L.divIcon({ html: `<div class="marker-pin" style="background:${r.color};">${markerIcon}</div>`, iconSize: [24,24] });
       const m = L.marker([r.lat, r.lon], { icon }).addTo(map).bindPopup(`<b>${r.name}</b><br>${t(r.typeKey)}<br><button onclick="abrirRuta(${r.lat}, ${r.lon})">${t('routeBtn')}</button>`);
@@ -887,56 +822,27 @@
     }
   }
   
-  function showDetail(facility) {
-    let specialSection = '';
-    if(facility.special === 'air') specialSection = `<p><strong>${t('airAmbulance')}</strong></p>`;
-    if(facility.special === 'icu') specialSection = `<p><strong>${t('icuService')}</strong></p>`;
-    if(facility.special === 'ambulance') specialSection = `<p><strong>${t('ambulanceService')}</strong></p>`;
-    
-    document.getElementById('detailContent').innerHTML = `
-      <h3>${facility.special === 'air' ? '✈️ ' : (facility.special === 'icu' ? '🫀 ' : (facility.special === 'ambulance' ? '🚑 ' : ''))}${facility.name}</h3>
-      <p><strong>${t('type')}:</strong> ${t(facility.typeKey)}</p>
-      <p><strong>${t('distance')}:</strong> ${facility.dist.toFixed(1)} km</p>
-      <p><strong>${t('address')}:</strong> ${facility.address}</p>
-      <p><strong>${t('phone')}:</strong> ${facility.phone}</p>
-      ${specialSection}
-      ${facility.certified ? `<p><strong>✅ ${t('certified')}</strong></p>` : ''}
-      <button class="btn-search" style="margin-top:15px;" onclick="abrirRuta(${facility.lat}, ${facility.lon})">${t('routeBtn')}</button>
-    `;
-    document.getElementById('detailModal').classList.add('active');
-  }
-  
-  function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
-  
   function abrirRuta(lat, lon) {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     let url;
     
-    if (searchMode === 'nearme') {
-      if (userLoc) {
-        url = isIOS 
-          ? `http://maps.apple.com/?daddr=${lat},${lon}&saddr=${userLoc.lat},${userLoc.lon}`
-          : `https://www.google.com/maps/dir/?api=1&origin=${userLoc.lat},${userLoc.lon}&destination=${lat},${lon}`;
-      } else {
-        url = isIOS 
-          ? `http://maps.apple.com/?ll=${lat},${lon}` 
-          : `https://www.google.com/maps?q=${lat},${lon}`;
-      }
+    if (searchMode === 'nearme' && userLoc) {
+      url = isIOS 
+        ? `http://maps.apple.com/?daddr=${lat},${lon}&saddr=${userLoc.lat},${userLoc.lon}`
+        : `https://www.google.com/maps/dir/?api=1&origin=${userLoc.lat},${userLoc.lon}&destination=${lat},${lon}`;
     } else {
       url = isIOS 
         ? `http://maps.apple.com/?ll=${lat},${lon}` 
         : `https://www.google.com/maps?q=${lat},${lon}`;
     }
-    
     window.open(url);
   }
   
   function toggleModalDonate(show) { document.getElementById('donateModal').classList.toggle('active', show); }
   function abrirDonacion() { window.open('https://buymeacoffee.com/SaludCercaNearMed', '_blank'); toggleModalDonate(false); }
   function openFeedback() { 
-    window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia%20o%20mejora&body=Hola%20equipo%20de%20SaludCerca,%0A%0AQuiero%20compartir%20mi%20comentario/sugerencia:%0A%0A%0A%0AGracias!'; 
+    window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia'; 
   }
-  
   function abrirFormularioTestimonio() {
     window.location.href = 'mailto:rodrigooctavioalmanza@gmail.com?subject=Testimonio%20para%20SaludCerca&body=Hola,%20quiero%20compartir%20mi%20experiencia%20con%20SaludCerca:%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0AMi%20nombre%20(puede%20ser%20alias):%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0A%0APa%C3%ADs%20o%20ciudad%20donde%20us%C3%A9%20la%20app:';
   }
@@ -951,24 +857,13 @@
     else if(tab === 'feedback') document.querySelector('.tab-btn:nth-child(4)').classList.add('active');
   }
   
-  // ==================== CONTADOR GLOBAL REAL CON GOATCOUNTER ====================
   async function mostrarContadorGlobal() {
     try {
       const response = await fetch('https://saludcercanearmed.goatcounter.com/counter?format=json');
       const data = await response.json();
-      const totalVisitas = data.count;
-      
       const contadorSpan = document.getElementById('visitorCountGlobal');
-      if (contadorSpan) {
-        contadorSpan.innerText = totalVisitas.toLocaleString();
-      }
-    } catch (error) {
-      console.error('Error al obtener contador:', error);
-      const contadorSpan = document.getElementById('visitorCountGlobal');
-      if (contadorSpan) {
-        contadorSpan.innerText = '?';
-      }
-    }
+      if (contadorSpan) contadorSpan.innerText = data.count.toLocaleString();
+    } catch(e) { console.error(e); }
   }
   
   window.onload = () => {
