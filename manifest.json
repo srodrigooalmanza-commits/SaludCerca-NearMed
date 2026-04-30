@@ -19,4 +19,4 @@
   "categories": ["medical", "health", "emergency", "navigation"],
   "lang": "es",
   "dir": "ltr"
-} Agrego manifest.json para PWA instalable
+}
