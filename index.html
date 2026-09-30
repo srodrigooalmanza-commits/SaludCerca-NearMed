@@ -33,11 +33,7 @@
       --c-warning: #D69E2E;
     }
     
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden !important;
-    }
+    html, body { width: 100%; height: 100%; overflow: hidden !important; }
     
     body {
       background-color: var(--bg);
@@ -62,20 +58,9 @@
       flex-shrink: 0;
       gap: 8px;
     }
-    .logo-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .logo-img {
-      height: 32px;
-      width: auto;
-    }
-    h1 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--primary);
-    }
+    .logo-title { display: flex; align-items: center; gap: 8px; }
+    .logo-img { height: 32px; width: auto; }
+    h1 { font-size: 1.2rem; font-weight: 600; color: var(--primary); }
     .lang-selector select { 
       padding: 5px 8px; 
       border-radius: 8px; 
@@ -102,7 +87,6 @@
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
-      transition: 0.2s;
       white-space: nowrap;
     }
     .tab-btn.active {
@@ -110,35 +94,12 @@
       border-bottom: 3px solid var(--primary);
     }
     
-    .main-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    
-    .tab-content {
-      display: none;
-      flex: 1;
-      overflow: hidden;
-    }
-    .tab-content.active {
-      display: flex;
-      flex-direction: column;
-    }
+    .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .tab-content { display: none; flex: 1; overflow: hidden; }
+    .tab-content.active { display: flex; flex-direction: column; }
 
-    .two-columns {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-    }
-    
-    @media (min-width: 768px) {
-      .two-columns {
-        flex-direction: row;
-      }
-    }
+    .two-columns { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    @media (min-width: 768px) { .two-columns { flex-direction: row; } }
     
     .sidebar {
       background: var(--card-bg);
@@ -147,26 +108,10 @@
       flex-direction: column;
       overflow: hidden;
     }
+    @media (min-width: 768px) { .sidebar { width: 38%; min-width: 320px; max-width: 500px; } }
     
-    @media (min-width: 768px) {
-      .sidebar {
-        width: 38%;
-        min-width: 320px;
-        max-width: 500px;
-      }
-    }
-    
-    .controls { 
-      padding: 12px; 
-      background: var(--card-bg); 
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .mode-selector {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+    .controls { padding: 12px; background: var(--card-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .mode-selector { display: flex; gap: 10px; margin-bottom: 15px; }
     .mode-btn {
       flex: 1;
       padding: 8px 12px;
@@ -178,158 +123,45 @@
       cursor: pointer;
       text-align: center;
     }
-    .mode-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
+    .mode-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
     .control-group { margin-bottom: 12px; }
     .control-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; display: block; }
     .slider-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
     input[type=range] { width: 100%; accent-color: var(--primary); }
-    .city-input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      font-size: 14px;
-    }
-    .checkbox-group {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .checkbox-group label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: normal;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .search-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .btn-search {
-      flex: 1;
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 40px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-    }
+    .city-input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 40px; font-size: 14px; }
+    .checkbox-group { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
+    .checkbox-group label { display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; font-size: 13px; }
+    .search-row { display: flex; gap: 8px; margin-top: 12px; }
+    .btn-search { flex: 1; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 14px; }
     
-    .results-list { 
-      flex: 1;
-      padding: 12px; 
-      overflow-y: auto;
-      min-height: 200px;
-    }
+    .results-list { flex: 1; padding: 12px; overflow-y: auto; min-height: 200px; }
     
-    .card { 
-      background: var(--card-bg); 
-      border: 1px solid var(--border); 
-      border-radius: 16px; 
-      padding: 12px; 
-      margin-bottom: 10px; 
-      cursor: pointer;
-    }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 12px; margin-bottom: 10px; cursor: pointer; }
     .card.urgent-card { background-color: #EBF8FF; border-top: 3px solid var(--c-urgent); }
     .card.ambulance-card { background-color: #F5E6FF; border-top: 3px solid var(--c-ambulance); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
     .card-title { font-size: 14px; font-weight: 700; }
     .tag-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; display: inline-block; margin-bottom: 8px; color: white; }
     .card-info { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
-    .btn-route { 
-      display: inline-block; 
-      margin-top: 8px; 
-      padding: 5px 10px; 
-      background: var(--c-doctor); 
-      color: white; 
-      border-radius: 40px; 
-      font-size: 11px; 
-      font-weight: 600; 
-      border: none;
-      cursor: pointer;
-    }
-    .certified-badge {
-      background: #27AE60;
-      color: white;
-      font-size: 8px;
-      padding: 2px 5px;
-      border-radius: 12px;
-      margin-left: 6px;
-    }
+    .btn-route { display: inline-block; margin-top: 8px; padding: 5px 10px; background: var(--c-doctor); color: white; border-radius: 40px; font-size: 11px; font-weight: 600; border: none; cursor: pointer; }
+    .certified-badge { background: #27AE60; color: white; font-size: 8px; padding: 2px 5px; border-radius: 12px; margin-left: 6px; }
     
-    .map-wrapper {
-      flex: 1;
-      position: relative;
-      min-height: 250px;
-    }
-    #map { 
-      width: 100%; 
-      height: 100%; 
-      background: #E9E5DE; 
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+    .map-wrapper { flex: 1; position: relative; min-height: 250px; }
+    #map { width: 100%; height: 100%; background: #E9E5DE; position: absolute; top: 0; left: 0; }
     
     .marker-pin { width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
     
-    .modal-overlay { 
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-      background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; 
-      z-index: 2000; 
-    }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; }
     .modal-overlay.active { display: flex; }
-    .modal-detail { 
-      background: var(--card-bg); width: 90%; max-width: 400px; 
-      border-radius: 28px; padding: 20px; max-height: 80vh; overflow-y: auto; 
-    }
+    .modal-detail { background: var(--card-bg); width: 90%; max-width: 400px; border-radius: 28px; padding: 20px; max-height: 80vh; overflow-y: auto; }
     .modal-detail h3 { margin-bottom: 10px; font-size: 1.2rem; }
     .modal-detail p { margin-bottom: 8px; font-size: 13px; }
-    .modal-close { 
-      float: right; background: none; border: none; font-size: 24px; cursor: pointer; 
-    }
+    .modal-close { float: right; background: none; border: none; font-size: 24px; cursor: pointer; }
     
-    .feedback-area {
-      padding: 20px;
-      text-align: center;
-      height: 100%;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      padding-bottom: 60px;
-    }
-    .feedback-btn {
-      background: var(--c-general);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 40px;
-      font-size: 16px;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    .feedback-email {
-      margin-top: 20px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .feedback-email a {
-      color: var(--primary);
-      text-decoration: none;
-    }
+    .feedback-area { padding: 20px; text-align: center; height: 100%; overflow-y: auto; display: flex; flex-direction: column; position: relative; padding-bottom: 60px; }
+    .feedback-btn { background: var(--c-general); color: white; padding: 14px; border: none; border-radius: 40px; font-size: 16px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 20px; }
+    .feedback-email { margin-top: 20px; font-size: 12px; color: var(--text-muted); }
+    .feedback-email a { color: var(--primary); text-decoration: none; }
     
     .privacy-block {
       background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
@@ -338,153 +170,35 @@
       padding: 24px 20px;
       margin-bottom: 25px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(44, 122, 123, 0.08);
     }
-    .privacy-block .privacy-logo {
-      height: 48px;
-      width: auto;
-      margin-bottom: 12px;
-    }
-    .privacy-block h3 {
-      color: var(--primary);
-      font-size: 1.25rem;
-      margin-bottom: 14px;
-      font-weight: 700;
-    }
-    .privacy-block p {
-      font-size: 14.5px;
-      color: var(--text-main);
-      line-height: 1.65;
-      text-align: left;
-    }
-    .privacy-block p strong {
-      color: var(--primary);
-    }
+    .privacy-block .privacy-logo { height: 48px; width: auto; margin-bottom: 12px; }
+    .privacy-block h3 { color: var(--primary); font-size: 1.25rem; margin-bottom: 14px; font-weight: 700; }
+    .privacy-block p { font-size: 14.5px; color: var(--text-main); line-height: 1.65; text-align: left; }
+    .privacy-block p strong { color: var(--primary); }
     
-    .content-page {
-      padding: 20px;
-      overflow-y: auto;
-      height: 100%;
-    }
+    .content-page { padding: 20px; overflow-y: auto; height: 100%; }
     
-    .testimonial-card {
-      background: var(--card-bg);
-      border-left: 4px solid var(--c-general);
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    .testimonial-text {
-      font-style: italic;
-      margin-bottom: 10px;
-    }
-    .testimonial-author {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: right;
-    }
-    .creator-testimonial {
-      background: #EBF8FF;
-      border-left: 4px solid var(--c-urgent);
-    }
-    .btn-testimonial {
-      display: inline-block;
-      background: var(--c-doctor);
-      color: white;
-      padding: 10px 16px;
-      border-radius: 40px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-top: 15px;
-      cursor: pointer;
-      border: none;
-    }
+    .testimonial-card { background: var(--card-bg); border-left: 4px solid var(--c-general); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+    .testimonial-text { font-style: italic; margin-bottom: 10px; }
+    .testimonial-author { font-size: 12px; color: var(--text-muted); text-align: right; }
+    .creator-testimonial { background: #EBF8FF; border-left: 4px solid var(--c-urgent); }
+    .btn-testimonial { display: inline-block; background: var(--c-doctor); color: white; padding: 10px 16px; border-radius: 40px; font-size: 13px; font-weight: 600; margin-top: 15px; cursor: pointer; border: none; }
     
-    .thanks-wall {
-      margin-top: 25px;
-      padding: 22px;
-      background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
-      border-radius: 16px;
-      border: 1px solid #BBF7D0;
-      text-align: center;
-    }
-    .thanks-wall h3 {
-      color: var(--primary);
-      font-size: 1.15rem;
-      margin-bottom: 12px;
-    }
-    .thanks-wall p {
-      font-size: 13.5px;
-      color: var(--text-main);
-      margin-bottom: 14px;
-      line-height: 1.6;
-    }
-    .thanks-wall strong {
-      color: var(--primary);
-    }
-    .thanks-wall .btn-thanks {
-      display: inline-block;
-      background: var(--c-general);
-      color: white;
-      padding: 12px 22px;
-      border-radius: 40px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
-    }
-    .thanks-wall .donor-list {
-      margin-top: 15px;
-      font-size: 11.5px;
-      color: var(--text-muted);
-      font-style: italic;
-    }
+    .thanks-wall { margin-top: 25px; padding: 22px; background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%); border-radius: 16px; border: 1px solid #BBF7D0; text-align: center; }
+    .thanks-wall h3 { color: var(--primary); font-size: 1.15rem; margin-bottom: 12px; }
+    .thanks-wall p { font-size: 13.5px; color: var(--text-main); margin-bottom: 14px; line-height: 1.6; }
+    .thanks-wall strong { color: var(--primary); }
+    .thanks-wall .btn-thanks { display: inline-block; background: var(--c-general); color: white; padding: 12px 22px; border-radius: 40px; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
+    .thanks-wall .donor-list { margin-top: 15px; font-size: 11.5px; color: var(--text-muted); font-style: italic; }
     
-    .counter-global {
-      position: absolute;
-      bottom: 15px;
-      left: 15px;
-      background: rgba(247, 249, 252, 0.9);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 10px;
-      color: #4A627A;
-      z-index: 10;
-    }
+    .counter-global { position: absolute; bottom: 15px; left: 15px; background: rgba(247, 249, 252, 0.9); padding: 4px 10px; border-radius: 20px; font-size: 10px; color: #4A627A; z-index: 10; }
     
-    .btn-donate { 
-      position: fixed; bottom: 16px; right: 16px; 
-      background: var(--c-general); color: white; border: none; 
-      padding: 10px 18px; border-radius: 40px; font-weight: 600; font-size: 14px; 
-      cursor: pointer; z-index: 1000; 
-    }
+    .btn-donate { position: fixed; bottom: 16px; right: 16px; background: var(--c-general); color: white; border: none; padding: 10px 18px; border-radius: 40px; font-weight: 600; font-size: 14px; cursor: pointer; z-index: 1000; }
     
-    .geo-warning {
-      background: #FEF5E6;
-      border: 1px solid var(--c-warning);
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 12px;
-      text-align: center;
-      font-size: 12px;
-    }
-    .geo-warning button {
-      background: var(--c-doctor);
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 40px;
-      margin-top: 6px;
-      cursor: pointer;
-      font-size: 12px;
-    }
+    .geo-warning { background: #FEF5E6; border: 1px solid var(--c-warning); border-radius: 12px; padding: 10px; margin-bottom: 12px; text-align: center; font-size: 12px; }
+    .geo-warning button { background: var(--c-doctor); color: white; border: none; padding: 6px 12px; border-radius: 40px; margin-top: 6px; cursor: pointer; font-size: 12px; }
     
-    .status-msg {
-      text-align: center;
-      padding: 30px 20px;
-      color: var(--text-muted);
-    }
+    .status-msg { text-align: center; padding: 30px 20px; color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -581,15 +295,15 @@
   <div id="tab-testimonials" class="tab-content">
     <div class="content-page">
       <h2 data-i18n="testimonialsTitle" style="color: var(--primary); margin-bottom: 15px;">💬 Testimonios de usuarios</h2>
-      <p data-i18n="testimonialsIntro">Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.</p>
+      <p data-i18n="testimonialsIntro">Comparte tu experiencia...</p>
       
       <div class="testimonial-card">
-        <div class="testimonial-text" data-i18n="testimonial1">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
-        <div class="testimonial-author" data-i18n="testimonial1Author">— Laura M., viajera frecuente</div>
+        <div class="testimonial-text" data-i18n="testimonial1"></div>
+        <div class="testimonial-author" data-i18n="testimonial1Author"></div>
       </div>
       <div class="testimonial-card">
-        <div class="testimonial-text" data-i18n="testimonial2">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
-        <div class="testimonial-author" data-i18n="testimonial2Author">— Carlos R., productor audiovisual</div>
+        <div class="testimonial-text" data-i18n="testimonial2"></div>
+        <div class="testimonial-author" data-i18n="testimonial2Author"></div>
       </div>
       
       <button class="btn-testimonial" data-i18n="shareTestimonialBtn" onclick="abrirFormularioTestimonio()">📝 Comparte tu testimonio</button>
@@ -601,8 +315,8 @@
       <h2 data-i18n="storyTitle" style="color: var(--primary); margin-bottom: 15px;">📖 La historia detrás de SaludCerca</h2>
       
       <div class="testimonial-card creator-testimonial">
-        <div class="testimonial-text" id="storyText"></div>
-        <div class="testimonial-author" data-i18n="storyAuthor">— El creador de SaludCerca | NearMed</div>
+        <div class="testimonial-text" data-i18n="storyText"></div>
+        <div class="testimonial-author" data-i18n="storyAuthor"></div>
       </div>
 
       <div class="thanks-wall">
@@ -613,9 +327,7 @@
         <a href="https://buymeacoffee.com/SaludCercaNearMed" target="_blank" class="btn-thanks" data-i18n="thanksBtn">
           ☕ Apóyanos con una donación
         </a>
-        <div class="donor-list" data-i18n="thanksDonorNote">
-          * Los nombres de quienes nos apoyan aparecerán aquí con su permiso. Mientras tanto, gracias por estar del otro lado.
-        </div>
+        <div class="donor-list" data-i18n="thanksDonorNote"></div>
       </div>
     </div>
   </div>
@@ -630,10 +342,10 @@
       </div>
       
       <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
-      <p data-i18n="feedbackDesc" style="margin:15px 0;">¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.</p>
+      <p data-i18n="feedbackDesc" style="margin:15px 0;"></p>
       <button class="feedback-btn" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
       <div class="feedback-email" style="margin-top: 20px;">
-        <span data-i18n="feedbackEmailText">📧 También puedes escribirnos directamente:</span><br>
+        <span data-i18n="feedbackEmailText"></span><br>
         <a href="mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia">rodrigooctavioalmanza@gmail.com</a>
       </div>
       
@@ -649,9 +361,9 @@
 <div id="donateModal" class="modal-overlay">
   <div class="modal-detail" style="max-width:300px;">
     <button class="modal-close" onclick="toggleModalDonate(false)">✖</button>
-    <h3 data-i18n="donateTitle">🙏 Gracias por apoyarnos</h3>
-    <p data-i18n="donateDesc">SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.</p>
-    <button class="btn-search" data-i18n="donateCta" onclick="abrirDonacion()">☕ Invítanos un café</button>
+    <h3 data-i18n="donateTitle"></h3>
+    <p data-i18n="donateDesc"></p>
+    <button class="btn-search" data-i18n="donateCta" onclick="abrirDonacion()"></button>
   </div>
 </div>
 
@@ -667,11 +379,16 @@
     es: { 
       tabSearch: "🔍 Buscar", tabTestimonials: "💬 Testimonios", tabStory: "📖 Historia", tabFeedback: "💬 Feedback",
       modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", searchBtn: "🔍 Buscar",
-      radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad",
+      radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad",
       includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias",
       loading: "Buscando centros de salud...", noResults: "No se encontraron centros", routeBtn: "🗺️ Cómo llegar",
-      donateBtn: "☕ Apóyanos", donateTitle: "🙏 Gracias", donateDesc: "Tu ayuda nos permite seguir mejorando", donateCta: "Invítanos un café",
-      certified: "Certificado", type_hospital: "Hospital", type_emergency: "Urgencias 24h", type_ambulance: "Ambulancia", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia",
+      donateBtn: "☕ Apóyanos", 
+      donateTitle: "🙏 Gracias por apoyarnos", 
+      donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.", 
+      donateCta: "☕ Invítanos un café",
+      certified: "Certificado", 
+      type_hospital: "Hospital", type_emergency: "Urgencias 24h", type_ambulance: "Ambulancia", 
+      type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia",
       geoWarningMsg: "⚠️ No se pudo obtener tu ubicación.",
       geoWarningHint: "Puedes buscar por ciudad usando la opción de arriba.",
       initialMsg: "📍 Activa ubicación o busca por ciudad",
@@ -704,11 +421,16 @@
     en: { 
       tabSearch: "🔍 Search", tabTestimonials: "💬 Testimonials", tabStory: "📖 Story", tabFeedback: "💬 Feedback",
       modeNearMe: "📍 Near me", modeCity: "🏙️ By city", searchBtn: "🔍 Search",
-      radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City",
+      radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town",
       includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances",
       loading: "Searching for health facilities...", noResults: "No facilities found", routeBtn: "🗺️ Directions",
-      donateBtn: "☕ Support us", donateTitle: "🙏 Thanks", donateDesc: "Your help allows us to improve", donateCta: "Buy us a coffee",
-      certified: "Certified", type_hospital: "Hospital", type_emergency: "24h Emergency", type_ambulance: "Ambulance", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy",
+      donateBtn: "☕ Support us", 
+      donateTitle: "🙏 Thank you for supporting us", 
+      donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", 
+      donateCta: "☕ Buy us a coffee",
+      certified: "Certified", 
+      type_hospital: "Hospital", type_emergency: "24h Emergency", type_ambulance: "Ambulance", 
+      type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy",
       geoWarningMsg: "⚠️ Could not get your location.",
       geoWarningHint: "You can search by city using the option above.",
       initialMsg: "📍 Enable location or search by city",
@@ -740,7 +462,6 @@
     }
   };
   
-  // Copiar inglés para los demás idiomas (puedes traducir más adelante)
   for(let l of ['pt','fr','ru','zh','hi','ar']) translations[l] = translations.en;
 
   let currentLang = 'es';
@@ -754,7 +475,6 @@
       const key = el.getAttribute('data-i18n');
       el.innerHTML = t(key);
     });
-    document.getElementById('storyText').innerHTML = t('storyText');
     const warningDiv = document.getElementById('geoWarning');
     if (warningDiv) {
       const msgSpan = warningDiv.querySelector('[data-i18n="geoWarningMsg"]');
@@ -878,7 +598,10 @@
         });
       }
       return results;
-    } catch(e) { return []; }
+    } catch(e) { 
+      console.error('Error fetching OSM data:', e);
+      return []; 
+    }
   }
   
   function getDistance(lat1, lon1, lat2, lon2) {
