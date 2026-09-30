@@ -61,38 +61,11 @@
     .logo-title { display: flex; align-items: center; gap: 8px; }
     .logo-img { height: 32px; width: auto; }
     h1 { font-size: 1.2rem; font-weight: 600; color: var(--primary); }
-    .lang-selector select { 
-      padding: 5px 8px; 
-      border-radius: 8px; 
-      border: 1px solid var(--border); 
-      font-size: 12px; 
-      background: var(--bg); 
-      cursor: pointer;
-    }
+    .lang-selector select { padding: 5px 8px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; background: var(--bg); cursor: pointer; }
 
-    .tabs {
-      display: flex;
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 12px 8px;
-      background: none;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .tab-btn.active {
-      color: var(--primary);
-      border-bottom: 3px solid var(--primary);
-    }
+    .tabs { display: flex; background: var(--card-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; overflow-x: auto; white-space: nowrap; }
+    .tab-btn { flex: 1; padding: 12px 8px; background: none; border: none; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
+    .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
     
     .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
     .tab-content { display: none; flex: 1; overflow: hidden; }
@@ -101,28 +74,12 @@
     .two-columns { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
     @media (min-width: 768px) { .two-columns { flex-direction: row; } }
     
-    .sidebar {
-      background: var(--card-bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+    .sidebar { background: var(--card-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
     @media (min-width: 768px) { .sidebar { width: 38%; min-width: 320px; max-width: 500px; } }
     
     .controls { padding: 12px; background: var(--card-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .mode-selector { display: flex; gap: 10px; margin-bottom: 15px; }
-    .mode-btn {
-      flex: 1;
-      padding: 8px 12px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-    }
+    .mode-btn { flex: 1; padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 40px; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; }
     .mode-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
     .control-group { margin-bottom: 12px; }
     .control-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; display: block; }
@@ -163,14 +120,7 @@
     .feedback-email { margin-top: 20px; font-size: 12px; color: var(--text-muted); }
     .feedback-email a { color: var(--primary); text-decoration: none; }
     
-    .privacy-block {
-      background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
-      border: 2px solid #BBF7D0;
-      border-radius: 20px;
-      padding: 24px 20px;
-      margin-bottom: 25px;
-      text-align: center;
-    }
+    .privacy-block { background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%); border: 2px solid #BBF7D0; border-radius: 20px; padding: 24px 20px; margin-bottom: 25px; text-align: center; }
     .privacy-block .privacy-logo { height: 48px; width: auto; margin-bottom: 12px; }
     .privacy-block h3 { color: var(--primary); font-size: 1.25rem; margin-bottom: 14px; font-weight: 700; }
     .privacy-block p { font-size: 14.5px; color: var(--text-main); line-height: 1.65; text-align: left; }
@@ -381,7 +331,7 @@
       modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", searchBtn: "🔍 Buscar",
       radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad",
       includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias",
-      loading: "Buscando centros de salud...", noResults: "No se encontraron centros", routeBtn: "🗺️ Cómo llegar",
+      loading: "Buscando centros de salud...", noResults: "No se encontraron centros de salud en este radio. Prueba aumentarlo o buscar en otra ciudad.", routeBtn: "🗺️ Cómo llegar",
       donateBtn: "☕ Apóyanos", 
       donateTitle: "🙏 Gracias por apoyarnos", 
       donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.", 
@@ -396,7 +346,6 @@
       feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.",
       feedbackBtn: "📝 Enviar comentario o sugerencia",
       feedbackEmailText: "📧 También puedes escribirnos directamente:",
-      airAmbulance: "✈️ Servicio de aeroambulancia", icuService: "🫀 Unidad de Cuidados Intensivos", ambulanceService: "🚑 Servicio de ambulancia certificado",
       type: "Tipo", distance: "Distancia", address: "Dirección", phone: "Teléfono",
       visitsLabel: "visitas totales",
       testimonialsTitle: "💬 Testimonios de usuarios",
@@ -423,7 +372,7 @@
       modeNearMe: "📍 Near me", modeCity: "🏙️ By city", searchBtn: "🔍 Search",
       radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town",
       includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances",
-      loading: "Searching for health facilities...", noResults: "No facilities found", routeBtn: "🗺️ Directions",
+      loading: "Searching for health facilities...", noResults: "No health centers found in this radius. Try increasing it or searching in another city.", routeBtn: "🗺️ Directions",
       donateBtn: "☕ Support us", 
       donateTitle: "🙏 Thank you for supporting us", 
       donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", 
@@ -438,7 +387,6 @@
       feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.",
       feedbackBtn: "📝 Send comment or suggestion",
       feedbackEmailText: "📧 You can also write to us directly:",
-      airAmbulance: "✈️ Air ambulance service", icuService: "🫀 Intensive Care Unit", ambulanceService: "🚑 Certified ambulance service",
       type: "Type", distance: "Distance", address: "Address", phone: "Phone",
       visitsLabel: "total visits",
       testimonialsTitle: "💬 User Testimonials",
