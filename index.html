@@ -33,6 +33,7 @@
       --c-air: #E67E22;
       --c-icu: #C0392B;
       --c-warning: #D69E2E;
+      --c-privacy: #2C7A7B;
     }
     
     html, body {
@@ -342,6 +343,38 @@
       text-decoration: none;
     }
     
+    /* BLOQUE DE PRIVACIDAD EN FEEDBACK */
+    .privacy-block {
+      background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
+      border: 2px solid #BBF7D0;
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-bottom: 25px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(44, 122, 123, 0.08);
+    }
+    .privacy-block .privacy-logo {
+      height: 48px;
+      width: auto;
+      margin-bottom: 12px;
+    }
+    .privacy-block h3 {
+      color: var(--primary);
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+    .privacy-block p {
+      font-size: 14.5px;
+      color: var(--text-main);
+      line-height: 1.65;
+      margin-bottom: 0;
+      text-align: left;
+    }
+    .privacy-block p strong {
+      color: var(--primary);
+    }
+    
     .content-page {
       padding: 20px;
       overflow-y: auto;
@@ -381,7 +414,6 @@
       border: none;
     }
     
-    /* MURO DE AGRADECIMIENTO */
     .thanks-wall {
       margin-top: 25px;
       padding: 22px;
@@ -599,7 +631,6 @@
         <div class="testimonial-author">— El creador de SaludCerca | NearMed</div>
       </div>
 
-      <!-- MURO DE AGRADECIMIENTO - Enfoque bien común -->
       <div class="thanks-wall">
         <h3>💚 Muro de Agradecimiento</h3>
         <p>
@@ -623,6 +654,16 @@
   
   <div id="tab-feedback" class="tab-content">
     <div class="feedback-area">
+      
+      <!-- BLOQUE DE PRIVACIDAD - ARRIBA DEL BOTÓN DE FEEDBACK -->
+      <div class="privacy-block">
+        <img src="SaludCerca.png" alt="SaludCerca" class="privacy-logo" onerror="this.style.display='none'">
+        <h3>🔒 Tu privacidad es nuestra prioridad</h3>
+        <p>
+          <strong>SaludCerca no tiene servidores, no guarda tu ubicación y no te rastrea.</strong> Tu ubicación se usa solo en tu teléfono para mostrarte los hospitales cercanos. No hay cuentas, no hay cookies de publicidad y no compartimos nada con nadie. Es una herramienta simple y transparente para ayudarte cuando más lo necesitas.
+        </p>
+      </div>
+      
       <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
       <p data-i18n="feedbackDesc" style="margin:15px 0;">¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.</p>
       <button class="feedback-btn" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
