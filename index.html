@@ -30,10 +30,7 @@
       --c-clinic: #00A3C4;
       --c-pharmacy: #38A169;
       --c-ambulance: #9B59B6;
-      --c-air: #E67E22;
-      --c-icu: #C0392B;
       --c-warning: #D69E2E;
-      --c-privacy: #2C7A7B;
     }
     
     html, body {
@@ -242,13 +239,9 @@
       padding: 12px; 
       margin-bottom: 10px; 
       cursor: pointer;
-      transition: 0.1s;
     }
-    .card:hover { border-color: var(--text-muted); }
     .card.urgent-card { background-color: #EBF8FF; border-top: 3px solid var(--c-urgent); }
     .card.ambulance-card { background-color: #F5E6FF; border-top: 3px solid var(--c-ambulance); }
-    .card.air-card { background-color: #FEF5E6; border-top: 3px solid var(--c-air); }
-    .card.icu-card { background-color: #FCE8E8; border-top: 3px solid var(--c-icu); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
     .card-title { font-size: 14px; font-weight: 700; }
     .tag-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; display: inline-block; margin-bottom: 8px; color: white; }
@@ -278,11 +271,6 @@
       flex: 1;
       position: relative;
       min-height: 250px;
-    }
-    @media (min-width: 768px) {
-      .map-wrapper {
-        flex: 1;
-      }
     }
     #map { 
       width: 100%; 
@@ -343,7 +331,6 @@
       text-decoration: none;
     }
     
-    /* BLOQUE DE PRIVACIDAD EN FEEDBACK */
     .privacy-block {
       background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
       border: 2px solid #BBF7D0;
@@ -368,7 +355,6 @@
       font-size: 14.5px;
       color: var(--text-main);
       line-height: 1.65;
-      margin-bottom: 0;
       text-align: left;
     }
     .privacy-block p strong {
@@ -447,10 +433,6 @@
       text-decoration: none;
       cursor: pointer;
       border: none;
-      transition: transform 0.2s;
-    }
-    .thanks-wall .btn-thanks:hover {
-      transform: translateY(-2px);
     }
     .thanks-wall .donor-list {
       margin-top: 15px;
@@ -468,7 +450,6 @@
       border-radius: 20px;
       font-size: 10px;
       color: #4A627A;
-      backdrop-filter: blur(2px);
       z-index: 10;
     }
     
@@ -547,7 +528,7 @@
           <div id="nearme-controls">
             <div id="geoWarning" class="geo-warning" style="display:none;">
               <span data-i18n="geoWarningMsg">⚠️ No se pudo obtener tu ubicación.</span><br>
-              <small>Puedes buscar por ciudad usando la opción de arriba.</small>
+              <small data-i18n="geoWarningHint">Puedes buscar por ciudad usando la opción de arriba.</small>
             </div>
             <div class="control-group">
               <div class="slider-row">
@@ -599,53 +580,40 @@
   
   <div id="tab-testimonials" class="tab-content">
     <div class="content-page">
-      <h2 style="color: var(--primary); margin-bottom: 15px;">💬 Testimonios de usuarios</h2>
-      <p>Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.</p>
+      <h2 data-i18n="testimonialsTitle" style="color: var(--primary); margin-bottom: 15px;">💬 Testimonios de usuarios</h2>
+      <p data-i18n="testimonialsIntro">Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.</p>
       
       <div class="testimonial-card">
-        <div class="testimonial-text">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
-        <div class="testimonial-author">— Laura M., viajera frecuente</div>
+        <div class="testimonial-text" data-i18n="testimonial1">"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."</div>
+        <div class="testimonial-author" data-i18n="testimonial1Author">— Laura M., viajera frecuente</div>
       </div>
       <div class="testimonial-card">
-        <div class="testimonial-text">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
-        <div class="testimonial-author">— Carlos R., productor audiovisual</div>
+        <div class="testimonial-text" data-i18n="testimonial2">"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."</div>
+        <div class="testimonial-author" data-i18n="testimonial2Author">— Carlos R., productor audiovisual</div>
       </div>
       
-      <button class="btn-testimonial" onclick="abrirFormularioTestimonio()">📝 Comparte tu testimonio</button>
+      <button class="btn-testimonial" data-i18n="shareTestimonialBtn" onclick="abrirFormularioTestimonio()">📝 Comparte tu testimonio</button>
     </div>
   </div>
   
   <div id="tab-story" class="tab-content">
     <div class="content-page">
-      <h2 style="color: var(--primary); margin-bottom: 15px;">📖 La historia detrás de SaludCerca</h2>
+      <h2 data-i18n="storyTitle" style="color: var(--primary); margin-bottom: 15px;">📖 La historia detrás de SaludCerca</h2>
       
       <div class="testimonial-card creator-testimonial">
-        <div class="testimonial-text">
-          "Hace veintitrés años quien escribe sufrió un accidente automovilístico. Mis familiares cercanos (mis padres y mi hermana) no se encontraban en la ciudad. Mis tíos, primos y amigos padecieron horas de angustia al no poder encontrar con facilidad servicios de emergencia.<br><br>
-          La ambulancia que me salvó la vida me llevó a un hospital privado que mi seguro no cubría y mientras mis tíos buscaban el hospital y las ambulancias de terapia intensiva que me trasladaran pasaron 9 horas angustiosas en las que yo me desangraba en una tabla de madera habilitada como camilla en un pasillo de una sala de urgencias.<br><br>
-          Afortunadamente viví para contarlo, y, hoy muchos años después cuando me preguntaron '¿tú, de qué harías una app?' No tuve que pensarlo mucho.<br><br>
-          Espero que esta web app gratuita ayude a salvar muchas vidas y a ahorrarle horas de angustia a pacientes, familiares y amigos en situaciones de emergencia.<br><br>
-          Que el espíritu del universo esté con ustedes siempre.<br><br>
-          Abril, 2026."
-        </div>
-        <div class="testimonial-author">— El creador de SaludCerca | NearMed</div>
+        <div class="testimonial-text" id="storyText"></div>
+        <div class="testimonial-author" data-i18n="storyAuthor">— El creador de SaludCerca | NearMed</div>
       </div>
 
       <div class="thanks-wall">
-        <h3>💚 Muro de Agradecimiento</h3>
-        <p>
-          SaludCerca | NearMed existe para que, cuando alguien necesite ayuda médica urgente, sepa a dónde ir sin perder tiempo ni pasar angustia. Es <strong>gratuita, sin publicidad y sin fines de lucro</strong>.
-        </p>
-        <p>
-          <strong>Con tu donación ayudas a que esta herramienta siga viva, llegue a más personas y mejore cada día.</strong>
-        </p>
-        <p>
-          Si valoras lo que hacemos y quieres que siga disponible para quien lo necesite, <strong>tu apoyo, desde $3 USD, hace la diferencia.</strong>
-        </p>
-        <a href="https://buymeacoffee.com/SaludCercaNearMed" target="_blank" class="btn-thanks">
+        <h3 data-i18n="thanksTitle">💚 Muro de Agradecimiento</h3>
+        <p data-i18n="thanksP1"></p>
+        <p><strong data-i18n="thanksP2"></strong></p>
+        <p data-i18n="thanksP3"></p>
+        <a href="https://buymeacoffee.com/SaludCercaNearMed" target="_blank" class="btn-thanks" data-i18n="thanksBtn">
           ☕ Apóyanos con una donación
         </a>
-        <div class="donor-list">
+        <div class="donor-list" data-i18n="thanksDonorNote">
           * Los nombres de quienes nos apoyan aparecerán aquí con su permiso. Mientras tanto, gracias por estar del otro lado.
         </div>
       </div>
@@ -655,13 +623,10 @@
   <div id="tab-feedback" class="tab-content">
     <div class="feedback-area">
       
-      <!-- BLOQUE DE PRIVACIDAD - ARRIBA DEL BOTÓN DE FEEDBACK -->
       <div class="privacy-block">
         <img src="SaludCerca.png" alt="SaludCerca" class="privacy-logo" onerror="this.style.display='none'">
-        <h3>🔒 Tu privacidad es nuestra prioridad</h3>
-        <p>
-          <strong>SaludCerca no tiene servidores, no guarda tu ubicación y no te rastrea.</strong> Tu ubicación se usa solo en tu teléfono para mostrarte los hospitales cercanos. No hay cuentas, no hay cookies de publicidad y no compartimos nada con nadie. Es una herramienta simple y transparente para ayudarte cuando más lo necesitas.
-        </p>
+        <h3 data-i18n="privacyTitle">🔒 Tu privacidad es nuestra prioridad</h3>
+        <p data-i18n="privacyText"></p>
       </div>
       
       <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
@@ -673,7 +638,7 @@
       </div>
       
       <div class="counter-global">
-        🌍 <span id="visitorCountGlobal">---</span> visitas totales
+        🌍 <span id="visitorCountGlobal">---</span> <span data-i18n="visitsLabel">visitas totales</span>
       </div>
     </div>
   </div>
@@ -708,13 +673,33 @@
       donateBtn: "☕ Apóyanos", donateTitle: "🙏 Gracias", donateDesc: "Tu ayuda nos permite seguir mejorando", donateCta: "Invítanos un café",
       certified: "Certificado", type_hospital: "Hospital", type_emergency: "Urgencias 24h", type_ambulance: "Ambulancia", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia",
       geoWarningMsg: "⚠️ No se pudo obtener tu ubicación.",
+      geoWarningHint: "Puedes buscar por ciudad usando la opción de arriba.",
       initialMsg: "📍 Activa ubicación o busca por ciudad",
       feedbackTitle: "💬 Tu opinión nos mejora",
       feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.",
       feedbackBtn: "📝 Enviar comentario o sugerencia",
       feedbackEmailText: "📧 También puedes escribirnos directamente:",
       airAmbulance: "✈️ Servicio de aeroambulancia", icuService: "🫀 Unidad de Cuidados Intensivos", ambulanceService: "🚑 Servicio de ambulancia certificado",
-      type: "Tipo", distance: "Distancia", address: "Dirección", phone: "Teléfono"
+      type: "Tipo", distance: "Distancia", address: "Dirección", phone: "Teléfono",
+      visitsLabel: "visitas totales",
+      testimonialsTitle: "💬 Testimonios de usuarios",
+      testimonialsIntro: "Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.",
+      testimonial1: '"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."',
+      testimonial1Author: "— Laura M., viajera frecuente",
+      testimonial2: '"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."',
+      testimonial2Author: "— Carlos R., productor audiovisual",
+      shareTestimonialBtn: "📝 Comparte tu testimonio",
+      storyTitle: "📖 La historia detrás de SaludCerca",
+      storyText: '"Hace veintitrés años quien escribe sufrió un accidente automovilístico. Mis familiares cercanos (mis padres y mi hermana) no se encontraban en la ciudad. Mis tíos, primos y amigos padecieron horas de angustia al no poder encontrar con facilidad servicios de emergencia.<br><br>La ambulancia que me salvó la vida me llevó a un hospital privado que mi seguro no cubría y mientras mis tíos buscaban el hospital y las ambulancias de terapia intensiva que me trasladaran pasaron 9 horas angustiosas en las que yo me desangraba en una tabla de madera habilitada como camilla en un pasillo de una sala de urgencias.<br><br>Afortunadamente viví para contarlo, y, hoy muchos años después cuando me preguntaron \'¿tú, de qué harías una app?\' No tuve que pensarlo mucho.<br><br>Espero que esta web app gratuita ayude a salvar muchas vidas y a ahorrarle horas de angustia a pacientes, familiares y amigos en situaciones de emergencia.<br><br>Que el espíritu del universo esté con ustedes siempre.<br><br>Abril, 2026."',
+      storyAuthor: "— El creador de SaludCerca | NearMed",
+      thanksTitle: "💚 Muro de Agradecimiento",
+      thanksP1: "SaludCerca | NearMed existe para que, cuando alguien necesite ayuda médica urgente, sepa a dónde ir sin perder tiempo ni pasar angustia. Es gratuita, sin publicidad y sin fines de lucro.",
+      thanksP2: "Con tu donación ayudas a que esta herramienta siga viva, llegue a más personas y mejore cada día.",
+      thanksP3: "Si valoras lo que hacemos y quieres que siga disponible para quien lo necesite, tu apoyo, desde $3 USD, hace la diferencia.",
+      thanksBtn: "☕ Apóyanos con una donación",
+      thanksDonorNote: "* Los nombres de quienes nos apoyan aparecerán aquí con su permiso. Mientras tanto, gracias por estar del otro lado.",
+      privacyTitle: "🔒 Tu privacidad es nuestra prioridad",
+      privacyText: "<strong>SaludCerca no tiene servidores, no guarda tu ubicación y no te rastrea.</strong> Tu ubicación se usa solo en tu teléfono para mostrarte los hospitales cercanos. No hay cuentas, no hay cookies de publicidad y no compartimos nada con nadie. Es una herramienta simple y transparente para ayudarte cuando más lo necesitas."
     },
     en: { 
       tabSearch: "🔍 Search", tabTestimonials: "💬 Testimonials", tabStory: "📖 Story", tabFeedback: "💬 Feedback",
@@ -725,15 +710,37 @@
       donateBtn: "☕ Support us", donateTitle: "🙏 Thanks", donateDesc: "Your help allows us to improve", donateCta: "Buy us a coffee",
       certified: "Certified", type_hospital: "Hospital", type_emergency: "24h Emergency", type_ambulance: "Ambulance", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy",
       geoWarningMsg: "⚠️ Could not get your location.",
+      geoWarningHint: "You can search by city using the option above.",
       initialMsg: "📍 Enable location or search by city",
       feedbackTitle: "💬 Your opinion improves us",
       feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.",
       feedbackBtn: "📝 Send comment or suggestion",
       feedbackEmailText: "📧 You can also write to us directly:",
       airAmbulance: "✈️ Air ambulance service", icuService: "🫀 Intensive Care Unit", ambulanceService: "🚑 Certified ambulance service",
-      type: "Type", distance: "Distance", address: "Address", phone: "Phone"
+      type: "Type", distance: "Distance", address: "Address", phone: "Phone",
+      visitsLabel: "total visits",
+      testimonialsTitle: "💬 User Testimonials",
+      testimonialsIntro: "Share your experience with SaludCerca | NearMed. Your story can help others.",
+      testimonial1: '"SaludCerca saved me on a trip to Thailand. My son got sick and in minutes I found the nearest hospital with pediatric emergency care. Incredible tool."',
+      testimonial1Author: "— Laura M., frequent traveler",
+      testimonial2: '"As an event producer, I now include nearby hospitals in my call sheets. My teams feel safer."',
+      testimonial2Author: "— Carlos R., audiovisual producer",
+      shareTestimonialBtn: "📝 Share your testimonial",
+      storyTitle: "📖 The story behind SaludCerca",
+      storyText: '"Twenty-three years ago, the writer of this message suffered a car accident. My close family (my parents and my sister) were not in the city. My uncles, cousins and friends endured hours of anguish unable to easily find emergency services.<br><br>The ambulance that saved my life took me to a private hospital my insurance did not cover, and while my uncles searched for a hospital and intensive care ambulances to transfer me, 9 agonizing hours passed while I bled out on a wooden board used as a stretcher in a hallway of an emergency room.<br><br>Fortunately, I lived to tell the story, and today, many years later, when I was asked \'what would you make an app about?\' I didn\'t have to think twice.<br><br>I hope this free web app helps save many lives and spares hours of anguish for patients, families and friends in emergency situations.<br><br>May the spirit of the universe be with you always.<br><br>April, 2026."',
+      storyAuthor: "— The creator of SaludCerca | NearMed",
+      thanksTitle: "💚 Wall of Gratitude",
+      thanksP1: "SaludCerca | NearMed exists so that when someone needs urgent medical help, they know where to go without wasting time or enduring anguish. It is free, ad-free and non-profit.",
+      thanksP2: "Your donation helps keep this tool alive, reach more people and improve every day.",
+      thanksP3: "If you value what we do and want it to remain available for those who need it, your support, from $3 USD, makes a difference.",
+      thanksBtn: "☕ Support us with a donation",
+      thanksDonorNote: "* The names of those who support us will appear here with their permission. Meanwhile, thank you for being on the other side.",
+      privacyTitle: "🔒 Your privacy is our priority",
+      privacyText: "<strong>SaludCerca has no servers, does not store your location and does not track you.</strong> Your location is used only on your phone to show you nearby hospitals. There are no accounts, no advertising cookies and we share nothing with anyone. It is a simple and transparent tool to help you when you need it most."
     }
   };
+  
+  // Copiar inglés para los demás idiomas (puedes traducir más adelante)
   for(let l of ['pt','fr','ru','zh','hi','ar']) translations[l] = translations.en;
 
   let currentLang = 'es';
@@ -745,12 +752,15 @@
   function updateAllTexts() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
-      el.innerText = t(key);
+      el.innerHTML = t(key);
     });
+    document.getElementById('storyText').innerHTML = t('storyText');
     const warningDiv = document.getElementById('geoWarning');
     if (warningDiv) {
       const msgSpan = warningDiv.querySelector('[data-i18n="geoWarningMsg"]');
+      const hintSpan = warningDiv.querySelector('[data-i18n="geoWarningHint"]');
       if (msgSpan) msgSpan.innerText = t('geoWarningMsg');
+      if (hintSpan) hintSpan.innerText = t('geoWarningHint');
     }
   }
 
@@ -782,9 +792,7 @@
   function solicitarGeolocalizacion() {
     const warningDiv = document.getElementById('geoWarning');
     const resultsDiv = document.getElementById('resultsList');
-    
     if (userLoc) { doSearch(); return; }
-    
     resultsDiv.innerHTML = `<div class="status-msg">${t('loading')}</div>`;
     warningDiv.style.display = 'none';
     
@@ -797,19 +805,16 @@
                 doSearch();
             },
             err => { 
-                let errorMsg = "No se pudo obtener tu ubicación. Intenta buscar por ciudad.";
                 warningDiv.style.display = 'block';
-                resultsDiv.innerHTML = `<div class="status-msg">${errorMsg}<br>
-                    <button onclick="cambiarModoYCiudad()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">Buscar por ciudad</button>
+                resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}<br>
+                    <button onclick="cambiarModoYCiudad()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('modeCity')}</button>
                     <button onclick="solicitarGeolocalizacion()" style="margin-top:10px; margin-left:10px; padding:8px 16px; background:#2C7A7B; color:white; border:none; border-radius:40px;">Reintentar</button>
                 </div>`;
             }
         );
     } else {
         warningDiv.style.display = 'block';
-        resultsDiv.innerHTML = `<div class="status-msg">Tu navegador no soporta geolocalización.<br>
-            <button onclick="cambiarModoYCiudad()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">Buscar por ciudad</button>
-        </div>`;
+        resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}</div>`;
     }
   }
 
@@ -889,15 +894,15 @@
     
     if(searchMode === 'nearme') {
       if(!userLoc) {
-        resultsDiv.innerHTML = `<div class="status-msg">Activa ubicación<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">Activar</button></div>`;
+        resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('modeNearMe')}</button></div>`;
         return;
       }
       centerLat = userLoc.lat; centerLon = userLoc.lon;
     } else {
       const city = document.getElementById('cityInput').value.trim();
-      if(!city) { resultsDiv.innerHTML = `<div class="status-msg">Ingresa una ciudad</div>`; return; }
+      if(!city) { resultsDiv.innerHTML = `<div class="status-msg">${t('cityLabel')}</div>`; return; }
       const geo = await geocodeCity(city);
-      if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">Ciudad no encontrada</div>`; return; }
+      if(!geo) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
       centerLat = geo.lat; centerLon = geo.lon;
     }
     
