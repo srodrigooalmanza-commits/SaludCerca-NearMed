@@ -14,37 +14,19 @@
   <script data-goatcounter="https://saludcercanearmed.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 
-  <!-- SCHEMA.ORG (JSON-LD) PARA AGENTES DE IA Y BUSCADORES -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "SaludCerca | NearMed",
-    "alternateName": "SaludCerca",
     "url": "https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/",
     "description": "Herramienta web gratuita para encontrar hospitales, urgencias 24h, médicos, clínicas, dentistas, farmacias y ambulancias cerca de cualquier ubicación.",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Web",
     "inLanguage": ["es", "en", "pt", "fr", "ru", "zh", "hi", "ar"],
     "isAccessibleForFree": true,
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "MXN"
-    },
-    "author": {
-      "@type": "Person",
-      "name": "Rodrigo Octavio Almanza"
-    },
-    "featureList": [
-      "Búsqueda de hospitales y urgencias 24h por ubicación actual",
-      "Búsqueda por ciudad en cualquier parte del mundo",
-      "Mapa interactivo con OpenStreetMap",
-      "Ruta directa a Google Maps o Apple Maps",
-      "Radio de búsqueda ajustable de 1 a 55 km",
-      "Disponible en 8 idiomas",
-      "Sin instalación, sin registro, sin publicidad"
-    ]
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MXN" },
+    "author": { "@type": "Person", "name": "Rodrigo Octavio Almanza" }
   }
   </script>
 
@@ -291,7 +273,6 @@
     <div class="content-page">
       <h2 data-i18n="testimonialsTitle" style="color: var(--primary); margin-bottom: 15px;">💬 Testimonios de usuarios</h2>
       <p data-i18n="testimonialsIntro">Comparte tu experiencia...</p>
-      
       <div class="testimonial-card">
         <div class="testimonial-text" data-i18n="testimonial1"></div>
         <div class="testimonial-author" data-i18n="testimonial1Author"></div>
@@ -300,7 +281,6 @@
         <div class="testimonial-text" data-i18n="testimonial2"></div>
         <div class="testimonial-author" data-i18n="testimonial2Author"></div>
       </div>
-      
       <button class="btn-testimonial" data-i18n="shareTestimonialBtn" onclick="abrirFormularioTestimonio()">📝 Comparte tu testimonio</button>
     </div>
   </div>
@@ -308,20 +288,16 @@
   <div id="tab-story" class="tab-content">
     <div class="content-page">
       <h2 data-i18n="storyTitle" style="color: var(--primary); margin-bottom: 15px;">📖 La historia detrás de SaludCerca</h2>
-      
       <div class="testimonial-card creator-testimonial">
         <div class="testimonial-text" data-i18n="storyText"></div>
         <div class="testimonial-author" data-i18n="storyAuthor"></div>
       </div>
-
       <div class="thanks-wall">
         <h3 data-i18n="thanksTitle">💚 Muro de Agradecimiento</h3>
         <p data-i18n="thanksP1"></p>
         <p><strong data-i18n="thanksP2"></strong></p>
         <p data-i18n="thanksP3"></p>
-        <a href="https://buymeacoffee.com/SaludCercaNearMed" target="_blank" class="btn-thanks" data-i18n="thanksBtn">
-          ☕ Apóyanos con una donación
-        </a>
+        <a href="https://buymeacoffee.com/SaludCercaNearMed" target="_blank" class="btn-thanks" data-i18n="thanksBtn">☕ Apóyanos con una donación</a>
         <div class="donor-list" data-i18n="thanksDonorNote"></div>
       </div>
     </div>
@@ -329,13 +305,11 @@
   
   <div id="tab-feedback" class="tab-content">
     <div class="feedback-area">
-      
       <div class="privacy-block">
         <img src="SaludCerca.png" alt="SaludCerca" class="privacy-logo" onerror="this.style.display='none'">
         <h3 data-i18n="privacyTitle">🔒 Tu privacidad es nuestra prioridad</h3>
         <p data-i18n="privacyText"></p>
       </div>
-      
       <h3 data-i18n="feedbackTitle">💬 Tu opinión nos mejora</h3>
       <p data-i18n="feedbackDesc" style="margin:15px 0;"></p>
       <button class="feedback-btn" data-i18n="feedbackBtn" onclick="openFeedback()">📝 Enviar comentario o sugerencia</button>
@@ -343,7 +317,6 @@
         <span data-i18n="feedbackEmailText"></span><br>
         <a href="mailto:rodrigooctavioalmanza@gmail.com?subject=Feedback%20SaludCerca%20-%20Sugerencia">rodrigooctavioalmanza@gmail.com</a>
       </div>
-      
       <div class="counter-global">
         🌍 <span id="visitorCountGlobal">---</span> <span data-i18n="visitsLabel">visitas totales</span>
       </div>
@@ -377,31 +350,20 @@
       radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad",
       includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias", includeDentist: "🦷 Incluir dentistas",
       loading: "Buscando centros de salud...", noResults: "No se encontraron centros de salud en este radio. Prueba aumentarlo o buscar en otra ciudad.", errorResults: "Hubo un problema al buscar. Intenta de nuevo en unos segundos.", routeBtn: "🗺️ Cómo llegar",
-      donateBtn: "☕ Apóyanos", 
-      donateTitle: "🙏 Gracias por apoyarnos", 
-      donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.", 
-      donateCta: "☕ Invítanos un café",
-      certified: "Certificado", 
-      type_hospital: "Hospital", type_emergency: "Urgencias 24h", type_ambulance: "Ambulancia", 
-      type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_dentist: "Dentista",
-      geoWarningMsg: "⚠️ No se pudo obtener tu ubicación.",
-      geoWarningHint: "Puedes buscar por ciudad usando la opción de arriba.",
+      donateBtn: "☕ Apóyanos", donateTitle: "🙏 Gracias por apoyarnos", donateDesc: "SaludCerca es gratuito y sin publicidad. Tu ayuda, desde $3 USD, nos permite seguir mejorando.", donateCta: "☕ Invítanos un café",
+      certified: "Certificado", type_hospital: "Hospital", type_emergency: "Urgencias 24h", type_ambulance: "Ambulancia", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_dentist: "Dentista",
+      geoWarningMsg: "⚠️ No se pudo obtener tu ubicación.", geoWarningHint: "Puedes buscar por ciudad usando la opción de arriba.",
       initialMsg: "📍 Activa ubicación o busca por ciudad",
-      feedbackTitle: "💬 Tu opinión nos mejora",
-      feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.",
-      feedbackBtn: "📝 Enviar comentario o sugerencia",
-      feedbackEmailText: "📧 También puedes escribirnos directamente:",
-      type: "Tipo", distance: "Distancia", address: "Dirección", phone: "Teléfono",
-      visitsLabel: "visitas totales",
-      testimonialsTitle: "💬 Testimonios de usuarios",
-      testimonialsIntro: "Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.",
+      feedbackTitle: "💬 Tu opinión nos mejora", feedbackDesc: "¿Encontraste lo que buscabas? ¿Falta algún hospital, ambulancia o servicio? Cuéntanos.", feedbackBtn: "📝 Enviar comentario o sugerencia", feedbackEmailText: "📧 También puedes escribirnos directamente:",
+      type: "Tipo", distance: "Distancia", address: "Dirección", phone: "Teléfono", visitsLabel: "visitas totales",
+      testimonialsTitle: "💬 Testimonios de usuarios", testimonialsIntro: "Comparte tu experiencia con SaludCerca | NearMed. Tu historia puede ayudar a otros.",
       testimonial1: '"SaludCerca me salvó en un viaje a Tailandia. Mi hijo se enfermó y en minutos encontré el hospital más cercano con urgencias pediátricas. Increíble herramienta."',
       testimonial1Author: "— Laura M., viajera frecuente",
       testimonial2: '"Como productor de eventos, ahora incluyo los hospitales cercanos en mi hoja de llamado. Mis equipos se sienten más seguros."',
       testimonial2Author: "— Carlos R., productor audiovisual",
       shareTestimonialBtn: "📝 Comparte tu testimonio",
       storyTitle: "📖 La historia detrás de SaludCerca",
-      storyText: '"Hace veintitrés años quien escribe sufrió un accidente automovilístico. Mis familiares cercanos (mis padres y mi hermana) no se encontraban en la ciudad. Mis tíos, primos y amigos padecieron horas de angustia al no poder encontrar con facilidad servicios de emergencia.<br><br>La ambulancia que me salvó la vida me llevó a un hospital privado que mi seguro no cubría y mientras mis tíos buscaban el hospital y las ambulancias de terapia intensiva que me trasladaran pasaron 9 horas angustiosas en las que yo me desangraba en una tabla de madera habilitada como camilla en un pasillo de una sala de urgencias.<br><br>Afortunadamente viví para contarlo, y, hoy muchos años después cuando me preguntaron \'¿tú, de qué harías una app?\' No tuve que pensarlo mucho.<br><br>Espero que esta web app gratuita ayude a salvar muchas vidas y a ahorrarle horas de angustia a pacientes, familiares y amigos en situaciones de emergencia.<br><br>Que el espíritu del universo esté con ustedes siempre.<br><br>Abril, 2026."',
+      storyText: '"Hace veintitrés años quien escribe sufrió un accidente automovilístico. Mis familiares cercanos no se encontraban en la ciudad. Mis tíos, primos y amigos padecieron horas de angustia al no poder encontrar con facilidad servicios de emergencia.<br><br>La ambulancia que me salvó la vida me llevó a un hospital privado que mi seguro no cubría y mientras mis tíos buscaban el hospital y las ambulancias de terapia intensiva que me trasladaran pasaron 9 horas angustiosas en las que yo me desangraba en una tabla de madera habilitada como camilla en un pasillo de una sala de urgencias.<br><br>Afortunadamente viví para contarlo, y, hoy muchos años después cuando me preguntaron \'¿tú, de qué harías una app?\' No tuve que pensarlo mucho.<br><br>Espero que esta web app gratuita ayude a salvar muchas vidas y a ahorrarle horas de angustia a pacientes, familiares y amigos en situaciones de emergencia.<br><br>Que el espíritu del universo esté con ustedes siempre.<br><br>Abril, 2026."',
       storyAuthor: "— El creador de SaludCerca | NearMed",
       thanksTitle: "💚 Muro de Agradecimiento",
       thanksP1: "SaludCerca | NearMed existe para que, cuando alguien necesite ayuda médica urgente, sepa a dónde ir sin perder tiempo ni pasar angustia. Es gratuita, sin publicidad y sin fines de lucro.",
@@ -410,7 +372,7 @@
       thanksBtn: "☕ Apóyanos con una donación",
       thanksDonorNote: "* Los nombres de quienes nos apoyan aparecerán aquí con su permiso. Mientras tanto, gracias por estar del otro lado.",
       privacyTitle: "🔒 Tu privacidad es nuestra prioridad",
-      privacyText: "<strong>SaludCerca no tiene servidores, no guarda tu ubicación y no te rastrea.</strong> Tu ubicación se usa solo en tu teléfono para mostrarte los hospitales cercanos. No hay cuentas, no hay cookies de publicidad y no compartimos nada con nadie. Es una herramienta simple y transparente para ayudarte cuando más lo necesitas."
+      privacyText: "<strong>SaludCerca no tiene servidores, no guarda tu ubicación y no te rastrea.</strong> Tu ubicación se usa solo en tu teléfono para mostrarte los hospitales cercanos. No hay cuentas, no hay cookies de publicidad y no compartimos nada con nadie."
     },
     en: { 
       tabSearch: "🔍 Search", tabTestimonials: "💬 Testimonials", tabStory: "📖 Story", tabFeedback: "💬 Feedback",
@@ -418,122 +380,64 @@
       radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town",
       includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances", includeDentist: "🦷 Include dentists",
       loading: "Searching for health facilities...", noResults: "No health centers found in this radius. Try increasing it or searching in another city.", errorResults: "There was a problem with the search. Please try again in a few seconds.", routeBtn: "🗺️ Directions",
-      donateBtn: "☕ Support us", 
-      donateTitle: "🙏 Thank you for supporting us", 
-      donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", 
-      donateCta: "☕ Buy us a coffee",
-      certified: "Certified", 
-      type_hospital: "Hospital", type_emergency: "24h Emergency", type_ambulance: "Ambulance", 
-      type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_dentist: "Dentist",
-      geoWarningMsg: "⚠️ Could not get your location.",
-      geoWarningHint: "You can search by city using the option above.",
+      donateBtn: "☕ Support us", donateTitle: "🙏 Thank you for supporting us", donateDesc: "SaludCerca is free and ad-free. Your help, starting at $3 USD, allows us to keep improving.", donateCta: "☕ Buy us a coffee",
+      certified: "Certified", type_hospital: "Hospital", type_emergency: "24h Emergency", type_ambulance: "Ambulance", type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_dentist: "Dentist",
+      geoWarningMsg: "⚠️ Could not get your location.", geoWarningHint: "You can search by city using the option above.",
       initialMsg: "📍 Enable location or search by city",
-      feedbackTitle: "💬 Your opinion improves us",
-      feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.",
-      feedbackBtn: "📝 Send comment or suggestion",
-      feedbackEmailText: "📧 You can also write to us directly:",
-      type: "Type", distance: "Distance", address: "Address", phone: "Phone",
-      visitsLabel: "total visits",
-      testimonialsTitle: "💬 User Testimonials",
-      testimonialsIntro: "Share your experience with SaludCerca | NearMed. Your story can help others.",
-      testimonial1: '"SaludCerca saved me on a trip to Thailand. My son got sick and in minutes I found the nearest hospital with pediatric emergency care. Incredible tool."',
-      testimonial1Author: "— Laura M., frequent traveler",
-      testimonial2: '"As an event producer, I now include nearby hospitals in my call sheets. My teams feel safer."',
-      testimonial2Author: "— Carlos R., audiovisual producer",
-      shareTestimonialBtn: "📝 Share your testimonial",
-      storyTitle: "📖 The story behind SaludCerca",
-      storyText: '"Twenty-three years ago, the writer of this message suffered a car accident. My close family (my parents and my sister) were not in the city. My uncles, cousins and friends endured hours of anguish unable to easily find emergency services.<br><br>The ambulance that saved my life took me to a private hospital my insurance did not cover, and while my uncles searched for a hospital and intensive care ambulances to transfer me, 9 agonizing hours passed while I bled out on a wooden board used as a stretcher in a hallway of an emergency room.<br><br>Fortunately, I lived to tell the story, and today, many years later, when I was asked \'what would you make an app about?\' I didn\'t have to think twice.<br><br>I hope this free web app helps save many lives and spares hours of anguish for patients, families and friends in emergency situations.<br><br>May the spirit of the universe be with you always.<br><br>April, 2026."',
+      feedbackTitle: "💬 Your opinion improves us", feedbackDesc: "Did you find what you were looking for? Missing a hospital, ambulance or service? Tell us.", feedbackBtn: "📝 Send comment or suggestion", feedbackEmailText: "📧 You can also write to us directly:",
+      type: "Type", distance: "Distance", address: "Address", phone: "Phone", visitsLabel: "total visits",
+      testimonialsTitle: "💬 User Testimonials", testimonialsIntro: "Share your experience with SaludCerca | NearMed.",
+      testimonial1: '"SaludCerca saved me on a trip to Thailand."', testimonial1Author: "— Laura M., frequent traveler",
+      testimonial2: '"As an event producer, I now include nearby hospitals in my call sheets."', testimonial2Author: "— Carlos R., audiovisual producer",
+      shareTestimonialBtn: "📝 Share your testimonial", storyTitle: "📖 The story behind SaludCerca",
+      storyText: '"Twenty-three years ago, the writer of this message suffered a car accident...<br><br>April, 2026."',
       storyAuthor: "— The creator of SaludCerca | NearMed",
       thanksTitle: "💚 Wall of Gratitude",
-      thanksP1: "SaludCerca | NearMed exists so that when someone needs urgent medical help, they know where to go without wasting time or enduring anguish. It is free, ad-free and non-profit.",
+      thanksP1: "SaludCerca | NearMed exists so that when someone needs urgent medical help, they know where to go without wasting time.",
       thanksP2: "Your donation helps keep this tool alive, reach more people and improve every day.",
-      thanksP3: "If you value what we do and want it to remain available for those who need it, your support, from $3 USD, makes a difference.",
+      thanksP3: "If you value what we do, your support, from $3 USD, makes a difference.",
       thanksBtn: "☕ Support us with a donation",
-      thanksDonorNote: "* The names of those who support us will appear here with their permission. Meanwhile, thank you for being on the other side.",
+      thanksDonorNote: "* The names of those who support us will appear here with their permission.",
       privacyTitle: "🔒 Your privacy is our priority",
-      privacyText: "<strong>SaludCerca has no servers, does not store your location and does not track you.</strong> Your location is used only on your phone to show you nearby hospitals. There are no accounts, no advertising cookies and we share nothing with anyone. It is a simple and transparent tool to help you when you need it most."
+      privacyText: "<strong>SaludCerca has no servers, does not store your location and does not track you.</strong>"
     },
     pt: {
       tabSearch: "🔍 Buscar", tabTestimonials: "💬 Depoimentos", tabStory: "📖 História", tabFeedback: "💬 Feedback",
       modeNearMe: "📍 Perto de mim", modeCity: "🏙️ Por cidade", searchBtn: "🔍 Buscar",
       radiusLabel: "📡 Raio (km)", radiusLabelCity: "📡 Raio (km)", cityLabel: "🌆 Cidade / Localidade",
       includePharmacy: "💊 Incluir farmácias", includeAmbulance: "🚑 Incluir ambulâncias", includeDentist: "🦷 Incluir dentistas",
-      loading: "Buscando centros de saúde...", noResults: "Nenhum centro de saúde encontrado neste raio. Tente aumentar ou buscar em outra cidade.", errorResults: "Houve um problema na busca. Tente novamente em alguns segundos.", routeBtn: "🗺️ Como chegar",
-      donateBtn: "☕ Apoie-nos",
-      donateTitle: "🙏 Obrigado por nos apoiar",
-      donateDesc: "SaludCerca é gratuito e sem publicidade. Sua ajuda, a partir de $3 USD, nos permite continuar melhorando.",
-      donateCta: "☕ Pague-nos um café",
-      certified: "Certificado",
-      type_hospital: "Hospital", type_emergency: "Emergência 24h", type_ambulance: "Ambulância",
-      type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmácia", type_dentist: "Dentista",
-      geoWarningMsg: "⚠️ Não foi possível obter sua localização.",
-      geoWarningHint: "Você pode buscar por cidade usando a opção acima.",
+      loading: "Buscando centros de saúde...", noResults: "Nenhum centro de saúde encontrado. Tente aumentar o raio ou buscar outra cidade.", errorResults: "Houve um problema na busca. Tente novamente.", routeBtn: "🗺️ Como chegar",
+      donateBtn: "☕ Apoie-nos", donateTitle: "🙏 Obrigado por nos apoiar", donateDesc: "SaludCerca é gratuito e sem publicidade.", donateCta: "☕ Pague-nos um café",
+      certified: "Certificado", type_hospital: "Hospital", type_emergency: "Emergência 24h", type_ambulance: "Ambulância", type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmácia", type_dentist: "Dentista",
+      geoWarningMsg: "⚠️ Não foi possível obter sua localização.", geoWarningHint: "Você pode buscar por cidade usando a opção acima.",
       initialMsg: "📍 Ative a localização ou busque por cidade",
-      feedbackTitle: "💬 Sua opinião nos melhora",
-      feedbackDesc: "Encontrou o que procurava? Falta algum hospital, ambulância ou serviço? Conte-nos.",
-      feedbackBtn: "📝 Enviar comentário ou sugestão",
-      feedbackEmailText: "📧 Você também pode nos escrever diretamente:",
-      type: "Tipo", distance: "Distância", address: "Endereço", phone: "Telefone",
-      visitsLabel: "visitas totais",
-      testimonialsTitle: "💬 Depoimentos de usuários",
-      testimonialsIntro: "Compartilhe sua experiência com SaludCerca | NearMed. Sua história pode ajudar outros.",
-      testimonial1: '"SaludCerca me salvou em uma viagem à Tailândia. Meu filho adoeceu e em minutos encontrei o hospital mais próximo com emergência pediátrica. Ferramenta incrível."',
-      testimonial1Author: "— Laura M., viajante frequente",
-      testimonial2: '"Como produtor de eventos, agora incluo os hospitais próximos na minha lista de chamadas. Minhas equipes se sentem mais seguras."',
-      testimonial2Author: "— Carlos R., produtor audiovisual",
-      shareTestimonialBtn: "📝 Compartilhe seu depoimento",
-      storyTitle: "📖 A história por trás do SaludCerca",
-      storyText: '"Vinte e três anos atrás, quem escreve sofreu um acidente automobilístico. Meus familiares próximos (meus pais e minha irmã) não estavam na cidade. Meus tios, primos e amigos passaram horas de angústia sem conseguir encontrar facilmente serviços de emergência.<br><br>A ambulância que salvou minha vida me levou a um hospital privado que meu seguro não cobria, e enquanto meus tios procuravam o hospital e as ambulâncias de terapia intensiva para me transferir, passaram-se 9 horas angustiantes em que eu sangrava em uma tábua de madeira improvisada como maca no corredor de uma sala de emergência.<br><br>Felizmente vivi para contar, e hoje, muitos anos depois, quando me perguntaram \'do que você faria um app?\' não precisei pensar muito.<br><br>Espero que este web app gratuito ajude a salvar muitas vidas e a poupar horas de angústia para pacientes, familiares e amigos em situações de emergência.<br><br>Que o espírito do universo esteja com vocês sempre.<br><br>Abril, 2026."',
-      storyAuthor: "— O criador do SaludCerca | NearMed",
-      thanksTitle: "💚 Mural de Gratidão",
-      thanksP1: "SaludCerca | NearMed existe para que, quando alguém precisar de ajuda médica urgente, saiba aonde ir sem perder tempo nem passar angústia. É gratuito, sem publicidade e sem fins lucrativos.",
-      thanksP2: "Com sua doação, você ajuda esta ferramenta a continuar viva, alcançar mais pessoas e melhorar a cada dia.",
-      thanksP3: "Se você valoriza o que fazemos e quer que continue disponível para quem precisa, seu apoio, a partir de $3 USD, faz a diferença.",
-      thanksBtn: "☕ Apoie-nos com uma doação",
-      thanksDonorNote: "* Os nomes de quem nos apoia aparecerão aqui com sua permissão. Enquanto isso, obrigado por estar do outro lado.",
-      privacyTitle: "🔒 Sua privacidade é nossa prioridade",
-      privacyText: "<strong>SaludCerca não tem servidores, não guarda sua localização e não te rastreia.</strong> Sua localização é usada apenas no seu telefone para mostrar os hospitais próximos. Não há contas, não há cookies de publicidade e não compartilhamos nada com ninguém. É uma ferramenta simples e transparente para ajudar você quando mais precisar."
+      feedbackTitle: "💬 Sua opinião nos melhora", feedbackDesc: "Encontrou o que procurava?", feedbackBtn: "📝 Enviar comentário", feedbackEmailText: "📧 Escreva-nos diretamente:",
+      type: "Tipo", distance: "Distância", address: "Endereço", phone: "Telefone", visitsLabel: "visitas totais",
+      testimonialsTitle: "💬 Depoimentos", testimonialsIntro: "Compartilhe sua experiência.", testimonial1: '"SaludCerca me salvou em uma viagem."', testimonial1Author: "— Laura M.",
+      testimonial2: '"Como produtor de eventos, incluo hospitais próximos."', testimonial2Author: "— Carlos R.",
+      shareTestimonialBtn: "📝 Compartilhe seu depoimento", storyTitle: "📖 A história por trás do SaludCerca",
+      storyText: '"Vinte e três anos atrás...<br><br>Abril, 2026."', storyAuthor: "— O criador do SaludCerca",
+      thanksTitle: "💚 Mural de Gratidão", thanksP1: "SaludCerca existe para ajudar quem precisa.", thanksP2: "Sua doação mantém esta ferramenta viva.", thanksP3: "Seu apoio faz a diferença.", thanksBtn: "☕ Apoie-nos", thanksDonorNote: "* Nomes aparecerão aqui com permissão.",
+      privacyTitle: "🔒 Sua privacidade é nossa prioridade", privacyText: "<strong>SaludCerca não tem servidores, não guarda sua localização.</strong>"
     },
     ar: {
       tabSearch: "🔍 بحث", tabTestimonials: "💬 شهادات", tabStory: "📖 القصة", tabFeedback: "💬 ملاحظات",
       modeNearMe: "📍 بالقرب مني", modeCity: "🏙️ حسب المدينة", searchBtn: "🔍 بحث",
       radiusLabel: "📡 نصف القطر (كم)", radiusLabelCity: "📡 نصف القطر (كم)", cityLabel: "🌆 المدينة / المنطقة",
       includePharmacy: "💊 تضمين الصيدليات", includeAmbulance: "🚑 تضمين سيارات الإسعاف", includeDentist: "🦷 تضمين أطباء الأسنان",
-      loading: "جاري البحث عن مراكز صحية...", noResults: "لم يتم العثور على مراكز صحية في هذا النطاق. حاول زيادته أو البحث في مدينة أخرى.", errorResults: "حدثت مشكلة في البحث. حاول مرة أخرى بعد بضع ثوانٍ.", routeBtn: "🗺️ الاتجاهات",
-      donateBtn: "☕ ادعمنا",
-      donateTitle: "🙏 شكرًا لدعمك",
-      donateDesc: "SaludCerca مجاني وخالٍ من الإعلانات. مساعدتك، بدءًا من 3 دولارات، تسمح لنا بمواصلة التحسين.",
-      donateCta: "☕ اشترِ لنا قهوة",
-      certified: "معتمد",
-      type_hospital: "مستشفى", type_emergency: "طوارئ 24 ساعة", type_ambulance: "سيارة إسعاف",
-      type_clinic: "عيادة", type_doctor: "طبيب", type_pharmacy: "صيدلية", type_dentist: "طبيب أسنان",
-      geoWarningMsg: "⚠️ لم يتمكن من الحصول على موقعك.",
-      geoWarningHint: "يمكنك البحث حسب المدينة باستخدام الخيار أعلاه.",
+      loading: "جاري البحث...", noResults: "لم يتم العثور على مراكز صحية.", errorResults: "حدثت مشكلة في البحث.", routeBtn: "🗺️ الاتجاهات",
+      donateBtn: "☕ ادعمنا", donateTitle: "🙏 شكرًا لدعمك", donateDesc: "SaludCerca مجاني وخالٍ من الإعلانات.", donateCta: "☕ اشترِ لنا قهوة",
+      certified: "معتمد", type_hospital: "مستشفى", type_emergency: "طوارئ 24 ساعة", type_ambulance: "سيارة إسعاف", type_clinic: "عيادة", type_doctor: "طبيب", type_pharmacy: "صيدلية", type_dentist: "طبيب أسنان",
+      geoWarningMsg: "⚠️ لم يتمكن من الحصول على موقعك.", geoWarningHint: "يمكنك البحث حسب المدينة.",
       initialMsg: "📍 فعّل الموقع أو ابحث حسب المدينة",
-      feedbackTitle: "💬 رأيك يحسننا",
-      feedbackDesc: "هل وجدت ما كنت تبحث عنه؟ هل ينقصك مستشفى أو إسعاف أو خدمة؟ أخبرنا.",
-      feedbackBtn: "📝 إرسال تعليق أو اقتراح",
-      feedbackEmailText: "📧 يمكنك أيضًا الكتابة لنا مباشرة:",
-      type: "النوع", distance: "المسافة", address: "العنوان", phone: "الهاتف",
-      visitsLabel: "إجمالي الزيارات",
-      testimonialsTitle: "💬 شهادات المستخدمين",
-      testimonialsIntro: "شارك تجربتك مع SaludCerca | NearMed. قصتك يمكن أن تساعد الآخرين.",
-      testimonial1: '"أنقذني SaludCerca في رحلة إلى تايلاند. مرض ابني وفي دقائق وجدت أقرب مستشفى به طوارئ أطفال. أداة رائعة."',
-      testimonial1Author: "— لورا م.، مسافرة متكررة",
-      testimonial2: '"كمنتج فعاليات، أصبحت أدرج المستشفيات القريبة في قائمة الاتصال الخاصة بي. فريقي يشعر بأمان أكبر."',
-      testimonial2Author: "— كارلوس ر.، منتج سمعي بصري",
-      shareTestimonialBtn: "📝 شارك شهادتك",
-      storyTitle: "📖 القصة وراء SaludCerca",
-      storyText: '"قبل ثلاثة وعشرين عامًا، تعرض كاتب هذه الرسالة لحادث سيارة. لم يكن أفراد عائلتي المقربون (والداي وأختي) في المدينة. عانى أعمامي وأبناء عمومتي وأصدقائي ساعات من القلق لعدم تمكنهم من العثور بسهولة على خدمات الطوارئ.<br><br>الإسعاف الذي أنقذ حياتي أخذني إلى مستشفى خاص لم يغطه تأميني، وبينما كان أعمامي يبحثون عن مستشفى وسيارات إسعاف للعناية المركزة لنقلي، مرت 9 ساعات مؤلمة كنت أنزف فيها على لوح خشبي استُخدم كنقالة في ممر غرفة الطوارئ.<br><br>لحسن الحظ عشت لأروي القصة، واليوم بعد سنوات عديدة، عندما سُئلت \'ماذا ستصنع من تطبيق؟\' لم أكن بحاجة للتفكير كثيرًا.<br><br>آمل أن يساعد هذا التطبيق المجاني في إنقاذ العديد من الأرواح وتوفير ساعات من القلق للمرضى والعائلات والأصدقاء في حالات الطوارئ.<br><br>لتكن روح الكون معكم دائمًا.<br><br>أبريل 2026."',
-      storyAuthor: "— مبتكر SaludCerca | NearMed",
-      thanksTitle: "💚 جدار الامتنان",
-      thanksP1: "SaludCerca | NearMed موجود حتى يعرف الشخص أين يذهب عندما يحتاج مساعدة طبية عاجلة، دون إضاعة وقت أو تحمل قلق. إنه مجاني وخالٍ من الإعلانات وغير ربحي.",
-      thanksP2: "تبرعك يساعد هذه الأداة على البقاء والوصول إلى المزيد من الناس والتحسن كل يوم.",
-      thanksP3: "إذا كنت تقدر ما نقوم به وتريد أن يظل متاحًا لمن يحتاجه، فإن دعمك، بدءًا من 3 دولارات، يحدث فرقًا.",
-      thanksBtn: "☕ ادعمنا بتبرع",
-      thanksDonorNote: "* ستظهر أسماء من يدعموننا هنا بإذنهم. في غضون ذلك، شكرًا لوجودك على الجانب الآخر.",
-      privacyTitle: "🔒 خصوصيتك هي أولويتنا",
-      privacyText: "<strong>SaludCerca ليس لديها خوادم، ولا تحفظ موقعك، ولا تتعقبك.</strong> يتم استخدام موقعك فقط على هاتفك لعرض المستشفيات القريبة. لا حسابات، لا ملفات تعريف ارتباط إعلانية، ولا نشارك أي شيء مع أي شخص. إنها أداة بسيطة وشفافة لمساعدتك عندما تحتاجها أكثر من أي وقت مضى."
+      feedbackTitle: "💬 رأيك يحسننا", feedbackDesc: "هل وجدت ما كنت تبحث عنه؟", feedbackBtn: "📝 إرسال تعليق", feedbackEmailText: "📧 الكتابة لنا مباشرة:",
+      type: "النوع", distance: "المسافة", address: "العنوان", phone: "الهاتف", visitsLabel: "إجمالي الزيارات",
+      testimonialsTitle: "💬 شهادات المستخدمين", testimonialsIntro: "شارك تجربتك.", testimonial1: '"أنقذني SaludCerca في رحلة."', testimonial1Author: "— لورا م.",
+      testimonial2: '"كمنتج فعاليات، أدرج المستشفيات القريبة."', testimonial2Author: "— كارلوس ر.",
+      shareTestimonialBtn: "📝 شارك شهادتك", storyTitle: "📖 القصة وراء SaludCerca",
+      storyText: '"قبل ثلاثة وعشرين عامًا...<br><br>أبريل 2026."', storyAuthor: "— مبتكر SaludCerca",
+      thanksTitle: "💚 جدار الامتنان", thanksP1: "SaludCerca موجود لمساعدة من يحتاج.", thanksP2: "تبرعك يساعد هذه الأداة على البقاء.", thanksP3: "دعمك يحدث فرقًا.", thanksBtn: "☕ ادعمنا", thanksDonorNote: "* ستظهر الأسماء هنا بإذنهم.",
+      privacyTitle: "🔒 خصوصيتك هي أولويتنا", privacyText: "<strong>SaludCerca ليس لديها خوادم، ولا تحفظ موقعك.</strong>"
     }
   };
   
@@ -551,13 +455,6 @@
       const key = el.getAttribute('data-i18n');
       el.innerHTML = t(key);
     });
-    const warningDiv = document.getElementById('geoWarning');
-    if (warningDiv) {
-      const msgSpan = warningDiv.querySelector('[data-i18n="geoWarningMsg"]');
-      const hintSpan = warningDiv.querySelector('[data-i18n="geoWarningHint"]');
-      if (msgSpan) msgSpan.innerText = t('geoWarningMsg');
-      if (hintSpan) hintSpan.innerText = t('geoWarningHint');
-    }
   }
 
   function changeLang(newLang) {
@@ -569,7 +466,7 @@
   function initMap() {
     map = L.map('map').setView([20, -100], 4);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: '&copy; OpenStreetMap contributors',
       maxZoom: 19
     }).addTo(map);
   }
@@ -630,25 +527,23 @@
   }
   
   async function fetchNearby(lat, lon, radiusKm, includePharmacy, includeAmbulance, includeDentist) {
-    let overpassQuery = `[out:json][timeout:25];(`;
+    // Consultas separadas y bien definidas
+    let overpassQuery = `[out:json][timeout:30];(`;
     overpassQuery += `node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
     overpassQuery += `way["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
     overpassQuery += `node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
     overpassQuery += `way["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
-    overpassQuery += `node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});`;
     overpassQuery += `node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQuery += `node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});`;
     if(includePharmacy) {
       overpassQuery += `node["amenity"="pharmacy"](around:${radiusKm*1000},${lat},${lon});`;
-      overpassQuery += `way["amenity"="pharmacy"](around:${radiusKm*1000},${lat},${lon});`;
     }
     if(includeAmbulance) {
       overpassQuery += `node["emergency"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
-      overpassQuery += `node["amenity"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
     }
     if(includeDentist) {
       overpassQuery += `node["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
       overpassQuery += `way["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
-      overpassQuery += `node["healthcare"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
     }
     overpassQuery += `);out center;`;
     
@@ -748,15 +643,14 @@
     const facilities = response.results;
     if(facilities.length === 0) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
     
-    const priority = { 'air': 1, 'icu': 2, 'urgent': 3, 'hospital': 4, 'ambulance': 5, 'clinic': 6, 'doctor': 7, 'dentist': 8, 'pharmacy': 9 };
     const getPriority = (f) => {
-      if(f.urgent) return priority.urgent;
-      if(f.typeKey === 'type_hospital') return priority.hospital;
-      if(f.special === 'ambulance') return priority.ambulance;
-      if(f.typeKey === 'type_clinic') return priority.clinic;
-      if(f.typeKey === 'type_doctor') return priority.doctor;
-      if(f.special === 'dentist') return priority.dentist;
-      return priority.pharmacy;
+      if(f.urgent) return 1;
+      if(f.typeKey === 'type_hospital') return 2;
+      if(f.typeKey === 'type_clinic') return 3;
+      if(f.typeKey === 'type_doctor') return 4;
+      if(f.special === 'dentist') return 5;
+      if(f.special === 'ambulance') return 6;
+      return 7;
     };
     
     currentResults = facilities.map(f => ({ ...f, dist: getDistance(centerLat, centerLon, f.lat, f.lon) }))
@@ -765,7 +659,7 @@
         if(pa !== pb) return pa - pb;
         return a.dist - b.dist;
       })
-      .slice(0, 25);
+      .slice(0, 30);
     
     renderResults();
     renderMarkers();
