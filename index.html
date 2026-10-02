@@ -516,115 +516,85 @@
     } catch(e) { return null; }
   }
   
-  // CONSULTA GENÉRICA A OVERPASS
-  async function overpassQuery(query) {
+  // CONSULTA UNIFICADA A OVERPASS (con servidor alternativo)
+  async function fetchAllFacilities(lat, lon, radiusKm, includePharmacy, includeAmbulance, includeDentist) {
+    let overpassQuery = `[out:json][timeout:25];(`;
+    overpassQuery += `node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQuery += `way["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQuery += `node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQuery += `way["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQuery += `node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQuery += `node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});`;
+    if(includePharmacy) {
+      overpassQuery += `node["amenity"="pharmacy"](around:${radiusKm*1000},${lat},${lon});`;
+    }
+    if(includeAmbulance) {
+      overpassQuery += `node["emergency"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
+    }
+    if(includeDentist) {
+      overpassQuery += `node["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
+      overpassQuery += `way["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
+    }
+    overpassQuery += `);out center;`;
+    
     try {
-      const resp = await fetch('https://overpass-api.de/api/interpreter', {
+      const resp = await fetch('https://overpass.private.coffee/api/interpreter', {
         method: 'POST',
-        body: 'data=' + encodeURIComponent(query),
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        body: 'data=' + encodeURIComponent(overpassQuery),
+        headers: { 
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'SaludCerca/1.0 (https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/)'
+        }
       });
       
       if (!resp.ok) {
         console.error('Overpass error:', resp.status);
-        return null;
+        return { error: true, results: [] };
       }
       
       const data = await resp.json();
-      return data.elements || [];
-    } catch(e) {
-      console.error('Error Overpass:', e);
-      return null;
+      const results = [];
+      for(let el of data.elements) {
+        let elLat, elLon;
+        if(el.type === 'node') {
+          elLat = el.lat; elLon = el.lon;
+        } else if(el.center) {
+          elLat = el.center.lat; elLon = el.center.lon;
+        } else {
+          continue;
+        }
+        
+        let name = el.tags?.name || "Centro médico";
+        let type = el.tags?.amenity || el.tags?.healthcare || "centro";
+        let color = '#00A3C4', urgent = false, special = '';
+        let typeKey = 'type_clinic';
+        
+        if(type === 'hospital') { 
+          color = '#ED8936'; typeKey = 'type_hospital';
+          if(el.tags?.emergency === 'yes') { urgent = true; color = '#2B6CB0'; typeKey = 'type_emergency'; }
+        }
+        else if(type === 'ambulance_station') { 
+          color = '#9B59B6'; typeKey = 'type_ambulance';
+          special = 'ambulance';
+        }
+        else if(type === 'doctor' || type === 'doctors') { color = '#3182CE'; typeKey = 'type_doctor'; }
+        else if(type === 'pharmacy') { color = '#38A169'; typeKey = 'type_pharmacy'; }
+        else if(type === 'dentist') { color = '#16A085'; typeKey = 'type_dentist'; special = 'dentist'; }
+        else if(type === 'clinic') { color = '#00A3C4'; typeKey = 'type_clinic'; }
+        
+        results.push({
+          id: el.id, name: name, lat: elLat, lon: elLon, typeKey: typeKey,
+          urgent: urgent, special: special, color: color,
+          phone: el.tags?.phone || "No disponible",
+          address: el.tags?.['addr:street'] || "Dirección no disponible",
+          certified: (type === 'ambulance_station')
+        });
+      }
+      return { error: false, results: results };
+    } catch(e) { 
+      console.error('Error fetching OSM data:', e);
+      return { error: true, results: [] }; 
     }
-  }
-  
-  // PROCESAR ELEMENTO DE OVERPASS A FORMATO INTERNO
-  function processElement(el) {
-    let elLat, elLon;
-    if(el.type === 'node') {
-      elLat = el.lat; elLon = el.lon;
-    } else if(el.center) {
-      elLat = el.center.lat; elLon = el.center.lon;
-    } else {
-      return null;
-    }
-    
-    let name = el.tags?.name || "Centro médico";
-    let type = el.tags?.amenity || el.tags?.healthcare || "centro";
-    let color = '#00A3C4', urgent = false, special = '';
-    let typeKey = 'type_clinic';
-    
-    if(type === 'hospital') { 
-      color = '#ED8936'; typeKey = 'type_hospital';
-      if(el.tags?.emergency === 'yes') { urgent = true; color = '#2B6CB0'; typeKey = 'type_emergency'; }
-    }
-    else if(type === 'ambulance_station') { 
-      color = '#9B59B6'; typeKey = 'type_ambulance';
-      special = 'ambulance';
-    }
-    else if(type === 'doctor' || type === 'doctors') { color = '#3182CE'; typeKey = 'type_doctor'; }
-    else if(type === 'pharmacy') { color = '#38A169'; typeKey = 'type_pharmacy'; }
-    else if(type === 'dentist') { color = '#16A085'; typeKey = 'type_dentist'; special = 'dentist'; }
-    else if(type === 'clinic') { color = '#00A3C4'; typeKey = 'type_clinic'; }
-    
-    return {
-      id: el.id, name: name, lat: elLat, lon: elLon, typeKey: typeKey,
-      urgent: urgent, special: special, color: color,
-      phone: el.tags?.phone || "No disponible",
-      address: el.tags?.['addr:street'] || "Dirección no disponible",
-      certified: (type === 'ambulance_station')
-    };
-  }
-  
-  // CONSULTA 1: PRINCIPAL (siempre se hace)
-  async function fetchMainFacilities(lat, lon, radiusKm) {
-    const query = `[out:json][timeout:20];(
-      node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});
-      way["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});
-      node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});
-      way["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});
-      node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon});
-      node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});
-    );out center;`;
-    
-    const elements = await overpassQuery(query);
-    if(!elements) return null;
-    return elements.map(processElement).filter(Boolean);
-  }
-  
-  // CONSULTA 2: FARMACIAS (opcional)
-  async function fetchPharmacies(lat, lon, radiusKm) {
-    const query = `[out:json][timeout:15];(
-      node["amenity"="pharmacy"](around:${radiusKm*1000},${lat},${lon});
-    );out center;`;
-    
-    const elements = await overpassQuery(query);
-    if(!elements) return [];
-    return elements.map(processElement).filter(Boolean);
-  }
-  
-  // CONSULTA 3: AMBULANCIAS (opcional)
-  async function fetchAmbulances(lat, lon, radiusKm) {
-    const query = `[out:json][timeout:15];(
-      node["emergency"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});
-      node["amenity"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});
-    );out center;`;
-    
-    const elements = await overpassQuery(query);
-    if(!elements) return [];
-    return elements.map(processElement).filter(Boolean);
-  }
-  
-  // CONSULTA 4: DENTISTAS (opcional)
-  async function fetchDentists(lat, lon, radiusKm) {
-    const query = `[out:json][timeout:15];(
-      node["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});
-      way["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});
-    );out center;`;
-    
-    const elements = await overpassQuery(query);
-    if(!elements) return [];
-    return elements.map(processElement).filter(Boolean);
   }
   
   function getDistance(lat1, lon1, lat2, lon2) {
@@ -653,33 +623,18 @@
     }
     
     map.setView([centerLat, centerLon], 12);
+    const includePharmacy = document.getElementById('includePharmacy').checked;
+    const includeAmbulance = document.getElementById('includeAmbulance').checked;
+    const includeDentist = document.getElementById('includeDentist').checked;
+    const response = await fetchAllFacilities(centerLat, centerLon, radiusKm, includePharmacy, includeAmbulance, includeDentist);
     
-    // CONSULTA PRINCIPAL (hospitales, clínicas, médicos)
-    const mainFacilities = await fetchMainFacilities(centerLat, centerLon, radiusKm);
-    if(mainFacilities === null) {
+    if (response.error) {
       resultsDiv.innerHTML = `<div class="status-msg">${t('errorResults')}</div>`;
       return;
     }
     
-    // CONSULTAS OPCIONALES
-    let allFacilities = [...mainFacilities];
-    
-    if(document.getElementById('includePharmacy').checked) {
-      const pharmacies = await fetchPharmacies(centerLat, centerLon, radiusKm);
-      allFacilities = allFacilities.concat(pharmacies);
-    }
-    
-    if(document.getElementById('includeAmbulance').checked) {
-      const ambulances = await fetchAmbulances(centerLat, centerLon, radiusKm);
-      allFacilities = allFacilities.concat(ambulances);
-    }
-    
-    if(document.getElementById('includeDentist').checked) {
-      const dentists = await fetchDentists(centerLat, centerLon, radiusKm);
-      allFacilities = allFacilities.concat(dentists);
-    }
-    
-    if(allFacilities.length === 0) { 
+    const facilities = response.results;
+    if(facilities.length === 0) { 
       resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; 
       return; 
     }
@@ -694,7 +649,7 @@
       return 7;
     };
     
-    currentResults = allFacilities.map(f => ({ ...f, dist: getDistance(centerLat, centerLon, f.lat, f.lon) }))
+    currentResults = facilities.map(f => ({ ...f, dist: getDistance(centerLat, centerLon, f.lat, f.lon) }))
       .sort((a,b) => {
         const pa = getPriority(a), pb = getPriority(b);
         if(pa !== pb) return pa - pb;
