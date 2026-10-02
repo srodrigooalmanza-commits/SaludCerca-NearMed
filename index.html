@@ -30,6 +30,7 @@
       --c-clinic: #00A3C4;
       --c-pharmacy: #38A169;
       --c-ambulance: #9B59B6;
+      --c-dentist: #16A085;
       --c-warning: #D69E2E;
     }
     
@@ -46,6 +47,11 @@
       height: 100vh;
       overflow: hidden;
     }
+
+    body[dir="rtl"] { direction: rtl; }
+    body[dir="rtl"] .logo-title { flex-direction: row-reverse; }
+    body[dir="rtl"] .sidebar { border-right: none; border-left: 1px solid var(--border); }
+    body[dir="rtl"] .counter-global { left: auto; right: 15px; }
 
     header { 
       background-color: var(--card-bg); 
@@ -96,6 +102,7 @@
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 12px; margin-bottom: 10px; cursor: pointer; }
     .card.urgent-card { background-color: #EBF8FF; border-top: 3px solid var(--c-urgent); }
     .card.ambulance-card { background-color: #F5E6FF; border-top: 3px solid var(--c-ambulance); }
+    .card.dentist-card { background-color: #E8F8F5; border-top: 3px solid var(--c-dentist); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
     .card-title { font-size: 14px; font-weight: 700; }
     .tag-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; display: inline-block; margin-bottom: 8px; color: white; }
@@ -144,6 +151,7 @@
     .counter-global { position: absolute; bottom: 15px; left: 15px; background: rgba(247, 249, 252, 0.9); padding: 4px 10px; border-radius: 20px; font-size: 10px; color: #4A627A; z-index: 10; }
     
     .btn-donate { position: fixed; bottom: 16px; right: 16px; background: var(--c-general); color: white; border: none; padding: 10px 18px; border-radius: 40px; font-weight: 600; font-size: 14px; cursor: pointer; z-index: 1000; }
+    body[dir="rtl"] .btn-donate { right: auto; left: 16px; }
     
     .geo-warning { background: #FEF5E6; border: 1px solid var(--c-warning); border-radius: 12px; padding: 10px; margin-bottom: 12px; text-align: center; font-size: 12px; }
     .geo-warning button { background: var(--c-doctor); color: white; border: none; padding: 6px 12px; border-radius: 40px; margin-top: 6px; cursor: pointer; font-size: 12px; }
@@ -162,7 +170,7 @@
     <select id="langSelect" onchange="changeLang(this.value)">
       <option value="es">🇪🇸 Español</option>
       <option value="en">🇬🇧 English</option>
-      <option value="pt">🇵🇹 Português</option>
+      <option value="pt">🇧🇷 Português</option>
       <option value="fr">🇫🇷 Français</option>
       <option value="ru">🇷🇺 Русский</option>
       <option value="zh">🇨🇳 中文</option>
@@ -223,6 +231,9 @@
             </label>
             <label>
               <input type="checkbox" id="includeAmbulance"> <span data-i18n="includeAmbulance">🚑 Incluir ambulancias</span>
+            </label>
+            <label>
+              <input type="checkbox" id="includeDentist"> <span data-i18n="includeDentist">🦷 Incluir dentistas</span>
             </label>
           </div>
           
@@ -330,7 +341,7 @@
       tabSearch: "🔍 Buscar", tabTestimonials: "💬 Testimonios", tabStory: "📖 Historia", tabFeedback: "💬 Feedback",
       modeNearMe: "📍 Cerca de mí", modeCity: "🏙️ Por ciudad", searchBtn: "🔍 Buscar",
       radiusLabel: "📡 Radio (km)", radiusLabelCity: "📡 Radio (km)", cityLabel: "🌆 Ciudad / Localidad",
-      includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias",
+      includePharmacy: "💊 Incluir farmacias", includeAmbulance: "🚑 Incluir ambulancias", includeDentist: "🦷 Incluir dentistas",
       loading: "Buscando centros de salud...", noResults: "No se encontraron centros de salud en este radio. Prueba aumentarlo o buscar en otra ciudad.", routeBtn: "🗺️ Cómo llegar",
       donateBtn: "☕ Apóyanos", 
       donateTitle: "🙏 Gracias por apoyarnos", 
@@ -338,7 +349,7 @@
       donateCta: "☕ Invítanos un café",
       certified: "Certificado", 
       type_hospital: "Hospital", type_emergency: "Urgencias 24h", type_ambulance: "Ambulancia", 
-      type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia",
+      type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmacia", type_dentist: "Dentista",
       geoWarningMsg: "⚠️ No se pudo obtener tu ubicación.",
       geoWarningHint: "Puedes buscar por ciudad usando la opción de arriba.",
       initialMsg: "📍 Activa ubicación o busca por ciudad",
@@ -371,7 +382,7 @@
       tabSearch: "🔍 Search", tabTestimonials: "💬 Testimonials", tabStory: "📖 Story", tabFeedback: "💬 Feedback",
       modeNearMe: "📍 Near me", modeCity: "🏙️ By city", searchBtn: "🔍 Search",
       radiusLabel: "📡 Radius (km)", radiusLabelCity: "📡 Radius (km)", cityLabel: "🌆 City / Town",
-      includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances",
+      includePharmacy: "💊 Include pharmacies", includeAmbulance: "🚑 Include ambulances", includeDentist: "🦷 Include dentists",
       loading: "Searching for health facilities...", noResults: "No health centers found in this radius. Try increasing it or searching in another city.", routeBtn: "🗺️ Directions",
       donateBtn: "☕ Support us", 
       donateTitle: "🙏 Thank you for supporting us", 
@@ -379,7 +390,7 @@
       donateCta: "☕ Buy us a coffee",
       certified: "Certified", 
       type_hospital: "Hospital", type_emergency: "24h Emergency", type_ambulance: "Ambulance", 
-      type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy",
+      type_clinic: "Clinic", type_doctor: "Doctor", type_pharmacy: "Pharmacy", type_dentist: "Dentist",
       geoWarningMsg: "⚠️ Could not get your location.",
       geoWarningHint: "You can search by city using the option above.",
       initialMsg: "📍 Enable location or search by city",
@@ -408,50 +419,92 @@
       privacyTitle: "🔒 Your privacy is our priority",
       privacyText: "<strong>SaludCerca has no servers, does not store your location and does not track you.</strong> Your location is used only on your phone to show you nearby hospitals. There are no accounts, no advertising cookies and we share nothing with anyone. It is a simple and transparent tool to help you when you need it most."
     },
-    zh: { 
-      tabSearch: "🔍 搜索", tabTestimonials: "💬 用户评价", tabStory: "📖 故事", tabFeedback: "💬 反馈",
-      modeNearMe: "📍 我附近", modeCity: "🏙️ 按城市搜索", searchBtn: "🔍 搜索",
-      radiusLabel: "📡 搜索半径（公里）", radiusLabelCity: "📡 搜索半径（公里）", cityLabel: "🌆 城市 / 地区",
-      includePharmacy: "💊 包含药店", includeAmbulance: "🚑 包含救护车",
-      loading: "正在搜索医疗机构...", noResults: "在此范围内未找到医疗机构。请尝试扩大范围或搜索其他城市。", routeBtn: "🗺️ 路线",
-      donateBtn: "☕ 支持我们", 
-      donateTitle: "🙏 感谢您的支持", 
-      donateDesc: "SaludCerca 完全免费且无广告。您的捐助，从 3 美元起，能帮助我们不断改进。", 
-      donateCta: "☕ 请我们喝杯咖啡",
-      certified: "已认证", 
-      type_hospital: "医院", type_emergency: "24小时急诊", type_ambulance: "救护车", 
-      type_clinic: "诊所", type_doctor: "医生", type_pharmacy: "药店",
-      geoWarningMsg: "⚠️ 无法获取您的位置。",
-      geoWarningHint: "您可以使用上方的选项按城市搜索。",
-      initialMsg: "📍 请启用定位或按城市搜索",
-      feedbackTitle: "💬 您的意见帮助我们改进",
-      feedbackDesc: "您找到所需信息了吗？缺少医院、救护车或服务？请告诉我们。",
-      feedbackBtn: "📝 发送评论或建议",
-      feedbackEmailText: "📧 您也可以直接给我们写信：",
-      type: "类型", distance: "距离", address: "地址", phone: "电话",
-      visitsLabel: "总访问量",
-      testimonialsTitle: "💬 用户评价",
-      testimonialsIntro: "分享您使用 SaludCerca | NearMed 的体验。您的故事可以帮助他人。",
-      testimonial1: '"SaludCerca 在泰国旅行时救了我。我儿子生病了，几分钟内我就找到了最近的有儿科急诊的医院。非常棒的工具。"',
-      testimonial1Author: "— Laura M.，常旅客",
-      testimonial2: '"作为活动策划人，我现在会把附近的医院列入我的通告单。我的团队感到更安全了。"',
-      testimonial2Author: "— Carlos R.，视听制作人",
-      shareTestimonialBtn: "📝 分享您的评价",
-      storyTitle: "📖 SaludCerca 背后的故事",
-      storyText: '"二十三年前，写下这段话的人遭遇了一场车祸。我的近亲（父母和姐姐）都不在城里。我的叔叔、表兄弟和朋友们在无法轻易找到急救服务的几个小时里备受煎熬。<br><br>救了我一命的救护车把我送到了一家我的保险不覆盖的私立医院，当我的叔叔们寻找可以转送我的医院和重症监护救护车时，9 个小时的痛苦时光过去了，我躺在急诊室走廊里一块当作担架的木板上流血不止。<br><br>幸运的是，我活了下来，许多年后的今天，当有人问我\'你会做什么应用？\'我毫不犹豫。<br><br>我希望这个免费的网页应用能帮助挽救许多生命，并为处于紧急情况中的患者、家人和朋友节省数小时的痛苦。<br><br>愿宇宙之灵永远与你们同在。<br><br>2026 年 4 月。"',
-      storyAuthor: "— SaludCerca | NearMed 的创作者",
-      thanksTitle: "💚 感恩墙",
-      thanksP1: "SaludCerca | NearMed 存在的意义是，当有人需要紧急医疗帮助时，他们知道该去哪里，不会浪费时间，也不会忍受痛苦。它免费、无广告、非营利。",
-      thanksP2: "您的捐助帮助这个工具继续存在、触达更多人，并每天改进。",
-      thanksP3: "如果您认可我们所做的事情，并希望它继续为需要的人服务，您的支持，从 3 美元起，就能带来改变。",
-      thanksBtn: "☕ 捐助支持我们",
-      thanksDonorNote: "* 支持我们的人的名字将在获得许可后出现在这里。同时，感谢您站在另一边。",
-      privacyTitle: "🔒 您的隐私是我们的首要任务",
-      privacyText: "<strong>SaludCerca 没有服务器，不保存您的位置，也不追踪您。</strong>您的位置只在您的手机上用于显示附近的医院。没有账户，没有广告 cookie，我们不与任何人分享任何信息。这是一个简单透明的工具，在您最需要的时候帮助您。"
+    pt: {
+      tabSearch: "🔍 Buscar", tabTestimonials: "💬 Depoimentos", tabStory: "📖 História", tabFeedback: "💬 Feedback",
+      modeNearMe: "📍 Perto de mim", modeCity: "🏙️ Por cidade", searchBtn: "🔍 Buscar",
+      radiusLabel: "📡 Raio (km)", radiusLabelCity: "📡 Raio (km)", cityLabel: "🌆 Cidade / Localidade",
+      includePharmacy: "💊 Incluir farmácias", includeAmbulance: "🚑 Incluir ambulâncias", includeDentist: "🦷 Incluir dentistas",
+      loading: "Buscando centros de saúde...", noResults: "Nenhum centro de saúde encontrado neste raio. Tente aumentar ou buscar em outra cidade.", routeBtn: "🗺️ Como chegar",
+      donateBtn: "☕ Apoie-nos",
+      donateTitle: "🙏 Obrigado por nos apoiar",
+      donateDesc: "SaludCerca é gratuito e sem publicidade. Sua ajuda, a partir de $3 USD, nos permite continuar melhorando.",
+      donateCta: "☕ Pague-nos um café",
+      certified: "Certificado",
+      type_hospital: "Hospital", type_emergency: "Emergência 24h", type_ambulance: "Ambulância",
+      type_clinic: "Clínica", type_doctor: "Médico", type_pharmacy: "Farmácia", type_dentist: "Dentista",
+      geoWarningMsg: "⚠️ Não foi possível obter sua localização.",
+      geoWarningHint: "Você pode buscar por cidade usando a opção acima.",
+      initialMsg: "📍 Ative a localização ou busque por cidade",
+      feedbackTitle: "💬 Sua opinião nos melhora",
+      feedbackDesc: "Encontrou o que procurava? Falta algum hospital, ambulância ou serviço? Conte-nos.",
+      feedbackBtn: "📝 Enviar comentário ou sugestão",
+      feedbackEmailText: "📧 Você também pode nos escrever diretamente:",
+      type: "Tipo", distance: "Distância", address: "Endereço", phone: "Telefone",
+      visitsLabel: "visitas totais",
+      testimonialsTitle: "💬 Depoimentos de usuários",
+      testimonialsIntro: "Compartilhe sua experiência com SaludCerca | NearMed. Sua história pode ajudar outros.",
+      testimonial1: '"SaludCerca me salvou em uma viagem à Tailândia. Meu filho adoeceu e em minutos encontrei o hospital mais próximo com emergência pediátrica. Ferramenta incrível."',
+      testimonial1Author: "— Laura M., viajante frequente",
+      testimonial2: '"Como produtor de eventos, agora incluo os hospitais próximos na minha lista de chamadas. Minhas equipes se sentem mais seguras."',
+      testimonial2Author: "— Carlos R., produtor audiovisual",
+      shareTestimonialBtn: "📝 Compartilhe seu depoimento",
+      storyTitle: "📖 A história por trás do SaludCerca",
+      storyText: '"Vinte e três anos atrás, quem escreve sofreu um acidente automobilístico. Meus familiares próximos (meus pais e minha irmã) não estavam na cidade. Meus tios, primos e amigos passaram horas de angústia sem conseguir encontrar facilmente serviços de emergência.<br><br>A ambulância que salvou minha vida me levou a um hospital privado que meu seguro não cobria, e enquanto meus tios procuravam o hospital e as ambulâncias de terapia intensiva para me transferir, passaram-se 9 horas angustiantes em que eu sangrava em uma tábua de madeira improvisada como maca no corredor de uma sala de emergência.<br><br>Felizmente vivi para contar, e hoje, muitos anos depois, quando me perguntaram \'do que você faria um app?\' não precisei pensar muito.<br><br>Espero que este web app gratuito ajude a salvar muitas vidas e a poupar horas de angústia para pacientes, familiares e amigos em situações de emergência.<br><br>Que o espírito do universo esteja com vocês sempre.<br><br>Abril, 2026."',
+      storyAuthor: "— O criador do SaludCerca | NearMed",
+      thanksTitle: "💚 Mural de Gratidão",
+      thanksP1: "SaludCerca | NearMed existe para que, quando alguém precisar de ajuda médica urgente, saiba aonde ir sem perder tempo nem passar angústia. É gratuito, sem publicidade e sem fins lucrativos.",
+      thanksP2: "Com sua doação, você ajuda esta ferramenta a continuar viva, alcançar mais pessoas e melhorar a cada dia.",
+      thanksP3: "Se você valoriza o que fazemos e quer que continue disponível para quem precisa, seu apoio, a partir de $3 USD, faz a diferença.",
+      thanksBtn: "☕ Apoie-nos com uma doação",
+      thanksDonorNote: "* Os nomes de quem nos apoia aparecerão aqui com sua permissão. Enquanto isso, obrigado por estar do outro lado.",
+      privacyTitle: "🔒 Sua privacidade é nossa prioridade",
+      privacyText: "<strong>SaludCerca não tem servidores, não guarda sua localização e não te rastreia.</strong> Sua localização é usada apenas no seu telefone para mostrar os hospitais próximos. Não há contas, não há cookies de publicidade e não compartilhamos nada com ninguém. É uma ferramenta simples e transparente para ajudar você quando mais precisar."
+    },
+    ar: {
+      tabSearch: "🔍 بحث", tabTestimonials: "💬 شهادات", tabStory: "📖 القصة", tabFeedback: "💬 ملاحظات",
+      modeNearMe: "📍 بالقرب مني", modeCity: "🏙️ حسب المدينة", searchBtn: "🔍 بحث",
+      radiusLabel: "📡 نصف القطر (كم)", radiusLabelCity: "📡 نصف القطر (كم)", cityLabel: "🌆 المدينة / المنطقة",
+      includePharmacy: "💊 تضمين الصيدليات", includeAmbulance: "🚑 تضمين سيارات الإسعاف", includeDentist: "🦷 تضمين أطباء الأسنان",
+      loading: "جاري البحث عن مراكز صحية...", noResults: "لم يتم العثور على مراكز صحية في هذا النطاق. حاول زيادته أو البحث في مدينة أخرى.", routeBtn: "🗺️ الاتجاهات",
+      donateBtn: "☕ ادعمنا",
+      donateTitle: "🙏 شكرًا لدعمك",
+      donateDesc: "SaludCerca مجاني وخالٍ من الإعلانات. مساعدتك، بدءًا من 3 دولارات، تسمح لنا بمواصلة التحسين.",
+      donateCta: "☕ اشترِ لنا قهوة",
+      certified: "معتمد",
+      type_hospital: "مستشفى", type_emergency: "طوارئ 24 ساعة", type_ambulance: "سيارة إسعاف",
+      type_clinic: "عيادة", type_doctor: "طبيب", type_pharmacy: "صيدلية", type_dentist: "طبيب أسنان",
+      geoWarningMsg: "⚠️ لم يتمكن من الحصول على موقعك.",
+      geoWarningHint: "يمكنك البحث حسب المدينة باستخدام الخيار أعلاه.",
+      initialMsg: "📍 فعّل الموقع أو ابحث حسب المدينة",
+      feedbackTitle: "💬 رأيك يحسننا",
+      feedbackDesc: "هل وجدت ما كنت تبحث عنه؟ هل ينقصك مستشفى أو إسعاف أو خدمة؟ أخبرنا.",
+      feedbackBtn: "📝 إرسال تعليق أو اقتراح",
+      feedbackEmailText: "📧 يمكنك أيضًا الكتابة لنا مباشرة:",
+      type: "النوع", distance: "المسافة", address: "العنوان", phone: "الهاتف",
+      visitsLabel: "إجمالي الزيارات",
+      testimonialsTitle: "💬 شهادات المستخدمين",
+      testimonialsIntro: "شارك تجربتك مع SaludCerca | NearMed. قصتك يمكن أن تساعد الآخرين.",
+      testimonial1: '"أنقذني SaludCerca في رحلة إلى تايلاند. مرض ابني وفي دقائق وجدت أقرب مستشفى به طوارئ أطفال. أداة رائعة."',
+      testimonial1Author: "— لورا م.، مسافرة متكررة",
+      testimonial2: '"كمنتج فعاليات، أصبحت أدرج المستشفيات القريبة في قائمة الاتصال الخاصة بي. فريقي يشعر بأمان أكبر."',
+      testimonial2Author: "— كارلوس ر.، منتج سمعي بصري",
+      shareTestimonialBtn: "📝 شارك شهادتك",
+      storyTitle: "📖 القصة وراء SaludCerca",
+      storyText: '"قبل ثلاثة وعشرين عامًا، تعرض كاتب هذه الرسالة لحادث سيارة. لم يكن أفراد عائلتي المقربون (والداي وأختي) في المدينة. عانى أعمامي وأبناء عمومتي وأصدقائي ساعات من القلق لعدم تمكنهم من العثور بسهولة على خدمات الطوارئ.<br><br>الإسعاف الذي أنقذ حياتي أخذني إلى مستشفى خاص لم يغطه تأميني، وبينما كان أعمامي يبحثون عن مستشفى وسيارات إسعاف للعناية المركزة لنقلي، مرت 9 ساعات مؤلمة كنت أنزف فيها على لوح خشبي استُخدم كنقالة في ممر غرفة الطوارئ.<br><br>لحسن الحظ عشت لأروي القصة، واليوم بعد سنوات عديدة، عندما سُئلت \'ماذا ستصنع من تطبيق؟\' لم أكن بحاجة للتفكير كثيرًا.<br><br>آمل أن يساعد هذا التطبيق المجاني في إنقاذ العديد من الأرواح وتوفير ساعات من القلق للمرضى والعائلات والأصدقاء في حالات الطوارئ.<br><br>لتكن روح الكون معكم دائمًا.<br><br>أبريل 2026."',
+      storyAuthor: "— مبتكر SaludCerca | NearMed",
+      thanksTitle: "💚 جدار الامتنان",
+      thanksP1: "SaludCerca | NearMed موجود حتى يعرف الشخص أين يذهب عندما يحتاج مساعدة طبية عاجلة، دون إضاعة وقت أو تحمل قلق. إنه مجاني وخالٍ من الإعلانات وغير ربحي.",
+      thanksP2: "تبرعك يساعد هذه الأداة على البقاء والوصول إلى المزيد من الناس والتحسن كل يوم.",
+      thanksP3: "إذا كنت تقدر ما نقوم به وتريد أن يظل متاحًا لمن يحتاجه، فإن دعمك، بدءًا من 3 دولارات، يحدث فرقًا.",
+      thanksBtn: "☕ ادعمنا بتبرع",
+      thanksDonorNote: "* ستظهر أسماء من يدعموننا هنا بإذنهم. في غضون ذلك، شكرًا لوجودك على الجانب الآخر.",
+      privacyTitle: "🔒 خصوصيتك هي أولويتنا",
+      privacyText: "<strong>SaludCerca ليس لديها خوادم، ولا تحفظ موقعك، ولا تتعقبك.</strong> يتم استخدام موقعك فقط على هاتفك لعرض المستشفيات القريبة. لا حسابات، لا ملفات تعريف ارتباط إعلانية، ولا نشارك أي شيء مع أي شخص. إنها أداة بسيطة وشفافة لمساعدتك عندما تحتاجها أكثر من أي وقت مضى."
     }
   };
   
-  for(let l of ['pt','fr','ru','hi','ar']) translations[l] = translations.en;
+  // Otros idiomas copian del inglés por ahora
+  for(let l of ['fr','ru','zh','hi']) translations[l] = translations.en;
 
   let currentLang = 'es';
   let map, userLoc = null, searchMode = 'nearme';
@@ -460,6 +513,7 @@
   function t(key) { return translations[currentLang]?.[key] || translations['es'][key] || key; }
 
   function updateAllTexts() {
+    document.body.dir = (currentLang === 'ar') ? 'rtl' : 'ltr';
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       el.innerHTML = t(key);
@@ -542,7 +596,7 @@
     } catch(e) { return null; }
   }
   
-  async function fetchNearby(lat, lon, radiusKm, includePharmacy, includeAmbulance) {
+  async function fetchNearby(lat, lon, radiusKm, includePharmacy, includeAmbulance, includeDentist) {
     let overpass = `[out:json][timeout:25];(`;
     overpass += `node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
     overpass += `node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
@@ -552,6 +606,10 @@
     if(includeAmbulance) {
       overpass += `node["emergency"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
       overpass += `node["amenity"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
+    }
+    if(includeDentist) {
+      overpass += `node["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
+      overpass += `node["healthcare"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
     }
     overpass += `);out body;`;
     
@@ -576,6 +634,7 @@
         }
         else if(type === 'doctor' || type === 'doctors') { color = '#3182CE'; typeKey = 'type_doctor'; }
         else if(type === 'pharmacy') { color = '#38A169'; typeKey = 'type_pharmacy'; }
+        else if(type === 'dentist') { color = '#16A085'; typeKey = 'type_dentist'; special = 'dentist'; }
         else if(type === 'clinic') { color = '#00A3C4'; typeKey = 'type_clinic'; }
         
         results.push({
@@ -621,7 +680,8 @@
     map.setView([centerLat, centerLon], 12);
     const includePharmacy = document.getElementById('includePharmacy').checked;
     const includeAmbulance = document.getElementById('includeAmbulance').checked;
-    const facilities = await fetchNearby(centerLat, centerLon, radiusKm, includePharmacy, includeAmbulance);
+    const includeDentist = document.getElementById('includeDentist').checked;
+    const facilities = await fetchNearby(centerLat, centerLon, radiusKm, includePharmacy, includeAmbulance, includeDentist);
     
     if(facilities.length === 0) { resultsDiv.innerHTML = `<div class="status-msg">${t('noResults')}</div>`; return; }
     
@@ -637,8 +697,8 @@
     const container = document.getElementById('resultsList');
     let html = '';
     for(let r of currentResults) {
-      let cardClass = r.urgent ? 'urgent-card' : (r.special === 'ambulance' ? 'ambulance-card' : '');
-      let specialIcon = r.urgent ? '⚡ ' : (r.special === 'ambulance' ? '🚑 ' : '');
+      let cardClass = r.urgent ? 'urgent-card' : (r.special === 'ambulance' ? 'ambulance-card' : (r.special === 'dentist' ? 'dentist-card' : ''));
+      let specialIcon = r.urgent ? '⚡ ' : (r.special === 'ambulance' ? '🚑 ' : (r.special === 'dentist' ? '🦷 ' : ''));
       const typeText = t(r.typeKey) || r.typeKey;
       const certifiedBadge = r.certified ? `<span class="certified-badge">${t('certified')}</span>` : '';
       
@@ -664,6 +724,7 @@
       let markerIcon = '';
       if(r.urgent) markerIcon = '⚡';
       else if(r.special === 'ambulance') markerIcon = '🚑';
+      else if(r.special === 'dentist') markerIcon = '🦷';
       const icon = L.divIcon({ html: `<div class="marker-pin" style="background:${r.color};">${markerIcon}</div>`, iconSize: [24,24] });
       const m = L.marker([r.lat, r.lon], { icon }).addTo(map).bindPopup(`<b>${r.name}</b><br>${t(r.typeKey)}<br><button onclick="abrirRuta(${r.lat}, ${r.lon})">${t('routeBtn')}</button>`);
       currentMarkers.push(m);
