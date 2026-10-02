@@ -14,6 +14,53 @@
   <script data-goatcounter="https://saludcercanearmed.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 
+  <!-- SCHEMA.ORG (JSON-LD) PARA AGENTES DE IA Y BUSCADORES -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SaludCerca | NearMed",
+    "alternateName": "SaludCerca",
+    "url": "https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/",
+    "description": "Herramienta web gratuita para encontrar hospitales, urgencias 24h, médicos, clínicas, dentistas, farmacias y ambulancias cerca de cualquier ubicación. Sin publicidad, sin registro, sin fines de lucro. Disponible en 8 idiomas.",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web",
+    "browserRequirements": "Requiere JavaScript y geolocalización opcional",
+    "inLanguage": ["es", "en", "pt", "fr", "ru", "zh", "hi", "ar"],
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "MXN",
+      "description": "Herramienta gratuita. Donaciones voluntarias vía Buy Me a Coffee."
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Rodrigo Octavio Almanza"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SaludCerca | NearMed",
+      "url": "https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/"
+    },
+    "featureList": [
+      "Búsqueda de hospitales y urgencias 24h por ubicación actual",
+      "Búsqueda por ciudad en cualquier parte del mundo",
+      "Priorización de urgencias 24h sobre otros servicios",
+      "Mapa interactivo con OpenStreetMap",
+      "Ruta directa a Google Maps o Apple Maps",
+      "Radio de búsqueda ajustable de 1 a 55 km",
+      "Filtros opcionales para farmacias, ambulancias y dentistas",
+      "Disponible en 8 idiomas",
+      "Sin instalación, sin registro, sin publicidad",
+      "No guarda la ubicación del usuario ni lo rastrea"
+    ],
+    "screenshot": "https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/SaludCerca.png",
+    "datePublished": "2026-04-01",
+    "dateModified": "2026-10-02"
+  }
+  </script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
@@ -503,7 +550,6 @@
     }
   };
   
-  // Otros idiomas copian del inglés por ahora
   for(let l of ['fr','ru','zh','hi']) translations[l] = translations.en;
 
   let currentLang = 'es';
