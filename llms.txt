@@ -1,0 +1,21 @@
+# SaludCerca | NearMed
+
+> Herramienta web gratuita para encontrar hospitales, urgencias 24h, médicos, clínicas, dentistas, farmacias y ambulancias cerca de cualquier ubicación. Sin publicidad, sin registro, sin fines de lucro. Disponible en 8 idiomas.
+
+## Búsqueda de servicios de salud
+
+- [Buscar centros de salud](https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/): Interfaz principal. Permite buscar por ubicación actual ("Cerca de mí") o por ciudad. Muestra resultados en mapa y lista ordenados por prioridad: urgencias 24h primero, luego hospitales, médicos, clínicas, dentistas, farmacias y ambulancias. Radio ajustable de 1 a 55 km.
+
+## Historia y misión
+
+- [Historia del creador](https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/): La razón por la que existe SaludCerca. En 2003, el creador sufrió un accidente automovilístico y sus familiares perdieron 9 horas buscando un hospital con terapia intensiva. Esta herramienta nació para que eso no le pase a nadie más.
+- [Testimonios](https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/): Experiencias de usuarios que han usado la herramienta.
+
+## Apoyar el proyecto
+
+- [Buy Me a Coffee](https://tinyurl.com/BuyMeACoffeSaludCerca): Donaciones voluntarias para mantener la herramienta viva, mejorarla y difundirla.
+
+## Optional
+
+- [Feedback](https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/): Enviar comentarios o sugerencias.
+Agrego llms.txt para agentes de IA
