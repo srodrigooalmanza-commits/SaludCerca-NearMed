@@ -601,7 +601,7 @@
   function solicitarGeolocalizacion() {
     const warningDiv = document.getElementById('geoWarning');
     const resultsDiv = document.getElementById('resultsList');
-    if (userLoc) { doSearch(); return; }
+    
     resultsDiv.innerHTML = `<div class="status-msg">${t('loading')}</div>`;
     warningDiv.style.display = 'none';
     
@@ -711,7 +711,7 @@
     
     if(searchMode === 'nearme') {
       if(!userLoc) {
-        resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}<br><button onclick="solicitarGeolocalizacion()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('modeNearMe')}</button></div>`;
+        solicitarGeolocalizacion();
         return;
       }
       centerLat = userLoc.lat; centerLon = userLoc.lon;
