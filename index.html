@@ -539,16 +539,14 @@
             return data.elements || [];
           }
           
-          // Si es un error 429, 500, 502, 503, 504, esperar y reintentar
           if ([429, 500, 502, 503, 504].includes(resp.status)) {
             console.warn(`Overpass error ${resp.status} en ${hosts[i]}, intento ${attempt}/${maxRetries}`);
             if (attempt < maxRetries) {
-              await new Promise(r => setTimeout(r, 3000 * attempt)); // Espera exponencial
+              await new Promise(r => setTimeout(r, 3000 * attempt));
               continue;
             }
           }
           
-          // Si el error no es recuperable o se agotaron los reintentos, pasar al siguiente host
           break;
         } catch(e) {
           console.warn(`Error de red en ${hosts[i]}:`, e.message);
