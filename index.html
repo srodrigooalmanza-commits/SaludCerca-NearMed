@@ -518,81 +518,114 @@
     } catch(e) { return null; }
   }
   
+  // CONSULTA A OVERPASS CON REINTENTOS
+  async function overpassQuery(query, maxRetries = 3) {
+    const hosts = [
+      'https://overpass.kumi.systems/api/interpreter',
+      'https://overpass-api.de/api/interpreter'
+    ];
+    
+    for (let i = 0; i < hosts.length; i++) {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const resp = await fetch(hosts[i], {
+            method: 'POST',
+            body: 'data=' + encodeURIComponent(query),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          });
+          
+          if (resp.ok) {
+            const data = await resp.json();
+            return data.elements || [];
+          }
+          
+          // Si es un error 429, 500, 502, 503, 504, esperar y reintentar
+          if ([429, 500, 502, 503, 504].includes(resp.status)) {
+            console.warn(`Overpass error ${resp.status} en ${hosts[i]}, intento ${attempt}/${maxRetries}`);
+            if (attempt < maxRetries) {
+              await new Promise(r => setTimeout(r, 3000 * attempt)); // Espera exponencial
+              continue;
+            }
+          }
+          
+          // Si el error no es recuperable o se agotaron los reintentos, pasar al siguiente host
+          break;
+        } catch(e) {
+          console.warn(`Error de red en ${hosts[i]}:`, e.message);
+          if (attempt < maxRetries) {
+            await new Promise(r => setTimeout(r, 3000 * attempt));
+            continue;
+          }
+          break;
+        }
+      }
+    }
+    return null;
+  }
+  
   async function fetchAllFacilities(lat, lon, radiusKm, includePharmacy, includeAmbulance, includeDentist) {
-    let overpassQuery = `[out:json][timeout:25];(`;
-    overpassQuery += `node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
-    overpassQuery += `way["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
-    overpassQuery += `node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
-    overpassQuery += `way["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
-    overpassQuery += `node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon});`;
-    overpassQuery += `node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});`;
+    let overpassQueryStr = `[out:json][timeout:25];(`;
+    overpassQueryStr += `node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQueryStr += `way["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQueryStr += `node["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQueryStr += `way["amenity"="clinic"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQueryStr += `node["amenity"="doctors"](around:${radiusKm*1000},${lat},${lon});`;
+    overpassQueryStr += `node["healthcare"="doctor"](around:${radiusKm*1000},${lat},${lon});`;
     if(includePharmacy) {
-      overpassQuery += `node["amenity"="pharmacy"](around:${radiusKm*1000},${lat},${lon});`;
+      overpassQueryStr += `node["amenity"="pharmacy"](around:${radiusKm*1000},${lat},${lon});`;
     }
     if(includeAmbulance) {
-      overpassQuery += `node["emergency"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
+      overpassQueryStr += `node["emergency"="ambulance_station"](around:${radiusKm*1000},${lat},${lon});`;
     }
     if(includeDentist) {
-      overpassQuery += `node["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
-      overpassQuery += `way["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
+      overpassQueryStr += `node["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
+      overpassQueryStr += `way["amenity"="dentist"](around:${radiusKm*1000},${lat},${lon});`;
     }
-    overpassQuery += `);out center;`;
+    overpassQueryStr += `);out center;`;
     
-    try {
-      const resp = await fetch('https://overpass-api.de/api/interpreter', {
-        method: 'POST',
-        body: 'data=' + encodeURIComponent(overpassQuery),
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      });
-      
-      if (!resp.ok) {
-        console.error('Overpass error:', resp.status);
-        return { error: true, results: [] };
-      }
-      
-      const data = await resp.json();
-      const results = [];
-      for(let el of data.elements) {
-        let elLat, elLon;
-        if(el.type === 'node') {
-          elLat = el.lat; elLon = el.lon;
-        } else if(el.center) {
-          elLat = el.center.lat; elLon = el.center.lon;
-        } else {
-          continue;
-        }
-        
-        let name = el.tags?.name || "Centro médico";
-        let type = el.tags?.amenity || el.tags?.healthcare || "centro";
-        let color = '#00A3C4', urgent = false, special = '';
-        let typeKey = 'type_clinic';
-        
-        if(type === 'hospital') { 
-          color = '#ED8936'; typeKey = 'type_hospital';
-          if(el.tags?.emergency === 'yes') { urgent = true; color = '#2B6CB0'; typeKey = 'type_emergency'; }
-        }
-        else if(type === 'ambulance_station') { 
-          color = '#9B59B6'; typeKey = 'type_ambulance';
-          special = 'ambulance';
-        }
-        else if(type === 'doctor' || type === 'doctors') { color = '#3182CE'; typeKey = 'type_doctor'; }
-        else if(type === 'pharmacy') { color = '#38A169'; typeKey = 'type_pharmacy'; }
-        else if(type === 'dentist') { color = '#16A085'; typeKey = 'type_dentist'; special = 'dentist'; }
-        else if(type === 'clinic') { color = '#00A3C4'; typeKey = 'type_clinic'; }
-        
-        results.push({
-          id: el.id, name: name, lat: elLat, lon: elLon, typeKey: typeKey,
-          urgent: urgent, special: special, color: color,
-          phone: el.tags?.phone || "No disponible",
-          address: el.tags?.['addr:street'] || "Dirección no disponible",
-          certified: (type === 'ambulance_station')
-        });
-      }
-      return { error: false, results: results };
-    } catch(e) { 
-      console.error('Error fetching OSM data:', e);
-      return { error: true, results: [] }; 
+    const elements = await overpassQuery(overpassQueryStr);
+    if (elements === null) {
+      return { error: true, results: [] };
     }
+    
+    const results = [];
+    for(let el of elements) {
+      let elLat, elLon;
+      if(el.type === 'node') {
+        elLat = el.lat; elLon = el.lon;
+      } else if(el.center) {
+        elLat = el.center.lat; elLon = el.center.lon;
+      } else {
+        continue;
+      }
+      
+      let name = el.tags?.name || "Centro médico";
+      let type = el.tags?.amenity || el.tags?.healthcare || "centro";
+      let color = '#00A3C4', urgent = false, special = '';
+      let typeKey = 'type_clinic';
+      
+      if(type === 'hospital') { 
+        color = '#ED8936'; typeKey = 'type_hospital';
+        if(el.tags?.emergency === 'yes') { urgent = true; color = '#2B6CB0'; typeKey = 'type_emergency'; }
+      }
+      else if(type === 'ambulance_station') { 
+        color = '#9B59B6'; typeKey = 'type_ambulance';
+        special = 'ambulance';
+      }
+      else if(type === 'doctor' || type === 'doctors') { color = '#3182CE'; typeKey = 'type_doctor'; }
+      else if(type === 'pharmacy') { color = '#38A169'; typeKey = 'type_pharmacy'; }
+      else if(type === 'dentist') { color = '#16A085'; typeKey = 'type_dentist'; special = 'dentist'; }
+      else if(type === 'clinic') { color = '#00A3C4'; typeKey = 'type_clinic'; }
+      
+      results.push({
+        id: el.id, name: name, lat: elLat, lon: elLon, typeKey: typeKey,
+        urgent: urgent, special: special, color: color,
+        phone: el.tags?.phone || "No disponible",
+        address: el.tags?.['addr:street'] || "Dirección no disponible",
+        certified: (type === 'ambulance_station')
+      });
+    }
+    return { error: false, results: results };
   }
   
   function getDistance(lat1, lon1, lat2, lon2) {
@@ -733,11 +766,15 @@
   
   async function mostrarContadorGlobal() {
     try {
-      const response = await fetch('https://saludcercanearmed.goatcounter.com/counter?format=json');
+      const response = await fetch('https://saludcercanearmed.goatcounter.com/counter/TOTAL.json');
       const data = await response.json();
       const contadorSpan = document.getElementById('visitorCountGlobal');
       if (contadorSpan) contadorSpan.innerText = data.count.toLocaleString();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+      console.error('Error al obtener contador:', e);
+      const contadorSpan = document.getElementById('visitorCountGlobal');
+      if (contadorSpan) contadorSpan.innerText = '?';
+    }
   }
   
   window.onload = () => {
@@ -747,7 +784,6 @@
     document.getElementById('radiusSliderCity').value = 10;
     updateRadiusLabel(10);
     updateAllTexts();
-    // Solicitar ubicación solo si el navegador lo permite
     if (navigator.geolocation) {
       solicitarGeolocalizacion();
     } else {
