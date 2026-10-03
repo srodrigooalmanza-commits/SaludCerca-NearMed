@@ -410,6 +410,27 @@
       thanksTitle: "💚 Mural de Gratidão", thanksP1: "SaludCerca existe para ajudar.", thanksP2: "Sua doação mantém esta ferramenta viva.", thanksP3: "Seu apoio faz a diferença.", thanksBtn: "☕ Apoie-nos", thanksDonorNote: "* Nomes aparecerão aqui com permissão.",
       privacyTitle: "🔒 Sua privacidade é nossa prioridade", privacyText: "<strong>SaludCerca não tem servidores, não guarda sua localização.</strong>"
     },
+    zh: {
+      tabSearch: "🔍 搜索", tabTestimonials: "💬 用户评价", tabStory: "📖 故事", tabFeedback: "💬 反馈",
+      modeNearMe: "📍 我附近", modeCity: "🏙️ 按城市搜索", searchBtn: "🔍 搜索",
+      radiusLabel: "📡 搜索半径（公里）", radiusLabelCity: "📡 搜索半径（公里）", cityLabel: "🌆 城市 / 地区",
+      includePharmacy: "💊 包含药店", includeAmbulance: "🚑 包含救护车", includeDentist: "🦷 包含牙医",
+      loading: "正在搜索医疗机构...", noResults: "在此范围内未找到医疗机构。请尝试扩大范围或搜索其他城市。", errorResults: "搜索时出现问题。请稍后再试。", routeBtn: "🗺️ 路线",
+      donateBtn: "☕ 支持我们", donateTitle: "🙏 感谢您的支持", donateDesc: "SaludCerca 完全免费且无广告。您的捐助，从 3 美元起，能帮助我们不断改进。", donateCta: "☕ 请我们喝杯咖啡",
+      certified: "已认证", type_hospital: "医院", type_emergency: "24小时急诊", type_ambulance: "救护车", type_clinic: "诊所", type_doctor: "医生", type_pharmacy: "药店", type_dentist: "牙医",
+      geoWarningMsg: "⚠️ 无法获取您的位置。", geoWarningHint: "您可以使用上方的选项按城市搜索。",
+      initialMsg: "📍 请启用定位或按城市搜索",
+      feedbackTitle: "💬 您的意见帮助我们改进", feedbackDesc: "您找到所需信息了吗？缺少医院、救护车或服务？请告诉我们。", feedbackBtn: "📝 发送评论或建议", feedbackEmailText: "📧 您也可以直接给我们写信：",
+      type: "类型", distance: "距离", address: "地址", phone: "电话", visitsLabel: "总访问量",
+      testimonialsTitle: "💬 用户评价", testimonialsIntro: "分享您使用 SaludCerca | NearMed 的体验。",
+      testimonial1: '"SaludCerca 在泰国旅行时救了我。"', testimonial1Author: "— Laura M.，常旅客",
+      testimonial2: '"作为活动策划人，我现在会把附近的医院列入我的通告单。"', testimonial2Author: "— Carlos R.，视听制作人",
+      shareTestimonialBtn: "📝 分享您的评价", storyTitle: "📖 SaludCerca 背后的故事",
+      storyText: '"二十三年前，写下这段话的人遭遇了一场车祸。我的近亲（父母和姐姐）都不在城里。我的叔叔、表兄弟和朋友们在无法轻易找到急救服务的几个小时里备受煎熬。<br><br>救了我一命的救护车把我送到了一家我的保险不覆盖的私立医院，当我的叔叔们寻找可以转送我的医院和重症监护救护车时，9 个小时的痛苦时光过去了，我躺在急诊室走廊里一块当作担架的木板上流血不止。<br><br>幸运的是，我活了下来，许多年后的今天，当有人问我\'你会做什么应用？\'我毫不犹豫。<br><br>我希望这个免费的网页应用能帮助挽救许多生命，并为处于紧急情况中的患者、家人和朋友节省数小时的痛苦。<br><br>愿宇宙之灵永远与你们同在。<br><br>2026 年 4 月。"',
+      storyAuthor: "— SaludCerca | NearMed 的创作者",
+      thanksTitle: "💚 感恩墙", thanksP1: "SaludCerca | NearMed 存在的意义是，当有人需要紧急医疗帮助时，他们知道该去哪里。它免费、无广告、非营利。", thanksP2: "您的捐助帮助这个工具继续存在并触达更多人。", thanksP3: "如果您认可我们所做的事情，您的支持，从 3 美元起，就能带来改变。", thanksBtn: "☕ 捐助支持我们", thanksDonorNote: "* 支持我们的人的名字将在获得许可后出现在这里。",
+      privacyTitle: "🔒 您的隐私是我们的首要任务", privacyText: "<strong>SaludCerca 没有服务器，不保存您的位置，也不追踪您。</strong> 您的位置只在您的手机上用于显示附近的医院。"
+    },
     ar: {
       tabSearch: "🔍 بحث", tabTestimonials: "💬 شهادات", tabStory: "📖 القصة", tabFeedback: "💬 ملاحظات",
       modeNearMe: "📍 بالقرب مني", modeCity: "🏙️ حسب المدينة", searchBtn: "🔍 بحث",
@@ -431,7 +452,8 @@
     }
   };
   
-  for(let l of ['fr','ru','zh','hi']) translations[l] = translations.en;
+  // Solo francés, ruso e hindi copian del inglés (el chino ya está traducido)
+  for(let l of ['fr','ru','hi']) translations[l] = translations.en;
 
   let currentLang = 'es';
   let map, userLoc = null, searchMode = 'nearme';
