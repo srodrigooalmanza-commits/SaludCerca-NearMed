@@ -479,26 +479,28 @@
     resultsDiv.innerHTML = `<div class="status-msg">${t('loading')}</div>`;
     warningDiv.style.display = 'none';
     
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            pos => { 
-                userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-                map.setView([userLoc.lat, userLoc.lon], 12);
-                L.marker([userLoc.lat, userLoc.lon]).addTo(map).bindPopup("Tu ubicación");
-                doSearch();
-            },
-            err => { 
-                warningDiv.style.display = 'block';
-                resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}<br>
-                    <button onclick="cambiarModoYCiudad()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('modeCity')}</button>
-                    <button onclick="solicitarGeolocalizacion()" style="margin-top:10px; margin-left:10px; padding:8px 16px; background:#2C7A7B; color:white; border:none; border-radius:40px;">Reintentar</button>
-                </div>`;
-            }
-        );
-    } else {
-        warningDiv.style.display = 'block';
-        resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}</div>`;
+    if (!navigator.geolocation) {
+      warningDiv.style.display = 'block';
+      resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}</div>`;
+      return;
     }
+    
+    navigator.geolocation.getCurrentPosition(
+      pos => { 
+        userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+        map.setView([userLoc.lat, userLoc.lon], 12);
+        L.marker([userLoc.lat, userLoc.lon]).addTo(map).bindPopup("Tu ubicación");
+        doSearch();
+      },
+      err => { 
+        warningDiv.style.display = 'block';
+        resultsDiv.innerHTML = `<div class="status-msg">${t('geoWarningMsg')}<br>
+          <button onclick="cambiarModoYCiudad()" style="margin-top:10px; padding:8px 16px; background:#3182CE; color:white; border:none; border-radius:40px;">${t('modeCity')}</button>
+          <button onclick="solicitarGeolocalizacion()" style="margin-top:10px; margin-left:10px; padding:8px 16px; background:#2C7A7B; color:white; border:none; border-radius:40px;">Reintentar</button>
+        </div>`;
+      },
+      { timeout: 15000, enableHighAccuracy: true, maximumAge: 60000 }
+    );
   }
 
   function cambiarModoYCiudad() {
@@ -516,7 +518,6 @@
     } catch(e) { return null; }
   }
   
-  // CONSULTA UNIFICADA A OVERPASS (con servidor alternativo)
   async function fetchAllFacilities(lat, lon, radiusKm, includePharmacy, includeAmbulance, includeDentist) {
     let overpassQuery = `[out:json][timeout:25];(`;
     overpassQuery += `node["amenity"="hospital"](around:${radiusKm*1000},${lat},${lon});`;
@@ -538,13 +539,10 @@
     overpassQuery += `);out center;`;
     
     try {
-      const resp = await fetch('https://overpass.private.coffee/api/interpreter', {
+      const resp = await fetch('https://overpass-api.de/api/interpreter', {
         method: 'POST',
         body: 'data=' + encodeURIComponent(overpassQuery),
-        headers: { 
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': 'SaludCerca/1.0 (https://srodrigooalmanza-commits.github.io/SaludCerca-NearMed/)'
-        }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       
       if (!resp.ok) {
@@ -749,7 +747,12 @@
     document.getElementById('radiusSliderCity').value = 10;
     updateRadiusLabel(10);
     updateAllTexts();
-    solicitarGeolocalizacion();
+    // Solicitar ubicación solo si el navegador lo permite
+    if (navigator.geolocation) {
+      solicitarGeolocalizacion();
+    } else {
+      document.getElementById('geoWarning').style.display = 'block';
+    }
     mostrarContadorGlobal();
   };
 </script>
