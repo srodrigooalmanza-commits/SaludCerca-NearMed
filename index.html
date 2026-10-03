@@ -452,7 +452,6 @@
     }
   };
   
-  // Solo francés, ruso e hindi copian del inglés (el chino ya está traducido)
   for(let l of ['fr','ru','hi']) translations[l] = translations.en;
 
   let currentLang = 'es';
@@ -540,7 +539,6 @@
     } catch(e) { return null; }
   }
   
-  // CONSULTA A OVERPASS CON REINTENTOS
   async function overpassQuery(query, maxRetries = 3) {
     const hosts = [
       'https://overpass.kumi.systems/api/interpreter',
@@ -787,13 +785,14 @@
   async function mostrarContadorGlobal() {
     try {
       const response = await fetch('https://saludcercanearmed.goatcounter.com/counter/TOTAL.json');
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       const contadorSpan = document.getElementById('visitorCountGlobal');
       if (contadorSpan) contadorSpan.innerText = data.count.toLocaleString();
     } catch(e) { 
       console.error('Error al obtener contador:', e);
       const contadorSpan = document.getElementById('visitorCountGlobal');
-      if (contadorSpan) contadorSpan.innerText = '?';
+      if (contadorSpan) contadorSpan.innerText = '—';
     }
   }
   
